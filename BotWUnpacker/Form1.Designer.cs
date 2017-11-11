@@ -30,6 +30,7 @@ namespace BotWUnpacker
             System.Windows.Forms.PictureBox imgIcon;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             System.Windows.Forms.Label lblFootnote;
+            System.Windows.Forms.Label line1;
             this.btnBrowseRoot = new System.Windows.Forms.Button();
             this.btnClearRoot = new System.Windows.Forms.Button();
             this.btnExtractPack = new System.Windows.Forms.Button();
@@ -38,8 +39,11 @@ namespace BotWUnpacker
             this.tbxFolderRoot = new System.Windows.Forms.TextBox();
             this.cbxWriteXml = new System.Windows.Forms.CheckBox();
             this.lblProcessStatus = new System.Windows.Forms.Label();
+            this.cbxSetDataOffset = new System.Windows.Forms.CheckBox();
+            this.tbxDataOffset = new System.Windows.Forms.TextBox();
             imgIcon = new System.Windows.Forms.PictureBox();
             lblFootnote = new System.Windows.Forms.Label();
+            line1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(imgIcon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,12 +61,20 @@ namespace BotWUnpacker
             // lblFootnote
             // 
             lblFootnote.AutoSize = true;
-            lblFootnote.Location = new System.Drawing.Point(9, 213);
+            lblFootnote.Location = new System.Drawing.Point(9, 313);
             lblFootnote.Name = "lblFootnote";
             lblFootnote.Size = new System.Drawing.Size(210, 39);
             lblFootnote.TabIndex = 10;
-            lblFootnote.Text = "Version: " + System.Windows.Forms.Application.ProductVersion +
-                "\nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
+            lblFootnote.Text = "Version: 1.1 \nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
+            // 
+            // line1
+            // 
+            line1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            line1.Enabled = false;
+            line1.Location = new System.Drawing.Point(13, 181);
+            line1.Name = "line1";
+            line1.Size = new System.Drawing.Size(356, 2);
+            line1.TabIndex = 14;
             // 
             // btnBrowseRoot
             // 
@@ -86,7 +98,7 @@ namespace BotWUnpacker
             // 
             // btnExtractPack
             // 
-            this.btnExtractPack.Location = new System.Drawing.Point(12, 118);
+            this.btnExtractPack.Location = new System.Drawing.Point(12, 122);
             this.btnExtractPack.Name = "btnExtractPack";
             this.btnExtractPack.Size = new System.Drawing.Size(100, 23);
             this.btnExtractPack.TabIndex = 2;
@@ -96,9 +108,9 @@ namespace BotWUnpacker
             // 
             // btnBuildPack
             // 
-            this.btnBuildPack.Location = new System.Drawing.Point(12, 147);
+            this.btnBuildPack.Location = new System.Drawing.Point(13, 195);
             this.btnBuildPack.Name = "btnBuildPack";
-            this.btnBuildPack.Size = new System.Drawing.Size(100, 23);
+            this.btnBuildPack.Size = new System.Drawing.Size(100, 47);
             this.btnBuildPack.TabIndex = 3;
             this.btnBuildPack.Text = "Build PACK";
             this.btnBuildPack.UseVisualStyleBackColor = true;
@@ -115,40 +127,65 @@ namespace BotWUnpacker
             // 
             // tbxFolderRoot
             // 
+            this.tbxFolderRoot.BackColor = System.Drawing.SystemColors.ControlLight;
             this.tbxFolderRoot.Location = new System.Drawing.Point(119, 60);
             this.tbxFolderRoot.Name = "tbxFolderRoot";
             this.tbxFolderRoot.ReadOnly = true;
-            this.tbxFolderRoot.Size = new System.Drawing.Size(153, 20);
+            this.tbxFolderRoot.Size = new System.Drawing.Size(253, 20);
             this.tbxFolderRoot.TabIndex = 6;
             // 
             // cbxWriteXml
             // 
             this.cbxWriteXml.AutoSize = true;
-            this.cbxWriteXml.Location = new System.Drawing.Point(119, 122);
+            this.cbxWriteXml.Location = new System.Drawing.Point(118, 126);
             this.cbxWriteXml.Name = "cbxWriteXml";
             this.cbxWriteXml.Size = new System.Drawing.Size(109, 17);
             this.cbxWriteXml.TabIndex = 8;
             this.cbxWriteXml.Text = "Write XML debug";
             this.cbxWriteXml.UseVisualStyleBackColor = true;
-            this.cbxWriteXml.CheckedChanged += new System.EventHandler(this.cbxWriteXml_CheckedChanged);
             // 
             // lblProcessStatus
             // 
             this.lblProcessStatus.AutoSize = true;
             this.lblProcessStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProcessStatus.Location = new System.Drawing.Point(12, 177);
+            this.lblProcessStatus.Location = new System.Drawing.Point(10, 275);
             this.lblProcessStatus.Name = "lblProcessStatus";
             this.lblProcessStatus.Size = new System.Drawing.Size(81, 13);
             this.lblProcessStatus.TabIndex = 11;
             this.lblProcessStatus.Text = "Processing...";
             this.lblProcessStatus.Visible = false;
             // 
+            // cbxSetDataOffset
+            // 
+            this.cbxSetDataOffset.AutoSize = true;
+            this.cbxSetDataOffset.Location = new System.Drawing.Point(119, 195);
+            this.cbxSetDataOffset.Name = "cbxSetDataOffset";
+            this.cbxSetDataOffset.Size = new System.Drawing.Size(197, 17);
+            this.cbxSetDataOffset.TabIndex = 12;
+            this.cbxSetDataOffset.Text = "Set Fixed Data Offset (Add Padding)";
+            this.cbxSetDataOffset.UseVisualStyleBackColor = true;
+            this.cbxSetDataOffset.CheckedChanged += new System.EventHandler(this.cbxSetDataOffset_CheckedChanged);
+            // 
+            // tbxDataOffset
+            // 
+            this.tbxDataOffset.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.tbxDataOffset.Location = new System.Drawing.Point(119, 218);
+            this.tbxDataOffset.MaxLength = 4;
+            this.tbxDataOffset.Name = "tbxDataOffset";
+            this.tbxDataOffset.ReadOnly = true;
+            this.tbxDataOffset.Size = new System.Drawing.Size(32, 20);
+            this.tbxDataOffset.TabIndex = 13;
+            this.tbxDataOffset.Text = "2000";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(384, 361);
+            this.Controls.Add(line1);
+            this.Controls.Add(this.tbxDataOffset);
+            this.Controls.Add(this.cbxSetDataOffset);
             this.Controls.Add(this.lblProcessStatus);
             this.Controls.Add(lblFootnote);
             this.Controls.Add(this.btnClearRoot);
@@ -180,6 +217,8 @@ namespace BotWUnpacker
         private System.Windows.Forms.TextBox tbxFolderRoot;
         private System.Windows.Forms.CheckBox cbxWriteXml;
         private System.Windows.Forms.Label lblProcessStatus;
+        private System.Windows.Forms.CheckBox cbxSetDataOffset;
+        private System.Windows.Forms.TextBox tbxDataOffset;
     }
 }
 

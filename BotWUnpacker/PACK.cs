@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
-//Modified code From Uwizard master branch as of 10/16/2017, 
+//Modified code From Uwizard SARC master branch as of 10/16/2017, 
 
 
 namespace BotWUnpacker
 {
     public struct PACK
     {
-        public static string lerror = ""; // Gets the last error that occurred in this struct. Similar to the C perror().
+        public static string lerror = ""; // Gets the last error
 
         #region Structures
         private struct SarcNode //SARC node row (extract only)
@@ -87,18 +87,19 @@ namespace BotWUnpacker
             return new byte[] { (byte)(u32 >> 24), (byte)((u32 >> 16) & 0xFF), (byte)((u32 >> 8) & 0xFF), (byte)(u32 & 0xFF) };
         }
 
+        static private string IntToHex(int num)
+        {
+            return num.ToString("X");
+        }
+
+        static private int HexToInt(String hex)
+        {
+            return int.Parse(hex, System.Globalization.NumberStyles.HexNumber);
+        }
+
         private static byte[] AddPadding(byte[] dataBuild, uint padding, NodeData nodeData, NodeInfo nodeInfo) //Add padding to adjust to Nintendo's logic
         {
             byte[] pad = { 0x00 };
-            /*
-            if (nodeData.data[0] != 0x59 && nodeData.data[1] != 0x61 && nodeData.data[2] != 0x7A && nodeData.data[3] != 0x30) //if NOT a Yaz0 encoded node, it doesn't need to be padded
-                return dataBuild;
-            if (System.IO.Path.GetExtension(nodeInfo.realname) == ".sblwp") //file type does not need padding
-                return dataBuild;
-            if ((System.IO.Path.GetExtension(nodeInfo.realname) == ".smubin") && ((nodeData.data.Length % padding) == 0)) //idk what im doing anymore
-                return dataBuild;
-            */
-
             if (nodeData.data[nodeData.data.Length - 1] != 0x00) //if node is NOT pre padded
             {
                 if ((dataBuild.Length % padding) != 0) //if build needs padding
@@ -313,7 +314,12 @@ namespace BotWUnpacker
         #endregion
 
         #region Build
-        public static bool build(string inDir, string outFile) //BUILD ----------------------------------------------------------------------
+        public static bool build(string inDir, string outFile)
+        {
+            return build(inDir, outFile, 0); //if no fixed data offset is set.
+        }
+
+        public static bool build(string inDir, string outFile, uint dataFixedOffset) //BUILD ----------------------------------------------------------------------
         {
             try
             {
@@ -393,6 +399,12 @@ namespace BotWUnpacker
                 fileSize += 0x08; //SFNT reserve
                 fileSize += totalNamesLength; //names of files 
                 uint nodeDataStart = fileSize; //node data table offset
+                if (dataFixedOffset > nodeDataStart) //if fixed data offset if larger than generated start...
+                {
+                    namePaddingToAdd += (dataFixedOffset - nodeDataStart);
+                    fileSize += (dataFixedOffset - nodeDataStart);
+                    nodeDataStart = dataFixedOffset;
+                }
                 fileSize += (uint)nodeBuild.Length; //finish calculating expected filesize 
 
 
@@ -449,8 +461,6 @@ namespace BotWUnpacker
                 return false;
             }
             
-
-
             return true;
         } //--------------------------------------------------------------------------------------------------------------------------------------------
         #endregion

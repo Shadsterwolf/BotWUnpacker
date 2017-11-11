@@ -18,7 +18,6 @@ namespace BotWUnpacker
             InitializeComponent();
             //Load in previous instance
             tbxFolderRoot.Text = Properties.Settings.Default.RootFolder;
-            cbxWriteXml.Checked = Properties.Settings.Default.XmlCbxStatus;
         }
 
         #region Browse Root Button
@@ -94,17 +93,32 @@ namespace BotWUnpacker
         {
             FolderBrowserDialog oFolder = new FolderBrowserDialog();
             SaveFileDialog sFile = new SaveFileDialog();
+
+            if (cbxSetDataOffset.Checked)
+            {
+                try{int.Parse(tbxDataOffset.Text, System.Globalization.NumberStyles.HexNumber);} //check if it's a hex value (textbox limited to 4 characters)
+                catch{MessageBox.Show("Error:" + "\n\n" + "Fixed Data Offset is not a hex value!"); goto toss;}
+            }
             oFolder.Description = "Select folder to build into Pack file";
             if (tbxFolderRoot.Text != "") oFolder.SelectedPath = tbxFolderRoot.Text;
             if (oFolder.ShowDialog() == DialogResult.Cancel) goto toss;
             sFile.Filter = "PACK|*.pack|SARC|*.sarc|SSARC|*.ssarc|RARC|*.rarc|SGENVB|*.sgenvb|SBFARC|*.sbfarc|SBLARC|*.sblarc|SBACTORPACK|*sbactorpack|All Files|*.*";
-            sFile.InitialDirectory = tbxFolderRoot.Text;
+            sFile.InitialDirectory = oFolder.SelectedPath.Remove(oFolder.SelectedPath.LastIndexOf("\\")); //Previous folder, as selected is to build outside of it.
             sFile.FileName = System.IO.Path.GetFileName(oFolder.SelectedPath);
             lblProcessStatus.Visible = true;
             if (sFile.ShowDialog() == DialogResult.Cancel) goto toss;
 
-            if (!PACK.build(oFolder.SelectedPath, sFile.FileName))
-                MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
+            if (cbxSetDataOffset.Checked)
+            {
+                uint dataOffset = (uint)int.Parse(tbxDataOffset.Text, System.Globalization.NumberStyles.HexNumber);
+                if (!PACK.build(oFolder.SelectedPath, sFile.FileName, dataOffset))
+                    MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
+            }
+            else
+            {
+                if (!PACK.build(oFolder.SelectedPath, sFile.FileName))
+                    MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
+            }
 
             toss:
             oFolder.Dispose();
@@ -114,12 +128,18 @@ namespace BotWUnpacker
         }
         #endregion
 
-        private void cbxWriteXml_CheckedChanged(object sender, EventArgs e)
+        private void cbxSetDataOffset_CheckedChanged(object sender, EventArgs e)
         {
-            //Save checkbox property
-            Properties.Settings.Default.XmlCbxStatus = cbxWriteXml.Checked;
-            Properties.Settings.Default.Save();
+            if (cbxSetDataOffset.Checked)
+            {
+                tbxDataOffset.ReadOnly = false;
+                tbxDataOffset.BackColor = SystemColors.Window;
+            }
+            else
+            {
+                tbxDataOffset.ReadOnly = true;
+                tbxDataOffset.BackColor = SystemColors.ControlLight;
+            }
         }
-
     }
 }

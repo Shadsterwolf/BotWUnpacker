@@ -34,17 +34,5 @@ namespace BotWUnpacker.Properties {
                 this["RootFolder"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool XmlCbxStatus {
-            get {
-                return ((bool)(this["XmlCbxStatus"]));
-            }
-            set {
-                this["XmlCbxStatus"] = value;
-            }
-        }
     }
 }
