@@ -1,5 +1,7 @@
 # Change Log
-Version 1.1 - Added support to adjust files that need a fixed data offset (add padding), and various tweaks for user experience.
+Version 1.1: <br />
+-Added support to adjust files that need a fixed data offset (add padding) <br />
+-Various tweaks for user experience.
 
 
 # BotW Unpacker
