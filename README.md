@@ -8,8 +8,8 @@
 -Various tweaks for user experience.
 
 <b>Version 1.2:</b> <br />
--Added Extract All to mass extract SARC types (does not support Yaz0 yet)
--Added simple Open Root Folder button
+-Added Extract All to mass extract SARC types (does not support Yaz0 yet)<br />
+-Added simple Open Root Folder button<br />
 -Added placeholder button for Compare and Build Pack
 
 # BotW Unpacker
