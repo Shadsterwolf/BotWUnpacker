@@ -41,6 +41,9 @@ namespace BotWUnpacker
             this.lblProcessStatus = new System.Windows.Forms.Label();
             this.cbxSetDataOffset = new System.Windows.Forms.CheckBox();
             this.tbxDataOffset = new System.Windows.Forms.TextBox();
+            this.btnBuildCompare = new System.Windows.Forms.Button();
+            this.btnExtractAll = new System.Windows.Forms.Button();
+            this.btnOpenFolder = new System.Windows.Forms.Button();
             imgIcon = new System.Windows.Forms.PictureBox();
             lblFootnote = new System.Windows.Forms.Label();
             line1 = new System.Windows.Forms.Label();
@@ -65,7 +68,7 @@ namespace BotWUnpacker
             lblFootnote.Name = "lblFootnote";
             lblFootnote.Size = new System.Drawing.Size(210, 39);
             lblFootnote.TabIndex = 10;
-            lblFootnote.Text = "Version: 1.1 \nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
+            lblFootnote.Text = "Version: 1.2 \nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
             // 
             // line1
             // 
@@ -82,7 +85,7 @@ namespace BotWUnpacker
             this.btnBrowseRoot.Name = "btnBrowseRoot";
             this.btnBrowseRoot.Size = new System.Drawing.Size(97, 23);
             this.btnBrowseRoot.TabIndex = 4;
-            this.btnBrowseRoot.Text = "Set Path Folder";
+            this.btnBrowseRoot.Text = "Set Root Folder";
             this.btnBrowseRoot.UseVisualStyleBackColor = true;
             this.btnBrowseRoot.Click += new System.EventHandler(this.btnBrowseRoot_Click);
             // 
@@ -110,7 +113,7 @@ namespace BotWUnpacker
             // 
             this.btnBuildPack.Location = new System.Drawing.Point(13, 195);
             this.btnBuildPack.Name = "btnBuildPack";
-            this.btnBuildPack.Size = new System.Drawing.Size(100, 47);
+            this.btnBuildPack.Size = new System.Drawing.Size(99, 47);
             this.btnBuildPack.TabIndex = 3;
             this.btnBuildPack.Text = "Build PACK";
             this.btnBuildPack.UseVisualStyleBackColor = true;
@@ -119,16 +122,16 @@ namespace BotWUnpacker
             // lblFolderRoot
             // 
             this.lblFolderRoot.AutoSize = true;
-            this.lblFolderRoot.Location = new System.Drawing.Point(118, 44);
+            this.lblFolderRoot.Location = new System.Drawing.Point(116, 39);
             this.lblFolderRoot.Name = "lblFolderRoot";
-            this.lblFolderRoot.Size = new System.Drawing.Size(113, 13);
+            this.lblFolderRoot.Size = new System.Drawing.Size(109, 13);
             this.lblFolderRoot.TabIndex = 5;
-            this.lblFolderRoot.Text = "Default Path Location:";
+            this.lblFolderRoot.Text = "Root Folder Location:";
             // 
             // tbxFolderRoot
             // 
             this.tbxFolderRoot.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.tbxFolderRoot.Location = new System.Drawing.Point(119, 60);
+            this.tbxFolderRoot.Location = new System.Drawing.Point(119, 55);
             this.tbxFolderRoot.Name = "tbxFolderRoot";
             this.tbxFolderRoot.ReadOnly = true;
             this.tbxFolderRoot.Size = new System.Drawing.Size(253, 20);
@@ -148,7 +151,7 @@ namespace BotWUnpacker
             // 
             this.lblProcessStatus.AutoSize = true;
             this.lblProcessStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProcessStatus.Location = new System.Drawing.Point(10, 275);
+            this.lblProcessStatus.Location = new System.Drawing.Point(9, 300);
             this.lblProcessStatus.Name = "lblProcessStatus";
             this.lblProcessStatus.Size = new System.Drawing.Size(81, 13);
             this.lblProcessStatus.TabIndex = 11;
@@ -177,12 +180,48 @@ namespace BotWUnpacker
             this.tbxDataOffset.TabIndex = 13;
             this.tbxDataOffset.Text = "2000";
             // 
+            // btnBuildCompare
+            // 
+            this.btnBuildCompare.Enabled = false;
+            this.btnBuildCompare.Location = new System.Drawing.Point(13, 249);
+            this.btnBuildCompare.Name = "btnBuildCompare";
+            this.btnBuildCompare.Size = new System.Drawing.Size(99, 48);
+            this.btnBuildCompare.TabIndex = 15;
+            this.btnBuildCompare.Text = "Compare and Build PACK";
+            this.btnBuildCompare.UseVisualStyleBackColor = true;
+            this.btnBuildCompare.Click += new System.EventHandler(this.btnBuildCompare_Click);
+            // 
+            // btnExtractAll
+            // 
+            this.btnExtractAll.Enabled = false;
+            this.btnExtractAll.Location = new System.Drawing.Point(12, 151);
+            this.btnExtractAll.Name = "btnExtractAll";
+            this.btnExtractAll.Size = new System.Drawing.Size(100, 23);
+            this.btnExtractAll.TabIndex = 16;
+            this.btnExtractAll.Text = "Extract All";
+            this.btnExtractAll.UseVisualStyleBackColor = true;
+            this.btnExtractAll.Click += new System.EventHandler(this.btnExtractAll_Click);
+            // 
+            // btnOpenFolder
+            // 
+            this.btnOpenFolder.Enabled = false;
+            this.btnOpenFolder.Location = new System.Drawing.Point(119, 81);
+            this.btnOpenFolder.Name = "btnOpenFolder";
+            this.btnOpenFolder.Size = new System.Drawing.Size(125, 23);
+            this.btnOpenFolder.TabIndex = 17;
+            this.btnOpenFolder.Text = "Open Root Folder";
+            this.btnOpenFolder.UseVisualStyleBackColor = true;
+            this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(384, 361);
+            this.Controls.Add(this.btnOpenFolder);
+            this.Controls.Add(this.btnExtractAll);
+            this.Controls.Add(this.btnBuildCompare);
             this.Controls.Add(line1);
             this.Controls.Add(this.tbxDataOffset);
             this.Controls.Add(this.cbxSetDataOffset);
@@ -219,6 +258,9 @@ namespace BotWUnpacker
         private System.Windows.Forms.Label lblProcessStatus;
         private System.Windows.Forms.CheckBox cbxSetDataOffset;
         private System.Windows.Forms.TextBox tbxDataOffset;
+        private System.Windows.Forms.Button btnBuildCompare;
+        private System.Windows.Forms.Button btnExtractAll;
+        private System.Windows.Forms.Button btnOpenFolder;
     }
 }
 

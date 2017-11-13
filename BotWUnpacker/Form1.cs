@@ -18,6 +18,8 @@ namespace BotWUnpacker
             InitializeComponent();
             //Load in previous instance
             tbxFolderRoot.Text = Properties.Settings.Default.RootFolder;
+            if (tbxFolderRoot.Text != "") btnExtractAll.Enabled = true;
+            if (tbxFolderRoot.Text != "") btnOpenFolder.Enabled = true;
         }
 
         #region Browse Root Button
@@ -29,6 +31,8 @@ namespace BotWUnpacker
             oFolder.Description = "Select a game root folder";
             if (oFolder.ShowDialog() == DialogResult.Cancel) goto toss;
             tbxFolderRoot.Text = oFolder.SelectedPath;
+            btnExtractAll.Enabled = true;
+            btnOpenFolder.Enabled = true;
 
             //Save GameRoot property
             Properties.Settings.Default.RootFolder = oFolder.SelectedPath; 
@@ -44,6 +48,8 @@ namespace BotWUnpacker
             tbxFolderRoot.Text = "";
             Properties.Settings.Default.RootFolder = "";
             Properties.Settings.Default.Save();
+            btnExtractAll.Enabled = false;
+            btnOpenFolder.Enabled = false;
         }
 
         #region Extract Pack Button
@@ -88,6 +94,30 @@ namespace BotWUnpacker
         }
         #endregion
 
+        private void btnExtractAll_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Extract all SARC data type files from default path?" + "\n" + tbxFolderRoot.Text + "\n\n" + "This does not include subfolders", "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.No) goto toss;
+            lblProcessStatus.Visible = true;
+
+            DirectoryInfo dirFolder = new DirectoryInfo(tbxFolderRoot.Text);
+
+            String oFolderName, oFolderPath;
+            int sarcFileCount = 0;
+            foreach (FileInfo file in dirFolder.GetFiles())
+            {
+                oFolderName = Path.GetFileNameWithoutExtension(file.FullName);
+                oFolderPath = Path.GetDirectoryName(file.FullName) + "\\" + oFolderName;
+                if (PACK.Extract(file.FullName, oFolderPath))
+                    sarcFileCount++;
+            }
+
+            MessageBox.Show("Done" + "\n\n" + sarcFileCount + " file(s) extracted!");
+
+            toss:
+            GC.Collect();
+            lblProcessStatus.Visible = false;
+        }
+
         #region Build Pack Button
         private void btnBuildPack_Click(object sender, EventArgs e) // Build Pack button
         {
@@ -128,6 +158,11 @@ namespace BotWUnpacker
         }
         #endregion
 
+        private void btnBuildCompare_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void cbxSetDataOffset_CheckedChanged(object sender, EventArgs e)
         {
             if (cbxSetDataOffset.Checked)
@@ -140,6 +175,11 @@ namespace BotWUnpacker
                 tbxDataOffset.ReadOnly = true;
                 tbxDataOffset.BackColor = SystemColors.ControlLight;
             }
+        }
+
+        private void btnOpenFolder_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(tbxFolderRoot.Text);
         }
     }
 }
