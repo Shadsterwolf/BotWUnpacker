@@ -7,6 +7,10 @@
 -Added support to adjust files that need a fixed data offset (add padding) <br />
 -Various tweaks for user experience.
 
+<b>Version 1.2:</b> <br />
+-Added Extract All to mass extract SARC types (does not support Yaz0 yet)
+-Added simple Open Root Folder button
+-Added placeholder button for Compare and Build Pack
 
 # BotW Unpacker
 <b>Purpose:</b> <br />
