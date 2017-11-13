@@ -32,3 +32,8 @@
 <b>Future plans:</b> <br />
 -Add file comparison which will detail the differences of the two files if there are any. <br />
 -Add Yaz0 decoding and encoding support
+
+# Credits
+Made by Shadsterwolf <br />
+Uwizard code SARC.cs heavily modified (and mostly commented!)
+
