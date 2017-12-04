@@ -22,7 +22,7 @@ namespace BotWUnpacker
             if (tbxFolderRoot.Text != "") btnOpenFolder.Enabled = true;
         }
 
-        #region Browse Root Button
+        #region Button Browse Root 
         private void btnBrowseRoot_Click(object sender, EventArgs e) //Browse Root button
         {
             FolderBrowserDialog oFolder = new FolderBrowserDialog();
@@ -43,6 +43,7 @@ namespace BotWUnpacker
         }
         #endregion
 
+        #region Button Clear 
         private void btnClearRoot_Click(object sender, EventArgs e)
         {
             tbxFolderRoot.Text = "";
@@ -51,8 +52,9 @@ namespace BotWUnpacker
             btnExtractAll.Enabled = false;
             btnOpenFolder.Enabled = false;
         }
+        #endregion
 
-        #region Extract Pack Button
+        #region Button Extract Pack
         private void btnExtractPack_Click(object sender, EventArgs e) //Extract Pack button
         {
             OpenFileDialog oFile = new OpenFileDialog();
@@ -69,7 +71,15 @@ namespace BotWUnpacker
 
             //SARC
             lblProcessStatus.Visible = true;
-            if (!PACK.Extract(oFile.FileName, oFolderPath))
+            bool boolAutoDecode = false;
+            bool boolReplaceFile = false;
+            if (cbxAutoDecode.Checked) //Auto Yaz0 decoding
+            {
+                boolAutoDecode = true;
+                if (cbxReplaceDecodedFile.Checked) //Replace File
+                    boolReplaceFile = true;
+            }
+            if (!PACK.Extract(oFile.FileName, oFolderPath, boolAutoDecode, boolReplaceFile)) //Extraction
             {
                 MessageBox.Show("Extraction error:" + "\n\n" + PACK.lerror);
                 goto toss;
@@ -94,21 +104,54 @@ namespace BotWUnpacker
         }
         #endregion
 
+        #region Button Extract All
         private void btnExtractAll_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Extract all SARC data type files from default path?" + "\n" + tbxFolderRoot.Text + "\n\n" + "This does not include subfolders", "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.No) goto toss;
+            if (!(Directory.Exists(tbxFolderRoot.Text))) {
+                MessageBox.Show("Error: Invalid path" + "\n" + tbxFolderRoot.Text);
+                goto toss;
+            }
+            if (cbxCompileAllInOneFolder.Checked) { if (MessageBox.Show("Extract all SARC data type files from default path?" + "\n" + tbxFolderRoot.Text + "\n\n" + "You are choosing to compile all extracted data to one folder!" + "\n" + "This does not include subfolders", "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.No) goto toss; }
+            else { if (MessageBox.Show("Extract all SARC data type files from default path?" + "\n" + tbxFolderRoot.Text + "\n\n" + "This will generate seperate folders of every file it unpacks" + "\n" + "This does not include subfolders", "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.No) goto toss; }
             lblProcessStatus.Visible = true;
 
             DirectoryInfo dirFolder = new DirectoryInfo(tbxFolderRoot.Text);
 
+
             String oFolderName, oFolderPath;
             int sarcFileCount = 0;
-            foreach (FileInfo file in dirFolder.GetFiles())
+            bool boolAutoDecode = false;
+            bool boolReplaceFile = false;
+            if (cbxAutoDecode.Checked) //Auto Yaz0 decoding
             {
-                oFolderName = Path.GetFileNameWithoutExtension(file.FullName);
-                oFolderPath = Path.GetDirectoryName(file.FullName) + "\\" + oFolderName;
-                if (PACK.Extract(file.FullName, oFolderPath))
-                    sarcFileCount++;
+                boolAutoDecode = true;
+                if (cbxReplaceDecodedFile.Checked) //Replace File
+                    boolReplaceFile = true;
+            }
+
+            if (cbxCompileAllInOneFolder.Checked) //Compile All to New Folder
+            {
+                FolderBrowserDialog oFolder = new FolderBrowserDialog();
+                if (tbxFolderRoot.Text != "") oFolder.SelectedPath = tbxFolderRoot.Text;
+                if (oFolder.ShowDialog() == DialogResult.Cancel) goto toss;
+                foreach (FileInfo file in dirFolder.GetFiles()) //Extraction
+                {
+                    oFolderName = Path.GetFileNameWithoutExtension(file.FullName);
+                    oFolderPath = oFolder.SelectedPath;
+                    if (PACK.Extract(file.FullName, oFolderPath, boolAutoDecode, boolReplaceFile))
+                        sarcFileCount++;
+                }
+
+            }
+            else
+            {
+                foreach (FileInfo file in dirFolder.GetFiles()) //Extraction
+                {
+                    oFolderName = Path.GetFileNameWithoutExtension(file.FullName);
+                    oFolderPath = Path.GetDirectoryName(file.FullName) + "\\" + oFolderName;
+                    if (PACK.Extract(file.FullName, oFolderPath, boolAutoDecode, boolReplaceFile))
+                        sarcFileCount++;
+                }
             }
 
             MessageBox.Show("Done" + "\n\n" + sarcFileCount + " file(s) extracted!");
@@ -117,8 +160,43 @@ namespace BotWUnpacker
             GC.Collect();
             lblProcessStatus.Visible = false;
         }
+        #endregion
 
-        #region Build Pack Button
+        #region Button Yaz0 Decode
+        private void btnYaz0Decode_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog oFile = new OpenFileDialog();
+            oFile.Filter = "All Files|*.*";
+            if (tbxFolderRoot.Text != "") oFile.InitialDirectory = tbxFolderRoot.Text;
+            if (oFile.ShowDialog() == DialogResult.Cancel) goto toss;
+
+            //Yaz0 Decode
+            lblProcessStatus.Visible = true;
+            if (cbxReplaceDecodedFile.Checked)
+            {
+                if (!Yaz0.Decode(oFile.FileName, oFile.FileName))
+                {
+                    MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
+                    goto toss;
+                }
+            }
+            else
+            {
+                if (!Yaz0.Decode(oFile.FileName, oFile.FileName + "Decoded"))
+                {
+                    MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
+                    goto toss;
+                }
+            }
+
+            toss:
+            oFile.Dispose();
+            GC.Collect();
+            lblProcessStatus.Visible = false;
+        }
+        #endregion
+
+        #region Button Build Pack 
         private void btnBuildPack_Click(object sender, EventArgs e) // Build Pack button
         {
             FolderBrowserDialog oFolder = new FolderBrowserDialog();
@@ -141,12 +219,12 @@ namespace BotWUnpacker
             if (cbxSetDataOffset.Checked)
             {
                 uint dataOffset = (uint)int.Parse(tbxDataOffset.Text, System.Globalization.NumberStyles.HexNumber);
-                if (!PACK.build(oFolder.SelectedPath, sFile.FileName, dataOffset))
+                if (!PACK.Build(oFolder.SelectedPath, sFile.FileName, dataOffset))
                     MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
             }
             else
             {
-                if (!PACK.build(oFolder.SelectedPath, sFile.FileName))
+                if (!PACK.Build(oFolder.SelectedPath, sFile.FileName))
                     MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
             }
 
@@ -179,7 +257,40 @@ namespace BotWUnpacker
 
         private void btnOpenFolder_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(tbxFolderRoot.Text);
+            try { System.Diagnostics.Process.Start(tbxFolderRoot.Text); }
+            catch { MessageBox.Show("Error: Invalid path" + "\n" + tbxFolderRoot.Text); }
+        }
+
+        private void tbxFolderRoot_TextChanged(object sender, EventArgs e)
+        {
+            if (tbxFolderRoot.Text == "")
+            {
+                Properties.Settings.Default.RootFolder = "";
+                Properties.Settings.Default.Save();
+                btnExtractAll.Enabled = false;
+                btnOpenFolder.Enabled = false;
+            }
+            else
+            {
+                btnExtractAll.Enabled = true;
+                btnOpenFolder.Enabled = true;
+                Properties.Settings.Default.RootFolder = tbxFolderRoot.Text;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        private void cbxAutoDecode_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbxAutoDecode.Checked)
+            {
+                cbxReplaceDecodedFile.Enabled = true;
+            }
+            else
+            {
+                cbxReplaceDecodedFile.Checked = false;
+                cbxReplaceDecodedFile.Enabled = false;
+            }
+                
         }
     }
 }

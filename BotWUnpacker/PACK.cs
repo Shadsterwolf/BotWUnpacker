@@ -67,27 +67,27 @@ namespace BotWUnpacker
         #endregion
 
         #region Conversions
-        private static ushort makeu16(byte b1, byte b2) //16-bit change (ushort, 0xFFFF)
+        private static ushort Makeu16(byte b1, byte b2) //16-bit change (ushort, 0xFFFF)
         {
             return (ushort)(((ushort)b1 << 8) | (ushort)b2);
         }
 
-        private static uint makeu32(byte b1, byte b2, byte b3, byte b4) //32-bit change (uint, 0xFFFFFFFF)
+        private static uint Makeu32(byte b1, byte b2, byte b3, byte b4) //32-bit change (uint, 0xFFFFFFFF)
         {
             return ((uint)b1 << 24) | ((uint)b2 << 16) | ((uint)b3 << 8) | (uint)b4;
         }
 
-        private static byte[] breaku16(ushort u16) //Byte change from 16-bits (byte, 0xFF, 0xFF)
+        private static byte[] Breaku16(ushort u16) //Byte change from 16-bits (byte, 0xFF, 0xFF)
         {
             return new byte[] { (byte)(u16 >> 8), (byte)(u16 & 0xFF) };
         }
 
-        private static byte[] breaku32(uint u32) //Byte change from 32-bits (byte, 0xFF, 0xFF, 0xFF, 0xFF)
+        private static byte[] Breaku32(uint u32) //Byte change from 32-bits (byte, 0xFF, 0xFF, 0xFF, 0xFF)
         {
             return new byte[] { (byte)(u32 >> 24), (byte)((u32 >> 16) & 0xFF), (byte)((u32 >> 8) & 0xFF), (byte)(u32 & 0xFF) };
         }
 
-        static private string IntToHex(int num)
+        static private string IntToHex(int num) 
         {
             return num.ToString("X");
         }
@@ -95,6 +95,41 @@ namespace BotWUnpacker
         static private int HexToInt(String hex)
         {
             return int.Parse(hex, System.Globalization.NumberStyles.HexNumber);
+        }
+        #endregion
+
+        #region Constructors
+        private static void MakeDirExist(string dir)
+        {
+            string dirPath = System.IO.Path.GetFullPath(dir);
+            int numDirs = 0;
+            for (int i = 0; i < dirPath.Length; i++)
+                if (dirPath[i] == '\\') numDirs++;
+
+            for (int j = numDirs; j >= 0; j--)
+            {
+                string tmp = dirPath;
+                for (int k = 0; k < j; k++)
+                    tmp = System.IO.Path.GetDirectoryName(tmp);
+                if (!System.IO.Directory.Exists(tmp))
+                    System.IO.Directory.CreateDirectory(tmp);
+            }
+        }
+
+        private static uint CalcHash(string name)
+        {
+            ulong result = 0;
+            for (int i = 0; i < name.Length; i++)
+            {
+                result = (((byte)name[i]) + (result * 0x65)) & 0xFFFFFFFF;
+            }
+            return (uint)(result & 0xFFFFFFFF);
+        }
+
+        private static string[] GetFiles(string dir)
+        {
+            if (dir == "") dir = System.Environment.CurrentDirectory;
+            return System.IO.Directory.GetFiles(dir);
         }
 
         private static byte[] AddPadding(byte[] dataBuild, uint padding, NodeData nodeData, NodeInfo nodeInfo) //Add padding to adjust to Nintendo's logic
@@ -126,74 +161,12 @@ namespace BotWUnpacker
         }
         #endregion
 
-        #region Constructors
-
-        private static void makeDirExist(string dir)
-        {
-            string dirPath = System.IO.Path.GetFullPath(dir);
-            int numDirs = 0;
-            for (int i = 0; i < dirPath.Length; i++)
-                if (dirPath[i] == '\\') numDirs++;
-
-            for (int j = numDirs; j >= 0; j--)
-            {
-                string tmp = dirPath;
-                for (int k = 0; k < j; k++)
-                    tmp = System.IO.Path.GetDirectoryName(tmp);
-                if (!System.IO.Directory.Exists(tmp))
-                    System.IO.Directory.CreateDirectory(tmp);
-            }
-        }
-
-        private static uint calchash(string name)
-        {
-            ulong result = 0;
-            for (int i = 0; i < name.Length; i++)
-            {
-                result = (((byte)name[i]) + (result * 0x65)) & 0xFFFFFFFF;
-            }
-            return (uint)(result & 0xFFFFFFFF);
-        }
-
-        private static string[] getfiles(string dir)
-        {
-            if (dir == "") dir = System.Environment.CurrentDirectory;
-            return System.IO.Directory.GetFiles(dir);
-        }
-
-        private static string[] getdirs(string dir)
-        {
-            if (dir == "") dir = System.Environment.CurrentDirectory;
-            return System.IO.Directory.GetDirectories(dir);
-        }
-
-        private static uint getfilesize(string filePath)
-        {
-            System.IO.StreamReader stream = new System.IO.StreamReader(filePath);
-            uint size = (uint)stream.BaseStream.Length;
-            stream.Close();
-            stream.Dispose();
-            return size;
-        }
-
-        private static uint getfilesize(string filePath, uint padding)
-        {
-            System.IO.StreamReader stream = new System.IO.StreamReader(filePath);
-            uint size = (uint)stream.BaseStream.Length;
-            if ((size % padding) != 0)
-                size = padding % (size % padding) + size;
-            stream.Close();
-            stream.Dispose();
-            return size;
-        }
-        #endregion
-
         #region Extract
         public static bool Extract(string inFile, string outDir) //EXTRACT ----------------------------------------------------------------------
         {
             try
             {
-                return Extract(System.IO.File.ReadAllBytes(inFile), outDir); //default
+                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, false, false); //default
             }
             catch (Exception e) //usually because file is in use
             {
@@ -202,13 +175,26 @@ namespace BotWUnpacker
             }
         }
 
-        public static bool Extract(byte[] inFile, string outDir)
+        public static bool Extract(string inFile, string outDir, bool autoDecode, bool replaceFile) 
+        {
+            try
+            {
+                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, autoDecode, replaceFile); 
+            }
+            catch (Exception e) //usually because file is in use
+            {
+                lerror = e.Message;
+                return false;
+            }
+        }
+
+        public static bool Extract(byte[] inFile, string outDir, bool autoDecode, bool replaceFile)
         {
 
             //SARC header 0x00 - 0x13
             if (inFile[0] != 'S' || inFile[1] != 'A' || inFile[2] != 'R' || inFile[3] != 'C')
             {
-                if (inFile[0] == 'Y' || inFile[0] == 'a' || inFile[0] == 'z')
+                if (inFile[0] == 'Y' && inFile[1] == 'a' && inFile[2] == 'z' && inFile[3] == '0')
                 {
                     lerror = "Yaz0 file encoded, please decode and try again!" + "\n" + "(Yaz0 not supported, yet...)";
                     return false;
@@ -220,9 +206,9 @@ namespace BotWUnpacker
                 }
             }
             int pos = 4; //0x04
-            ushort hdr = makeu16(inFile[pos], inFile[pos + 1]); //SARC Header length
+            ushort hdr = Makeu16(inFile[pos], inFile[pos + 1]); //SARC Header length
             pos += 2; //0x06
-            ushort bom = makeu16(inFile[pos], inFile[pos + 1]); //Byte Order Mark
+            ushort bom = Makeu16(inFile[pos], inFile[pos + 1]); //Byte Order Mark
             if (bom != 65279) //Check 0x06 for Byte Order Mark (if not 0xFEFF)
             {
                 if (bom == 65518) lerror = "Unable to support Little Endian! (Byte Order Mark 0x06)";
@@ -230,11 +216,11 @@ namespace BotWUnpacker
                 return false;
             }
             pos += 2; //0x08
-            uint fileSize = makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); 
+            uint fileSize = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); 
             pos += 4; //0x0C
-            uint dataOffset = makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //Data offset start position
+            uint dataOffset = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //Data offset start position
             pos += 4; //0x10
-            uint unknown = makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //unknown, always 0x01?
+            uint unknown = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //unknown, always 0x01?
             pos += 4; //0x14
 
             //SFAT header 0x14 - 0x1F
@@ -244,11 +230,11 @@ namespace BotWUnpacker
                 return false;
             }
             pos += 4; //0x18
-            ushort hdr2 = makeu16(inFile[pos], inFile[pos + 1]); //SFAT Header length
+            ushort hdr2 = Makeu16(inFile[pos], inFile[pos + 1]); //SFAT Header length
             pos += 2; //0x1A
-            ushort nodeCount = makeu16(inFile[pos], inFile[pos + 1]); //Node Cluster count
+            ushort nodeCount = Makeu16(inFile[pos], inFile[pos + 1]); //Node Cluster count
             pos += 2; //0x1C
-            uint hashr = makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //Hash multiplier, always 0x65
+            uint hashr = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //Hash multiplier, always 0x65
             pos += 4; //0x20
 
             SarcNode[] nodes = new SarcNode[nodeCount];
@@ -256,15 +242,15 @@ namespace BotWUnpacker
 
             for (int i = 0; i < nodeCount; i++) //Node cluster 
             {
-                tmpnode.hash = makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]);
+                tmpnode.hash = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]);
                 pos += 4; //0x?4
                 tmpnode.unknown = inFile[pos]; //unknown, always 0x01? (not used in this case)
                 pos += 1; //0x?5
-                tmpnode.offset = makeu32(0, inFile[pos], inFile[pos + 1], inFile[pos + 2]); //Node SFNT filename offset divided by 4 (not used)
+                tmpnode.offset = Makeu32(0, inFile[pos], inFile[pos + 1], inFile[pos + 2]); //Node SFNT filename offset divided by 4 (not used)
                 pos += 3; //0x?8
-                tmpnode.start = makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //Start Data offset position
+                tmpnode.start = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //Start Data offset position
                 pos += 4; //0x?C
-                tmpnode.end = makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //End Data offset position
+                tmpnode.end = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //End Data offset position
                 pos += 4; //0x?0
                 nodes[i] = tmpnode; //Store node data into array
             }
@@ -276,9 +262,9 @@ namespace BotWUnpacker
                 return false;
             }
             pos += 4; //0x?4
-            ushort hdr3 = makeu16(inFile[pos], inFile[pos + 1]); //SFNT Header length, always 0x08
+            ushort hdr3 = Makeu16(inFile[pos], inFile[pos + 1]); //SFNT Header length, always 0x08
             pos += 2; //0x?6
-            ushort unk2 = makeu16(inFile[pos], inFile[pos + 1]); //unknown, always 0x00?
+            ushort unk2 = Makeu16(inFile[pos], inFile[pos + 1]); //unknown, always 0x00?
             pos += 2; //0x?8
 
             string[] fileNames = new string[nodeCount];
@@ -299,14 +285,41 @@ namespace BotWUnpacker
 
             if (!System.IO.Directory.Exists(outDir)) System.IO.Directory.CreateDirectory(outDir); //folder creation
             System.IO.StreamWriter stream;
+            byte[] nodeData;
 
             for (int i = 0; i < nodeCount; i++) //Write files based from node information
             {
-                makeDirExist(System.IO.Path.GetDirectoryName(outDir + "/" + fileNames[i]));
-                stream = new System.IO.StreamWriter(outDir + "/" + fileNames[i]);
-                stream.BaseStream.Write(inFile, (int)(nodes[i].start + dataOffset), (int)(nodes[i].end - nodes[i].start)); //Write 
-                stream.Close();
-                stream.Dispose();
+                MakeDirExist(System.IO.Path.GetDirectoryName(outDir + "/" + fileNames[i]));
+                if (autoDecode)
+                {
+                    nodeData = new byte[nodes[i].end - nodes[i].start];
+                    Array.Copy(inFile, nodes[i].start + dataOffset, nodeData, 0, nodes[i].end - nodes[i].start);
+                    if (replaceFile)
+                    {
+                        if (!(Yaz0.Decode(nodeData, outDir + "/" + fileNames[i]))) //attempt decode, but if it fails, write it anyway.
+                        {
+                            stream = new System.IO.StreamWriter(outDir + "/" + fileNames[i]);
+                            stream.BaseStream.Write(inFile, (int)(nodes[i].start + dataOffset), (int)(nodes[i].end - nodes[i].start)); //Write 
+                            stream.Close();
+                            stream.Dispose();
+                        }
+                    }
+                    else
+                    {
+                        Yaz0.Decode(nodeData, outDir + "/" + fileNames[i] + "Decoded");
+                        stream = new System.IO.StreamWriter(outDir + "/" + fileNames[i]);
+                        stream.BaseStream.Write(inFile, (int)(nodes[i].start + dataOffset), (int)(nodes[i].end - nodes[i].start)); //Write 
+                        stream.Close();
+                        stream.Dispose();
+                    }
+                }
+                else
+                {
+                    stream = new System.IO.StreamWriter(outDir + "/" + fileNames[i]);
+                    stream.BaseStream.Write(inFile, (int)(nodes[i].start + dataOffset), (int)(nodes[i].end - nodes[i].start)); //Write 
+                    stream.Close();
+                    stream.Dispose();
+                }
             }
             GC.Collect();
             return true;
@@ -314,12 +327,12 @@ namespace BotWUnpacker
         #endregion
 
         #region Build
-        public static bool build(string inDir, string outFile)
+        public static bool Build(string inDir, string outFile)
         {
-            return build(inDir, outFile, 0); //if no fixed data offset is set.
+            return Build(inDir, outFile, 0); //if no fixed data offset is set.
         }
 
-        public static bool build(string inDir, string outFile, uint dataFixedOffset) //BUILD ----------------------------------------------------------------------
+        public static bool Build(string inDir, string outFile, uint dataFixedOffset) //BUILD ----------------------------------------------------------------------
         {
             try
             {
@@ -351,25 +364,25 @@ namespace BotWUnpacker
                 NodeHash[] hashesUnsorted = new NodeHash[numFiles];
                 for (int i = 0; i < numFiles; i++)
                 {
-                    hashesUnsorted[i] = new NodeHash(calchash(nodeInfo[i].filename), i); //Store and calculate unsorted hashes
+                    hashesUnsorted[i] = new NodeHash(CalcHash(nodeInfo[i].filename), i); //Store and calculate unsorted hashes
                 }
-                uint lhash;
-                bool[] hashes_done = new bool[hashesUnsorted.Length];
+                uint lastHash;
+                bool[] hashSortedFlag = new bool[hashesUnsorted.Length];
                 NodeHash[] hashes = new NodeHash[hashesUnsorted.Length];
                 int dhi = 0;
                 for (int i = 0; i < hashes.Length; i++) //sort nodes by hash calculation
                 {
-                    lhash = uint.MaxValue;
+                    lastHash = uint.MaxValue;
                     for (int j = 0; j < hashesUnsorted.Length; j++)
                     {
-                        if (hashes_done[j]) continue;
-                        if (hashesUnsorted[j].hash < lhash)
+                        if (hashSortedFlag[j]) continue;
+                        if (hashesUnsorted[j].hash < lastHash)
                         {
                             dhi = j;
-                            lhash = hashesUnsorted[j].hash;
+                            lastHash = hashesUnsorted[j].hash;
                         }
                     }
-                    hashes_done[dhi] = true;
+                    hashSortedFlag[dhi] = true;
                     hashes[i] = hashesUnsorted[dhi];
                 }
 
@@ -412,22 +425,22 @@ namespace BotWUnpacker
                 System.IO.StreamWriter stream = new System.IO.StreamWriter(outFile);
                 //SARC ---
                 stream.BaseStream.Write(new byte[] { 83, 65, 82, 67, 0x00, 0x14, 0xFE, 0xFF }, 0, 8); //Write Fixed SARC Big Endian header
-                stream.BaseStream.Write(breaku32(fileSize), 0, 4); //Write 0x08 split bytes of file size
-                stream.BaseStream.Write(breaku32(nodeDataStart), 0, 4); //Write 0x0C split bytes of data table start offset
+                stream.BaseStream.Write(Breaku32(fileSize), 0, 4); //Write 0x08 split bytes of file size
+                stream.BaseStream.Write(Breaku32(nodeDataStart), 0, 4); //Write 0x0C split bytes of data table start offset
                 //SFAT ---
                 stream.BaseStream.Write(new byte[] { 0x01, 0x00, 0x00, 0x00, 83, 70, 65, 84, 0x00, 0x0C }, 0, 10); //Write Fixed SFAT header
-                stream.BaseStream.Write(breaku16((ushort)numFiles), 0, 2); //Write 0x1A split bytes of number of nodes/files
-                stream.BaseStream.Write(breaku32(0x65), 0, 4); //Write Fixed Hash Multiplier 
+                stream.BaseStream.Write(Breaku16((ushort)numFiles), 0, 2); //Write 0x1A split bytes of number of nodes/files
+                stream.BaseStream.Write(Breaku32(0x65), 0, 4); //Write Fixed Hash Multiplier 
                 uint strpos = 0;
                 //Node ---
                 for (int i = 0; i < numFiles; i++)
                 {
-                    stream.BaseStream.Write(breaku32(hashes[i].hash), 0, 4); //Node Hash 
+                    stream.BaseStream.Write(Breaku32(hashes[i].hash), 0, 4); //Node Hash 
                     stream.BaseStream.WriteByte(0x01); //Node Fixed Unknown
-                    stream.BaseStream.Write(breaku32((strpos >> 2)), 1, 3); //Node filename offset position (divided by 4)
+                    stream.BaseStream.Write(Breaku32((strpos >> 2)), 1, 3); //Node filename offset position (divided by 4)
                     strpos += nodeInfo[hashes[i].index].namesize;
-                    stream.BaseStream.Write(breaku32(nodeData[hashes[i].index].startPos), 0, 4); //Node start data offset position
-                    stream.BaseStream.Write(breaku32(nodeData[hashes[i].index].endPos), 0, 4); //Node end data offset position
+                    stream.BaseStream.Write(Breaku32(nodeData[hashes[i].index].startPos), 0, 4); //Node start data offset position
+                    stream.BaseStream.Write(Breaku32(nodeData[hashes[i].index].endPos), 0, 4); //Node end data offset position
                 }
                 GC.Collect();
                 //SFNT ---

@@ -44,6 +44,10 @@ namespace BotWUnpacker
             this.btnBuildCompare = new System.Windows.Forms.Button();
             this.btnExtractAll = new System.Windows.Forms.Button();
             this.btnOpenFolder = new System.Windows.Forms.Button();
+            this.btnYaz0Decode = new System.Windows.Forms.Button();
+            this.cbxReplaceDecodedFile = new System.Windows.Forms.CheckBox();
+            this.cbxAutoDecode = new System.Windows.Forms.CheckBox();
+            this.cbxCompileAllInOneFolder = new System.Windows.Forms.CheckBox();
             imgIcon = new System.Windows.Forms.PictureBox();
             lblFootnote = new System.Windows.Forms.Label();
             line1 = new System.Windows.Forms.Label();
@@ -64,17 +68,17 @@ namespace BotWUnpacker
             // lblFootnote
             // 
             lblFootnote.AutoSize = true;
-            lblFootnote.Location = new System.Drawing.Point(9, 313);
+            lblFootnote.Location = new System.Drawing.Point(12, 373);
             lblFootnote.Name = "lblFootnote";
             lblFootnote.Size = new System.Drawing.Size(210, 39);
             lblFootnote.TabIndex = 10;
-            lblFootnote.Text = "Version: 1.2 \nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
+            lblFootnote.Text = "Version: 1.4 \nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
             // 
             // line1
             // 
             line1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             line1.Enabled = false;
-            line1.Location = new System.Drawing.Point(13, 181);
+            line1.Location = new System.Drawing.Point(12, 250);
             line1.Name = "line1";
             line1.Size = new System.Drawing.Size(356, 2);
             line1.TabIndex = 14;
@@ -101,7 +105,7 @@ namespace BotWUnpacker
             // 
             // btnExtractPack
             // 
-            this.btnExtractPack.Location = new System.Drawing.Point(12, 122);
+            this.btnExtractPack.Location = new System.Drawing.Point(12, 118);
             this.btnExtractPack.Name = "btnExtractPack";
             this.btnExtractPack.Size = new System.Drawing.Size(100, 23);
             this.btnExtractPack.TabIndex = 2;
@@ -111,9 +115,9 @@ namespace BotWUnpacker
             // 
             // btnBuildPack
             // 
-            this.btnBuildPack.Location = new System.Drawing.Point(13, 195);
+            this.btnBuildPack.Location = new System.Drawing.Point(12, 256);
             this.btnBuildPack.Name = "btnBuildPack";
-            this.btnBuildPack.Size = new System.Drawing.Size(99, 47);
+            this.btnBuildPack.Size = new System.Drawing.Size(100, 47);
             this.btnBuildPack.TabIndex = 3;
             this.btnBuildPack.Text = "Build PACK";
             this.btnBuildPack.UseVisualStyleBackColor = true;
@@ -130,17 +134,17 @@ namespace BotWUnpacker
             // 
             // tbxFolderRoot
             // 
-            this.tbxFolderRoot.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.tbxFolderRoot.BackColor = System.Drawing.SystemColors.Control;
             this.tbxFolderRoot.Location = new System.Drawing.Point(119, 55);
             this.tbxFolderRoot.Name = "tbxFolderRoot";
-            this.tbxFolderRoot.ReadOnly = true;
             this.tbxFolderRoot.Size = new System.Drawing.Size(253, 20);
             this.tbxFolderRoot.TabIndex = 6;
+            this.tbxFolderRoot.TextChanged += new System.EventHandler(this.tbxFolderRoot_TextChanged);
             // 
             // cbxWriteXml
             // 
             this.cbxWriteXml.AutoSize = true;
-            this.cbxWriteXml.Location = new System.Drawing.Point(118, 126);
+            this.cbxWriteXml.Location = new System.Drawing.Point(118, 122);
             this.cbxWriteXml.Name = "cbxWriteXml";
             this.cbxWriteXml.Size = new System.Drawing.Size(109, 17);
             this.cbxWriteXml.TabIndex = 8;
@@ -151,7 +155,8 @@ namespace BotWUnpacker
             // 
             this.lblProcessStatus.AutoSize = true;
             this.lblProcessStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProcessStatus.Location = new System.Drawing.Point(9, 300);
+            this.lblProcessStatus.ForeColor = System.Drawing.Color.Blue;
+            this.lblProcessStatus.Location = new System.Drawing.Point(12, 360);
             this.lblProcessStatus.Name = "lblProcessStatus";
             this.lblProcessStatus.Size = new System.Drawing.Size(81, 13);
             this.lblProcessStatus.TabIndex = 11;
@@ -161,7 +166,7 @@ namespace BotWUnpacker
             // cbxSetDataOffset
             // 
             this.cbxSetDataOffset.AutoSize = true;
-            this.cbxSetDataOffset.Location = new System.Drawing.Point(119, 195);
+            this.cbxSetDataOffset.Location = new System.Drawing.Point(119, 260);
             this.cbxSetDataOffset.Name = "cbxSetDataOffset";
             this.cbxSetDataOffset.Size = new System.Drawing.Size(197, 17);
             this.cbxSetDataOffset.TabIndex = 12;
@@ -172,7 +177,7 @@ namespace BotWUnpacker
             // tbxDataOffset
             // 
             this.tbxDataOffset.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.tbxDataOffset.Location = new System.Drawing.Point(119, 218);
+            this.tbxDataOffset.Location = new System.Drawing.Point(119, 280);
             this.tbxDataOffset.MaxLength = 4;
             this.tbxDataOffset.Name = "tbxDataOffset";
             this.tbxDataOffset.ReadOnly = true;
@@ -183,9 +188,9 @@ namespace BotWUnpacker
             // btnBuildCompare
             // 
             this.btnBuildCompare.Enabled = false;
-            this.btnBuildCompare.Location = new System.Drawing.Point(13, 249);
+            this.btnBuildCompare.Location = new System.Drawing.Point(12, 309);
             this.btnBuildCompare.Name = "btnBuildCompare";
-            this.btnBuildCompare.Size = new System.Drawing.Size(99, 48);
+            this.btnBuildCompare.Size = new System.Drawing.Size(100, 48);
             this.btnBuildCompare.TabIndex = 15;
             this.btnBuildCompare.Text = "Compare and Build PACK";
             this.btnBuildCompare.UseVisualStyleBackColor = true;
@@ -194,7 +199,7 @@ namespace BotWUnpacker
             // btnExtractAll
             // 
             this.btnExtractAll.Enabled = false;
-            this.btnExtractAll.Location = new System.Drawing.Point(12, 151);
+            this.btnExtractAll.Location = new System.Drawing.Point(12, 147);
             this.btnExtractAll.Name = "btnExtractAll";
             this.btnExtractAll.Size = new System.Drawing.Size(100, 23);
             this.btnExtractAll.TabIndex = 16;
@@ -213,12 +218,61 @@ namespace BotWUnpacker
             this.btnOpenFolder.UseVisualStyleBackColor = true;
             this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
             // 
+            // btnYaz0Decode
+            // 
+            this.btnYaz0Decode.Location = new System.Drawing.Point(12, 176);
+            this.btnYaz0Decode.Name = "btnYaz0Decode";
+            this.btnYaz0Decode.Size = new System.Drawing.Size(100, 23);
+            this.btnYaz0Decode.TabIndex = 18;
+            this.btnYaz0Decode.Text = "Yaz0 Decode";
+            this.btnYaz0Decode.UseVisualStyleBackColor = true;
+            this.btnYaz0Decode.Click += new System.EventHandler(this.btnYaz0Decode_Click);
+            // 
+            // cbxReplaceDecodedFile
+            // 
+            this.cbxReplaceDecodedFile.AutoSize = true;
+            this.cbxReplaceDecodedFile.Checked = true;
+            this.cbxReplaceDecodedFile.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbxReplaceDecodedFile.Location = new System.Drawing.Point(12, 228);
+            this.cbxReplaceDecodedFile.Name = "cbxReplaceDecodedFile";
+            this.cbxReplaceDecodedFile.Size = new System.Drawing.Size(215, 17);
+            this.cbxReplaceDecodedFile.TabIndex = 19;
+            this.cbxReplaceDecodedFile.Text = "Replace With Decoded File (No Copies)";
+            this.cbxReplaceDecodedFile.UseVisualStyleBackColor = true;
+            // 
+            // cbxAutoDecode
+            // 
+            this.cbxAutoDecode.AutoSize = true;
+            this.cbxAutoDecode.Checked = true;
+            this.cbxAutoDecode.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbxAutoDecode.Location = new System.Drawing.Point(12, 205);
+            this.cbxAutoDecode.Name = "cbxAutoDecode";
+            this.cbxAutoDecode.Size = new System.Drawing.Size(116, 17);
+            this.cbxAutoDecode.TabIndex = 20;
+            this.cbxAutoDecode.Text = "Auto Yaz0 Decode";
+            this.cbxAutoDecode.UseVisualStyleBackColor = true;
+            this.cbxAutoDecode.CheckedChanged += new System.EventHandler(this.cbxAutoDecode_CheckedChanged);
+            // 
+            // cbxCompileAllInOneFolder
+            // 
+            this.cbxCompileAllInOneFolder.AutoSize = true;
+            this.cbxCompileAllInOneFolder.Location = new System.Drawing.Point(118, 151);
+            this.cbxCompileAllInOneFolder.Name = "cbxCompileAllInOneFolder";
+            this.cbxCompileAllInOneFolder.Size = new System.Drawing.Size(144, 17);
+            this.cbxCompileAllInOneFolder.TabIndex = 21;
+            this.cbxCompileAllInOneFolder.Text = "Compile All In One Folder";
+            this.cbxCompileAllInOneFolder.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(384, 361);
+            this.ClientSize = new System.Drawing.Size(384, 421);
+            this.Controls.Add(this.cbxCompileAllInOneFolder);
+            this.Controls.Add(this.cbxAutoDecode);
+            this.Controls.Add(this.cbxReplaceDecodedFile);
+            this.Controls.Add(this.btnYaz0Decode);
             this.Controls.Add(this.btnOpenFolder);
             this.Controls.Add(this.btnExtractAll);
             this.Controls.Add(this.btnBuildCompare);
@@ -261,6 +315,10 @@ namespace BotWUnpacker
         private System.Windows.Forms.Button btnBuildCompare;
         private System.Windows.Forms.Button btnExtractAll;
         private System.Windows.Forms.Button btnOpenFolder;
+        private System.Windows.Forms.Button btnYaz0Decode;
+        private System.Windows.Forms.CheckBox cbxReplaceDecodedFile;
+        private System.Windows.Forms.CheckBox cbxAutoDecode;
+        private System.Windows.Forms.CheckBox cbxCompileAllInOneFolder;
     }
 }
 

@@ -47,33 +47,6 @@ namespace BotWUnpacker
         {
             return new byte[] { (byte)(u32 >> 24), (byte)((u32 >> 16) & 0xFF), (byte)((u32 >> 8) & 0xFF), (byte)(u32 & 0xFF) };
         }
-
-        public static string ReadString(byte[] Data, ref int Offset)
-        {
-            if (Offset >= Data.Length) return null;
-            while (Data[Offset] == 0) Offset++;
-            int Length = Array.IndexOf(Data, (byte)0, Offset) - Offset;
-            string ReturnString = ReadString(Data, Offset, Length);
-            Offset += Length;
-            return ReturnString;
-        }
-
-        public static string ReadString(byte[] Data, int Offset)
-        {
-            if (Offset >= Data.Length) return null;
-            while (Data[Offset] == 0) Offset++;
-            int Length = Array.IndexOf(Data, (byte)0, Offset) - Offset;
-            return ReadString(Data, Offset, Length);
-        }
-
-        public static string ReadString(byte[] Data, int Offset, int Length)
-        {
-            if (Offset >= Data.Length) return null;
-            while (Data[Offset] == 0) Offset++;
-            byte[] TempBuffer = new Byte[Length + 1];
-            Buffer.BlockCopy(Data, Offset, TempBuffer, 0, Length);
-            return Encoding.GetEncoding(1251).GetString(TempBuffer, 0, Array.IndexOf(TempBuffer, (byte)0));
-        }
         #endregion
 
         #region SaveXml
