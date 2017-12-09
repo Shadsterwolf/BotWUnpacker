@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.IO;
 //Modified code From Uwizard SARC master branch as of 10/16/2017, 
 
 
@@ -166,7 +167,7 @@ namespace BotWUnpacker
         {
             try
             {
-                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, false, false); //default
+                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, false, false, inFile); //default
             }
             catch (Exception e) //usually because file is in use
             {
@@ -179,7 +180,7 @@ namespace BotWUnpacker
         {
             try
             {
-                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, autoDecode, replaceFile); 
+                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, autoDecode, replaceFile, inFile); 
             }
             catch (Exception e) //usually because file is in use
             {
@@ -188,7 +189,7 @@ namespace BotWUnpacker
             }
         }
 
-        public static bool Extract(byte[] inFile, string outDir, bool autoDecode, bool replaceFile)
+        public static bool Extract(byte[] inFile, string outDir, bool autoDecode, bool replaceFile, string inFileName)
         {
 
             //SARC header 0x00 - 0x13
@@ -196,8 +197,28 @@ namespace BotWUnpacker
             {
                 if (inFile[0] == 'Y' && inFile[1] == 'a' && inFile[2] == 'z' && inFile[3] == '0')
                 {
-                    lerror = "Yaz0 file encoded, please decode and try again!" + "\n" + "(Yaz0 not supported, yet...)";
-                    return false;
+                    if (autoDecode)
+                    {
+                        string outFile;
+                        if (replaceFile)
+                        {
+                            //replace the file decoded and recursively run the extract
+                            outFile = inFileName;
+                            Yaz0.Decode(inFileName, outFile);
+                        }
+                        else
+                        {
+                            //create the decoded file and recursively run the extract
+                            outFile = Path.GetDirectoryName(inFileName) + "\\" + Path.GetFileNameWithoutExtension(inFileName) + "Decoded" + Path.GetExtension(inFileName);
+                            Yaz0.Decode(inFileName, outFile);
+                        }
+                        return Extract(outFile, outDir, autoDecode, replaceFile); //recursively run the code again
+                    }
+                    else
+                    {
+                        lerror = "Yaz0 file encoded (you don't have Auto Yaz0 Decode on!)";
+                        return false;
+                    }
                 }
                 else
                 {
