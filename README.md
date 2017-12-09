@@ -19,6 +19,9 @@
 <b>Version 1.4:</b> <br />
 -Added Compile All to Extract All process to combine common folders from other SARC sources
 
+<b>Version 1.5:</b> <br />
+-Bugfix Auto Yaz0 decode first pass for encoded SARC data, falsely handling inital Yaz0 encoded files while checked on
+
 # BotW Unpacker
 <b>Purpose:</b> <br />
 -Extract and Build PACK/SARC files in a convenient environment
