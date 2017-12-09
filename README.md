@@ -12,9 +12,16 @@
 -Added simple Open Root Folder button<br />
 -Added placeholder button for Compare and Build Pack
 
+<b>Version 1.3:</b> <br />
+-Added Auto Yaz0 Decoding!<br />
+-Cleaned up unused code and adjusted for readability
+
+<b>Version 1.4:</b> <br />
+-Added Compile All to Extract All process to combine common folders from other SARC sources
+
 # BotW Unpacker
 <b>Purpose:</b> <br />
--Extract and Build PACK/SARC files in a convenient enviorment
+-Extract and Build PACK/SARC files in a convenient environment
 
 <b>Operation:</b> <br />
 -Set a default path of your workspace to make your life easier <br />
@@ -22,6 +29,8 @@
 -ReBuild PACK files (BotW origin, SARC big endian)
 
 <b>Features:</b> <br />
+-Auto Yaz0 Decode <br />
+-Extract all Pack Files in one go to seperate folders or compile all to one <br />
 -Build with a fixed data start offset (Add padding) <br />
 -Detects if extract file is Yaz0 encoded, it lets the user know to extract it first <br />
 -Detects if extract file header is unsupported, it shows the user what it actually is
