@@ -20,7 +20,10 @@
 -Added Compile All to Extract All process to combine common folders from other SARC sources
 
 <b>Version 1.5:</b> <br />
--Bugfix Auto Yaz0 decode first pass for encoded SARC data, falsely handling inital Yaz0 encoded files while checked on
+-Bugfix Auto Yaz0 decode first pass for encoded SARC data, falsely handling inital Yaz0 encoded files while checked on <br />
+
+<b>Version 1.6:</b> <br />
+-Added Yaz0 Encoding! Which currently abides by most rules for Nintendo's algorithem.<br />
 
 # BotW Unpacker
 <b>Purpose:</b> <br />
@@ -47,5 +50,7 @@
 
 # Credits
 Made by Shadsterwolf <br />
-Uwizard code SARC.cs heavily modified (and mostly commented!)
+Uwizard code SARC.cs heavily modified (and mostly commented!) <br />
+Decode based off of thakis's and shevious's code, recoded in C# <br />
+Encode was re-researched and programmed by myself!
 
