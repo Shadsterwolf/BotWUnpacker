@@ -35,11 +35,10 @@
 -ReBuild PACK files (BotW origin, SARC big endian)
 
 <b>Features:</b> <br />
+-General Extract, Build, Decode, and Encode
 -Auto Yaz0 Decode <br />
 -Extract all Pack Files in one go to seperate folders or compile all to one <br />
 -Build with a fixed data start offset (Add padding) <br />
--Detects if extract file is Yaz0 encoded, it lets the user know to extract it first <br />
--Detects if extract file header is unsupported, it shows the user what it actually is
 
 <b>Helpful Tips:</b> <br />
 -To ensure perfect stability, please make sure the file you modify was encoded/decoded before repacking!
