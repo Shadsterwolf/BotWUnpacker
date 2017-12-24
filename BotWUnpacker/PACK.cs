@@ -327,7 +327,7 @@ namespace BotWUnpacker
                     }
                     else
                     {
-                        Yaz0.Decode(nodeData, outDir + "/" + fileNames[i] + "Decoded");
+                        Yaz0.Decode(nodeData, outDir + "/" + fileNames[i].Split('.')[0] + "Decoded." + fileNames[i].Split('.')[1]);
                         stream = new System.IO.StreamWriter(outDir + "/" + fileNames[i]);
                         stream.BaseStream.Write(inFile, (int)(nodes[i].start + dataOffset), (int)(nodes[i].end - nodes[i].start)); //Write 
                         stream.Close();

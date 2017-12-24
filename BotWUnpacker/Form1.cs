@@ -168,10 +168,10 @@ namespace BotWUnpacker
             OpenFileDialog oFile = new OpenFileDialog();
             oFile.Filter = "All Files|*.*";
             if (tbxFolderRoot.Text != "") oFile.InitialDirectory = tbxFolderRoot.Text;
+            lblProcessStatus.Visible = true;
             if (oFile.ShowDialog() == DialogResult.Cancel) goto toss;
 
             //Yaz0 Decode
-            lblProcessStatus.Visible = true;
             if (cbxReplaceDecodedFile.Checked)
             {
                 if (!Yaz0.Decode(oFile.FileName, oFile.FileName))
@@ -182,7 +182,8 @@ namespace BotWUnpacker
             }
             else
             {
-                if (!Yaz0.Decode(oFile.FileName, oFile.FileName + "Decoded"))
+                string outFile = Path.GetDirectoryName(oFile.FileName) + "\\" + Path.GetFileNameWithoutExtension(oFile.FileName) + "Decoded" + Path.GetExtension(oFile.FileName);
+                if (!Yaz0.Decode(oFile.FileName, outFile))
                 {
                     MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
                     goto toss;
@@ -238,7 +239,7 @@ namespace BotWUnpacker
 
         private void btnBuildCompare_Click(object sender, EventArgs e)
         {
-
+            //TODO: make stuff work
         }
 
         private void cbxSetDataOffset_CheckedChanged(object sender, EventArgs e)
@@ -291,6 +292,27 @@ namespace BotWUnpacker
                 cbxReplaceDecodedFile.Enabled = false;
             }
                 
+        }
+
+        private void btnYaz0Encode_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog oFile = new OpenFileDialog();
+            oFile.Filter = "All Files|*.*";
+            if (tbxFolderRoot.Text != "") oFile.InitialDirectory = tbxFolderRoot.Text;
+            lblProcessStatus.Visible = true;
+            if (oFile.ShowDialog() == DialogResult.Cancel) goto toss;
+
+            //Yaz0 Encode
+            if (!Yaz0.Encode(oFile.FileName, oFile.FileName))
+            {
+                MessageBox.Show("Encode error:" + "\n\n" + Yaz0.lerror);
+                goto toss;
+            }
+
+            toss:
+            oFile.Dispose();
+            GC.Collect();
+            lblProcessStatus.Visible = false;
         }
     }
 }
