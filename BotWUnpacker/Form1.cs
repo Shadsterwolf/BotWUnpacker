@@ -20,7 +20,9 @@ namespace BotWUnpacker
             tbxFolderRoot.Text = Properties.Settings.Default.RootFolder;
             if (tbxFolderRoot.Text != "") btnExtractAll.Enabled = true;
             if (tbxFolderRoot.Text != "") btnOpenFolder.Enabled = true;
+            
         }
+
 
         #region Button Browse Root 
         private void btnBrowseRoot_Click(object sender, EventArgs e) //Browse Root button
@@ -40,17 +42,6 @@ namespace BotWUnpacker
 
             toss:
             oFolder.Dispose();
-        }
-        #endregion
-
-        #region Button Clear 
-        private void btnClearRoot_Click(object sender, EventArgs e)
-        {
-            tbxFolderRoot.Text = "";
-            Properties.Settings.Default.RootFolder = "";
-            Properties.Settings.Default.Save();
-            btnExtractAll.Enabled = false;
-            btnOpenFolder.Enabled = false;
         }
         #endregion
 
@@ -189,7 +180,6 @@ namespace BotWUnpacker
                     goto toss;
                 }
             }
-
             toss:
             oFile.Dispose();
             GC.Collect();
@@ -211,6 +201,15 @@ namespace BotWUnpacker
             oFolder.Description = "Select folder to build into Pack file";
             if (tbxFolderRoot.Text != "") oFolder.SelectedPath = tbxFolderRoot.Text;
             if (oFolder.ShowDialog() == DialogResult.Cancel) goto toss;
+            int numFiles = Directory.GetFiles(oFolder.SelectedPath, "*", SearchOption.AllDirectories).Length;
+            if (numFiles > 50)
+            {
+                DialogResult diagResult = MessageBox.Show("Hold up, you got " + numFiles + " files! \n\n" + "You sure you want to build? \nIt will take some time...", "Large Number of Files!", MessageBoxButtons.YesNo);
+                if (diagResult == DialogResult.No)
+                    goto toss;
+            }
+            
+
             sFile.Filter = "PACK|*.pack|SARC|*.sarc|SSARC|*.ssarc|RARC|*.rarc|SGENVB|*.sgenvb|SBFARC|*.sbfarc|SBLARC|*.sblarc|SBACTORPACK|*sbactorpack|All Files|*.*";
             sFile.InitialDirectory = oFolder.SelectedPath.Remove(oFolder.SelectedPath.LastIndexOf("\\")); //Previous folder, as selected is to build outside of it.
             sFile.FileName = System.IO.Path.GetFileName(oFolder.SelectedPath);
@@ -222,11 +221,15 @@ namespace BotWUnpacker
                 uint dataOffset = (uint)int.Parse(tbxDataOffset.Text, System.Globalization.NumberStyles.HexNumber);
                 if (!PACK.Build(oFolder.SelectedPath, sFile.FileName, dataOffset))
                     MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
+                else
+                    MessageBox.Show("Done!\n\n" + sFile.FileName);
             }
             else
             {
                 if (!PACK.Build(oFolder.SelectedPath, sFile.FileName))
                     MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
+                else
+                    MessageBox.Show("Done!\n\n" + sFile.FileName);
             }
 
             toss:
@@ -236,11 +239,6 @@ namespace BotWUnpacker
             lblProcessStatus.Visible = false;
         }
         #endregion
-
-        private void btnBuildCompare_Click(object sender, EventArgs e)
-        {
-            //TODO: make stuff work
-        }
 
         private void cbxSetDataOffset_CheckedChanged(object sender, EventArgs e)
         {
@@ -313,6 +311,27 @@ namespace BotWUnpacker
             oFile.Dispose();
             GC.Collect();
             lblProcessStatus.Visible = false;
+        }
+        
+        Form2 form2 = new Form2();
+        private void btnCompareAndBuild_Click(object sender, EventArgs e)
+        {
+            if (!(form2.Visible))
+            {
+                if (form2.IsDisposed)
+                    form2 = new Form2();
+                form2.StartPosition = FormStartPosition.Manual;
+                form2.Location = new Point (Form1.ActiveForm.DesktopLocation.X + 120, Form1.ActiveForm.DesktopLocation.Y + 200);
+                form2.Show();
+            }
+            else
+            {
+                form2.Refresh();
+                if (form2.WindowState == FormWindowState.Minimized)
+                    form2.WindowState = FormWindowState.Normal;
+                form2.BringToFront();
+            }
+
         }
     }
 }

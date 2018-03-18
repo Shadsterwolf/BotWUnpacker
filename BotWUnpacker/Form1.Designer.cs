@@ -32,7 +32,6 @@ namespace BotWUnpacker
             System.Windows.Forms.Label lblFootnote;
             System.Windows.Forms.Label line1;
             this.btnBrowseRoot = new System.Windows.Forms.Button();
-            this.btnClearRoot = new System.Windows.Forms.Button();
             this.btnExtractPack = new System.Windows.Forms.Button();
             this.btnBuildPack = new System.Windows.Forms.Button();
             this.lblFolderRoot = new System.Windows.Forms.Label();
@@ -48,6 +47,8 @@ namespace BotWUnpacker
             this.cbxAutoDecode = new System.Windows.Forms.CheckBox();
             this.cbxCompileAllInOneFolder = new System.Windows.Forms.CheckBox();
             this.btnYaz0Encode = new System.Windows.Forms.Button();
+            this.btnCompareAndBuild = new System.Windows.Forms.Button();
+            this.lblBeta = new System.Windows.Forms.Label();
             imgIcon = new System.Windows.Forms.PictureBox();
             lblFootnote = new System.Windows.Forms.Label();
             line1 = new System.Windows.Forms.Label();
@@ -72,7 +73,7 @@ namespace BotWUnpacker
             lblFootnote.Name = "lblFootnote";
             lblFootnote.Size = new System.Drawing.Size(210, 39);
             lblFootnote.TabIndex = 10;
-            lblFootnote.Text = "Version: 1.6 \nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
+            lblFootnote.Text = "Version: 1.7 \nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
             // 
             // line1
             // 
@@ -85,23 +86,13 @@ namespace BotWUnpacker
             // 
             // btnBrowseRoot
             // 
-            this.btnBrowseRoot.Location = new System.Drawing.Point(119, 13);
+            this.btnBrowseRoot.Location = new System.Drawing.Point(116, 54);
             this.btnBrowseRoot.Name = "btnBrowseRoot";
-            this.btnBrowseRoot.Size = new System.Drawing.Size(97, 23);
+            this.btnBrowseRoot.Size = new System.Drawing.Size(71, 23);
             this.btnBrowseRoot.TabIndex = 4;
-            this.btnBrowseRoot.Text = "Set Root Folder";
+            this.btnBrowseRoot.Text = "Browse";
             this.btnBrowseRoot.UseVisualStyleBackColor = true;
             this.btnBrowseRoot.Click += new System.EventHandler(this.btnBrowseRoot_Click);
-            // 
-            // btnClearRoot
-            // 
-            this.btnClearRoot.Location = new System.Drawing.Point(222, 13);
-            this.btnClearRoot.Name = "btnClearRoot";
-            this.btnClearRoot.Size = new System.Drawing.Size(50, 23);
-            this.btnClearRoot.TabIndex = 9;
-            this.btnClearRoot.Text = "Clear";
-            this.btnClearRoot.UseVisualStyleBackColor = true;
-            this.btnClearRoot.Click += new System.EventHandler(this.btnClearRoot_Click);
             // 
             // btnExtractPack
             // 
@@ -126,16 +117,16 @@ namespace BotWUnpacker
             // lblFolderRoot
             // 
             this.lblFolderRoot.AutoSize = true;
-            this.lblFolderRoot.Location = new System.Drawing.Point(116, 39);
+            this.lblFolderRoot.Location = new System.Drawing.Point(115, 12);
             this.lblFolderRoot.Name = "lblFolderRoot";
-            this.lblFolderRoot.Size = new System.Drawing.Size(109, 13);
+            this.lblFolderRoot.Size = new System.Drawing.Size(120, 13);
             this.lblFolderRoot.TabIndex = 5;
-            this.lblFolderRoot.Text = "Root Folder Location:";
+            this.lblFolderRoot.Text = "Default Folder Location:";
             // 
             // tbxFolderRoot
             // 
             this.tbxFolderRoot.BackColor = System.Drawing.SystemColors.Control;
-            this.tbxFolderRoot.Location = new System.Drawing.Point(119, 55);
+            this.tbxFolderRoot.Location = new System.Drawing.Point(116, 28);
             this.tbxFolderRoot.Name = "tbxFolderRoot";
             this.tbxFolderRoot.Size = new System.Drawing.Size(253, 20);
             this.tbxFolderRoot.TabIndex = 6;
@@ -199,11 +190,11 @@ namespace BotWUnpacker
             // btnOpenFolder
             // 
             this.btnOpenFolder.Enabled = false;
-            this.btnOpenFolder.Location = new System.Drawing.Point(119, 81);
+            this.btnOpenFolder.Location = new System.Drawing.Point(193, 54);
             this.btnOpenFolder.Name = "btnOpenFolder";
-            this.btnOpenFolder.Size = new System.Drawing.Size(125, 23);
+            this.btnOpenFolder.Size = new System.Drawing.Size(84, 23);
             this.btnOpenFolder.TabIndex = 17;
-            this.btnOpenFolder.Text = "Open Root Folder";
+            this.btnOpenFolder.Text = "Open Folder";
             this.btnOpenFolder.UseVisualStyleBackColor = true;
             this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
             // 
@@ -220,8 +211,7 @@ namespace BotWUnpacker
             // cbxReplaceDecodedFile
             // 
             this.cbxReplaceDecodedFile.AutoSize = true;
-            this.cbxReplaceDecodedFile.Checked = true;
-            this.cbxReplaceDecodedFile.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbxReplaceDecodedFile.Enabled = false;
             this.cbxReplaceDecodedFile.Location = new System.Drawing.Point(12, 228);
             this.cbxReplaceDecodedFile.Name = "cbxReplaceDecodedFile";
             this.cbxReplaceDecodedFile.Size = new System.Drawing.Size(215, 17);
@@ -232,8 +222,6 @@ namespace BotWUnpacker
             // cbxAutoDecode
             // 
             this.cbxAutoDecode.AutoSize = true;
-            this.cbxAutoDecode.Checked = true;
-            this.cbxAutoDecode.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbxAutoDecode.Location = new System.Drawing.Point(12, 205);
             this.cbxAutoDecode.Name = "cbxAutoDecode";
             this.cbxAutoDecode.Size = new System.Drawing.Size(116, 17);
@@ -262,12 +250,35 @@ namespace BotWUnpacker
             this.btnYaz0Encode.UseVisualStyleBackColor = true;
             this.btnYaz0Encode.Click += new System.EventHandler(this.btnYaz0Encode_Click);
             // 
+            // btnCompareAndBuild
+            // 
+            this.btnCompareAndBuild.Location = new System.Drawing.Point(272, 253);
+            this.btnCompareAndBuild.Name = "btnCompareAndBuild";
+            this.btnCompareAndBuild.Size = new System.Drawing.Size(100, 77);
+            this.btnCompareAndBuild.TabIndex = 24;
+            this.btnCompareAndBuild.Text = "Compare and Build";
+            this.btnCompareAndBuild.UseVisualStyleBackColor = true;
+            this.btnCompareAndBuild.Click += new System.EventHandler(this.btnCompareAndBuild_Click);
+            // 
+            // lblBeta
+            // 
+            this.lblBeta.AutoSize = true;
+            this.lblBeta.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBeta.ForeColor = System.Drawing.Color.Red;
+            this.lblBeta.Location = new System.Drawing.Point(74, 346);
+            this.lblBeta.Name = "lblBeta";
+            this.lblBeta.Size = new System.Drawing.Size(39, 13);
+            this.lblBeta.TabIndex = 25;
+            this.lblBeta.Text = "BETA";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(384, 391);
+            this.Controls.Add(this.lblBeta);
+            this.Controls.Add(this.btnCompareAndBuild);
             this.Controls.Add(line1);
             this.Controls.Add(this.btnYaz0Encode);
             this.Controls.Add(this.cbxCompileAllInOneFolder);
@@ -280,7 +291,6 @@ namespace BotWUnpacker
             this.Controls.Add(this.cbxSetDataOffset);
             this.Controls.Add(this.lblProcessStatus);
             this.Controls.Add(lblFootnote);
-            this.Controls.Add(this.btnClearRoot);
             this.Controls.Add(this.cbxWriteXml);
             this.Controls.Add(this.tbxFolderRoot);
             this.Controls.Add(this.lblFolderRoot);
@@ -302,7 +312,6 @@ namespace BotWUnpacker
 
         #endregion
         private System.Windows.Forms.Button btnBrowseRoot;
-        private System.Windows.Forms.Button btnClearRoot;
         private System.Windows.Forms.Button btnExtractPack;
         private System.Windows.Forms.Button btnBuildPack;
         private System.Windows.Forms.Label lblFolderRoot;
@@ -318,6 +327,8 @@ namespace BotWUnpacker
         private System.Windows.Forms.CheckBox cbxAutoDecode;
         private System.Windows.Forms.CheckBox cbxCompileAllInOneFolder;
         private System.Windows.Forms.Button btnYaz0Encode;
+        private System.Windows.Forms.Button btnCompareAndBuild;
+        private System.Windows.Forms.Label lblBeta;
     }
 }
 

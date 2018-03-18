@@ -31,18 +31,20 @@ namespace BotWUnpacker
         {
             public uint hash;
             public int index;
+            public string fileName;
 
-            public NodeHash(uint h, int i)
+            public NodeHash(uint h, int i, string f)
             {
                 hash = h;
                 index = i;
+                fileName = f;
             }
         }
 
         private struct NodeInfo //Build only
         {
             public string filename, realname;
-            public uint namesize; 
+            public uint namesize;
 
             public NodeInfo(string inFileName, string inRealName, uint inNameSize)
             {
@@ -88,7 +90,7 @@ namespace BotWUnpacker
             return new byte[] { (byte)(u32 >> 24), (byte)((u32 >> 16) & 0xFF), (byte)((u32 >> 8) & 0xFF), (byte)(u32 & 0xFF) };
         }
 
-        static private string IntToHex(int num) 
+        static private string IntToHex(int num)
         {
             return num.ToString("X");
         }
@@ -133,32 +135,32 @@ namespace BotWUnpacker
             return System.IO.Directory.GetFiles(dir);
         }
 
-        private static byte[] AddPadding(byte[] dataBuild, uint padding, NodeData nodeData, NodeInfo nodeInfo) //Add padding to adjust to Nintendo's logic
+        private static byte[] AddPadding(byte[] dataBuild, NodeData nodeData) //Add padding to clean to next line
         {
             byte[] pad = { 0x00 };
             if (nodeData.data[nodeData.data.Length - 1] != 0x00) //if node is NOT pre padded
             {
-                if ((dataBuild.Length % padding) != 0) //if build needs padding
+                if ((dataBuild.Length % 0x10) != 0) //if build needs padding
                 {
-                    uint toAdd = padding % ((uint)dataBuild.Length % padding); //count of data to pad
+                    uint toAdd = 0x10 % ((uint)dataBuild.Length % 0x10); //count of data to pad
                     for (int i = 0; i < toAdd; i++)
                     {
                         dataBuild = dataBuild.Concat(pad).ToArray(); //padding data
                     }
                     return dataBuild;
                 }
-                else
-                {
-                    return dataBuild; //build doesn't need padding
-                }
             }
-            else
+            return dataBuild; //build doesn't need padding
+        }
+
+        private static byte[] AddPadding(byte[] dataBuild, uint padding, NodeData nodeData) //Add padding to adjust to Nintendo's logic
+        {
+            byte[] pad = { 0x00 };
+            for (int i = 0; i < padding; i++)
             {
-                if (nodeData.data[nodeData.data.Length - 2] != 0x00) //if node only 1 byte pre-padding
-                    return dataBuild.Concat(pad).ToArray(); // add 1 pad to it... because Nintendo wants two bytes of padding
-                else
-                    return dataBuild; //build doesn't need padding
+                dataBuild = dataBuild.Concat(pad).ToArray(); //padding data
             }
+            return dataBuild;
         }
         #endregion
 
@@ -176,11 +178,11 @@ namespace BotWUnpacker
             }
         }
 
-        public static bool Extract(string inFile, string outDir, bool autoDecode, bool replaceFile) 
+        public static bool Extract(string inFile, string outDir, bool autoDecode, bool replaceFile)
         {
             try
             {
-                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, autoDecode, replaceFile, inFile); 
+                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, autoDecode, replaceFile, inFile);
             }
             catch (Exception e) //usually because file is in use
             {
@@ -193,7 +195,7 @@ namespace BotWUnpacker
         {
 
             //SARC header 0x00 - 0x13
-            if (inFile[0] != 'S' || inFile[1] != 'A' || inFile[2] != 'R' || inFile[3] != 'C')
+            if (inFile[0] != 'S' && inFile[1] != 'A' && inFile[2] != 'R' && inFile[3] != 'C')
             {
                 if (inFile[0] == 'Y' && inFile[1] == 'a' && inFile[2] == 'z' && inFile[3] == '0')
                 {
@@ -237,7 +239,7 @@ namespace BotWUnpacker
                 return false;
             }
             pos += 2; //0x08
-            uint fileSize = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); 
+            uint fileSize = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]);
             pos += 4; //0x0C
             uint dataOffset = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //Data offset start position
             pos += 4; //0x10
@@ -279,7 +281,7 @@ namespace BotWUnpacker
             if (inFile[pos] != 'S' || inFile[pos + 1] != 'F' || inFile[pos + 2] != 'N' || inFile[pos + 3] != 'T')
             {
                 string posOffset = "0x" + pos.ToString("X");
-                lerror = "Unknown file name table! (Missing SFNT header at " + posOffset +")";
+                lerror = "Unknown file name table! (Missing SFNT header at " + posOffset + ")";
                 return false;
             }
             pos += 4; //0x?4
@@ -368,7 +370,7 @@ namespace BotWUnpacker
                 {
                     string realname = inDirFiles[i];
                     string fileName = inDirFiles[i].Replace(inDir + System.IO.Path.DirectorySeparatorChar.ToString(), "");
-                    fileName = fileName.Replace("\\","/"); //HURP DERP NINTENDUR
+                    fileName = fileName.Replace("\\", "/"); //HURP DERP NINTENDUR
                     uint namesize = (uint)fileName.Length;
                     namesize += (4 - (namesize % 4));
                     totalNamesLength += namesize;
@@ -385,7 +387,7 @@ namespace BotWUnpacker
                 NodeHash[] hashesUnsorted = new NodeHash[numFiles];
                 for (int i = 0; i < numFiles; i++)
                 {
-                    hashesUnsorted[i] = new NodeHash(CalcHash(nodeInfo[i].filename), i); //Store and calculate unsorted hashes
+                    hashesUnsorted[i] = new NodeHash(CalcHash(nodeInfo[i].filename), i, ""); //Store and calculate unsorted hashes
                 }
                 uint lastHash;
                 bool[] hashSortedFlag = new bool[hashesUnsorted.Length];
@@ -412,7 +414,7 @@ namespace BotWUnpacker
                 nodeData[hashes[0].index].data = System.IO.File.ReadAllBytes(nodeInfo[hashes[0].index].realname);
                 nodeData[hashes[0].index].startPos = 0; //first starting positon
                 nodeData[hashes[0].index].endPos = (uint)nodeData[hashes[0].index].data.Length; //first end position before padding
-                byte[] nodeBuild = AddPadding(nodeData[hashes[0].index].data, 0x10, nodeData[hashes[0].index], nodeInfo[hashes[0].index]); //Prep first node for building
+                byte[] nodeBuild = AddPadding(nodeData[hashes[0].index].data, nodeData[hashes[0].index]); //Prep first node for building
                 for (int i = 1; i < numFiles; i++)
                 {
                     nodeData[hashes[i].index].startPos = (uint)nodeBuild.Length; //start position after padding
@@ -421,11 +423,11 @@ namespace BotWUnpacker
                     nodeData[hashes[i].index].endPos = (uint)nodeBuild.Length; //end position before padding
                     if (i != numFiles - 1) //As long as it's not the last node, add padding
                     {
-                        nodeBuild = AddPadding(nodeBuild, 0x10, nodeData[hashes[i].index], nodeInfo[hashes[i].index]);
+                        nodeBuild = AddPadding(nodeBuild, nodeData[hashes[i].index]);
                     }
-                    GC.Collect();
+                    GC.Collect(); //CUZ IM LAZY AND DONT WANT TO OPTIMIZE, STORE ALL THE THINGS IN RAM
                 }
-                
+
 
                 uint fileSize = 0;
                 fileSize += 0x20; //SARC + SFAT reserve
@@ -475,7 +477,7 @@ namespace BotWUnpacker
                     }
                     int namePadding = (int)nodeInfo[hashes[i].index].namesize - nodeInfo[hashes[i].index].filename.Length; //short padding for file offset location (to be divisible by 4)
                     for (int j = 0; j < namePadding; j++)
-                        stream.BaseStream.WriteByte(0); 
+                        stream.BaseStream.WriteByte(0);
                 }
 
                 for (int i = 0; i < namePaddingToAdd; i++)
@@ -494,7 +496,369 @@ namespace BotWUnpacker
                 lerror = "An error occurred: " + e.Message;
                 return false;
             }
-            
+
+            return true;
+        } //--------------------------------------------------------------------------------------------------------------------------------------------
+        #endregion
+
+        #region FileOperations
+        public static int GetFileNodeCount(string file) //Get # of Nodes
+        {
+            try
+            {
+                byte[] inFile = System.IO.File.ReadAllBytes(file);
+                if (inFile[0] != 'S' && inFile[1] != 'A' && inFile[2] != 'R' && inFile[3] != 'C')
+                    return -1;
+                int nodeCount = 0;
+                nodeCount = Makeu16(inFile[0x1A], inFile[0x1B]);
+                return nodeCount;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        public static int GetFileDataOffset(string file)
+        {
+            byte[] inFile = System.IO.File.ReadAllBytes(file);
+            if (inFile[0] != 'S' && inFile[1] != 'A' && inFile[2] != 'R' && inFile[3] != 'C')
+                return -1;
+            uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F]);
+            return (int)dataStartPos;
+        }
+
+        public static string[] GetFileNodeType(string file) //Get Types
+        {
+            byte[] inFile = System.IO.File.ReadAllBytes(file);
+            if (inFile[0] != 'S' && inFile[1] != 'A' && inFile[2] != 'R' && inFile[3] != 'C')
+                return null;
+            int nodeCount = GetFileNodeCount(file);
+            int pos;
+            uint[] nodeDataStartPos = new uint[nodeCount];
+            string[] nodeTypes = new string[nodeCount];
+            uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F]);
+
+            pos = 0x28;
+            for (int i = 0; i < nodeCount; i++)
+            {
+                nodeDataStartPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]) + dataStartPos;
+                pos += 0x10; 
+                nodeTypes[i] = ((char)inFile[nodeDataStartPos[i]]) + "" + ((char)inFile[nodeDataStartPos[i]+1]) + "" + ((char)inFile[nodeDataStartPos[i]+2]) + "" + ((char)inFile[nodeDataStartPos[i]+3]);
+            }
+            return nodeTypes;
+        }
+
+        public static uint[] GetFileNodeSizes(string file) //Get Paddings
+        {
+            byte[] inFile = System.IO.File.ReadAllBytes(file);
+            if (inFile[0] != 'S' && inFile[1] != 'A' && inFile[2] != 'R' && inFile[3] != 'C')
+                return null;
+            int nodeCount = GetFileNodeCount(file);
+            int pos;
+            uint[] nodeDataStartPos = new uint[nodeCount];
+            uint[] nodeDataEndPos = new uint[nodeCount];
+            uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F]);
+            uint[] nodeSizes = new uint[nodeCount];
+
+            pos = 0x28;
+            for (int i = 0; i < nodeCount; i++) //Get data start and end positions 
+            {
+                nodeDataStartPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]) + dataStartPos;
+                pos += 4;
+                nodeDataEndPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]) + dataStartPos;
+                pos += 0x10 - 4;
+                nodeSizes[i] = nodeDataEndPos[i] - nodeDataStartPos[i];
+            }
+            return nodeSizes;
+        }
+
+        public static uint[] GetFileNodePaddings(string file) //Get Paddings
+        {
+            byte[] inFile = System.IO.File.ReadAllBytes(file);
+            if (inFile[0] != 'S' && inFile[1] != 'A' && inFile[2] != 'R' && inFile[3] != 'C')
+                return null;
+            int nodeCount = GetFileNodeCount(file);
+            int pos;
+            uint[] nodeDataStartPos = new uint[nodeCount];
+            uint[] nodeDataEndPos = new uint[nodeCount];
+            uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F]);
+            uint[] nodePaddings = new uint[nodeCount];
+
+            pos = 0x28;
+            for (int i = 0; i < nodeCount; i++) //Get data start and end positions 
+            {
+                nodeDataStartPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]) + dataStartPos;
+                pos += 4;
+                nodeDataEndPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]) + dataStartPos;
+                pos += 0x10 - 4;
+            }
+            for (int i = 0; i < nodeCount; i++) //Calculate padding 
+            {
+                if (i != (nodeCount - 1))
+                    nodePaddings[i] = nodeDataStartPos[i + 1] - nodeDataEndPos[i];
+                else
+                    nodePaddings[i] = (uint)inFile.Length - nodeDataEndPos[i];
+                    
+            }
+
+            return nodePaddings;
+        }
+        public static string[] GetFileNodePaths(string file) //Get Paths
+        {
+            byte[] inFile = System.IO.File.ReadAllBytes(file);
+            if (inFile[0] != 'S' && inFile[1] != 'A' && inFile[2] != 'R' && inFile[3] != 'C')
+                return null;
+            int nodeCount = GetFileNodeCount(file);
+            int pos = 0;
+            uint[] offsetPos = new uint[nodeCount];
+            string[] nodePaths = new string[nodeCount];
+            pos = (nodeCount * 0x10) + 0x20 + 8;
+            //System.Windows.Forms.MessageBox.Show("Pos: 0x" + pos.ToString("X"));
+            for (int i = 0; i < nodeCount; i++)
+            {
+                while (inFile[pos] != 0x00)
+                {
+                    nodePaths[i] += (char)inFile[pos];
+                    pos++;
+                }
+                while (inFile[pos] == 0x00)
+                    pos++;
+            }
+            return nodePaths;
+        }
+        #endregion
+
+        #region FolderOperations
+        public static string[] GetFolderFilePaths(string folder)
+        {
+            string[] folderDir = System.IO.Directory.GetFiles(folder == "" ? System.Environment.CurrentDirectory : folder, "*.*", System.IO.SearchOption.AllDirectories);
+            string[] filePaths = new string[folderDir.Length];
+            for (int i = 0; i < folderDir.Length; i++)
+            {
+                filePaths[i] = folderDir[i].Replace(folder + System.IO.Path.DirectorySeparatorChar.ToString(), "");
+                filePaths[i] = filePaths[i].Replace("\\", "/");
+            }
+            filePaths = CalculateHashAndSort(filePaths);
+            return filePaths;
+        }
+
+        public static string[] CalculateHashAndSort(string[] files) //Calculate Hash and Sort
+        {
+            NodeHash[] hashesUnsorted = new NodeHash[files.Length];
+            for (int i = 0; i < files.Length; i++)
+            {
+                hashesUnsorted[i] = new NodeHash(CalcHash(files[i]), i, files[i]); //Store and calculate unsorted hashes
+            }
+            uint lastHash;
+            bool[] hashSortedFlag = new bool[hashesUnsorted.Length];
+            NodeHash[] hashes = new NodeHash[hashesUnsorted.Length];
+            int dhi = 0;
+            for (int i = 0; i < hashes.Length; i++) //sort nodes by hash calculation
+            {
+                lastHash = uint.MaxValue;
+                for (int j = 0; j < hashesUnsorted.Length; j++)
+                {
+                    if (hashSortedFlag[j]) continue;
+                    if (hashesUnsorted[j].hash < lastHash)
+                    {
+                        dhi = j;
+                        lastHash = hashesUnsorted[j].hash;
+                    }
+                }
+                hashSortedFlag[dhi] = true;
+                hashes[i] = hashesUnsorted[dhi];
+            }
+            for (int i = 0; i < files.Length; i++)
+            {
+                files[i] = hashes[i].fileName;
+            }
+            return files;
+        }
+
+        public static uint[] GetFolderFileSizes(string folder) //Get Folder's files and their sizes
+        {
+            string[] folderDir = System.IO.Directory.GetFiles(folder == "" ? System.Environment.CurrentDirectory : folder, "*.*", System.IO.SearchOption.AllDirectories);
+            string[] filePaths = new string[folderDir.Length];
+            uint[] fileSizes = new uint[folderDir.Length];
+            FileInfo[] fileInfo = new FileInfo[folderDir.Length];
+            filePaths = GetFolderFilePaths(folder);
+
+            for (int i = 0; i < folderDir.Length; i++) //I know this looks stupid, but trust me on this...
+            {
+                filePaths[i] = filePaths[i].Replace("/", "\\");
+                filePaths[i] = folder + System.IO.Path.DirectorySeparatorChar.ToString() + filePaths[i];
+                fileInfo[i] = new FileInfo(filePaths[i]);
+                fileSizes[i] = (uint)fileInfo[i].Length;
+            }
+            return fileSizes;
+        }
+
+        public static string[] GetFolderFileTypes(string folder)
+        {
+            string[] folderDir = System.IO.Directory.GetFiles(folder == "" ? System.Environment.CurrentDirectory : folder, "*.*", System.IO.SearchOption.AllDirectories);
+            string[] filePaths = new string[folderDir.Length];
+            string[] fileTypes = new string[folderDir.Length];
+            FileInfo[] fileInfo = new FileInfo[folderDir.Length];
+            filePaths = GetFolderFilePaths(folder);
+
+            for (int i = 0; i < folderDir.Length; i++)
+            {
+                filePaths[i] = filePaths[i].Replace("/", "\\");
+                filePaths[i] = folder + System.IO.Path.DirectorySeparatorChar.ToString() + filePaths[i];
+                fileInfo[i] = new FileInfo(filePaths[i]);
+                byte[] fileData = new byte[fileInfo[i].Length];
+                fileData = System.IO.File.ReadAllBytes(filePaths[i]);
+                fileTypes[i] = (char)fileData[0] + "" + (char)fileData[1] + "" + (char)fileData[2] + "" + (char)fileData[3];
+            }
+            return fileTypes;
+        }
+        #endregion
+
+        #region CompareAndBuild
+        public static bool CompareAndBuild(string oriFile, string inDir, string outFile) //Build after comparison (TODO: Fix process for better optimization)
+        {
+            try
+            {
+                //Setup
+                string[] inDirFiles = System.IO.Directory.GetFiles(inDir == "" ? System.Environment.CurrentDirectory : inDir, "*.*", System.IO.SearchOption.AllDirectories);
+                uint[] addOriPadding = GetFileNodePaddings(oriFile);
+                int dataFixedOffset = GetFileDataOffset(oriFile);
+                NodeInfo[] nodeInfo = new NodeInfo[inDirFiles.Length];
+
+
+                //Node storage logic
+                uint totalNamesLength = 0;
+                uint numFiles = (uint)inDirFiles.Length;
+                for (int i = 0; i < numFiles; i++) //collect node information
+                {
+                    string realname = inDirFiles[i];
+                    string fileName = inDirFiles[i].Replace(inDir + System.IO.Path.DirectorySeparatorChar.ToString(), "");
+                    fileName = fileName.Replace("\\", "/"); //HURP DERP NINTENDUR
+                    uint namesize = (uint)fileName.Length;
+                    namesize += (4 - (namesize % 4));
+                    totalNamesLength += namesize;
+                    nodeInfo[i] = new NodeInfo(fileName, realname, namesize);
+                }
+                uint namePaddingToAdd = 0;
+                if (totalNamesLength % 0x10 != 0)
+                {
+                    namePaddingToAdd = 0x10 % (totalNamesLength % 0x10); //padding to add for 
+                    totalNamesLength += namePaddingToAdd;
+                }
+
+                //Node hash calculation and sorting logic
+                NodeHash[] hashesUnsorted = new NodeHash[numFiles];
+                for (int i = 0; i < numFiles; i++)
+                {
+                    hashesUnsorted[i] = new NodeHash(CalcHash(nodeInfo[i].filename), i, ""); //Store and calculate unsorted hashes
+                }
+                uint lastHash;
+                bool[] hashSortedFlag = new bool[hashesUnsorted.Length];
+                NodeHash[] hashes = new NodeHash[hashesUnsorted.Length];
+                int dhi = 0;
+                for (int i = 0; i < hashes.Length; i++) //sort nodes by hash calculation
+                {
+                    lastHash = uint.MaxValue;
+                    for (int j = 0; j < hashesUnsorted.Length; j++)
+                    {
+                        if (hashSortedFlag[j]) continue;
+                        if (hashesUnsorted[j].hash < lastHash)
+                        {
+                            dhi = j;
+                            lastHash = hashesUnsorted[j].hash;
+                        }
+                    }
+                    hashSortedFlag[dhi] = true;
+                    hashes[i] = hashesUnsorted[dhi];
+                }
+
+                //Node data build and position logic
+                NodeData[] nodeData = new NodeData[numFiles];
+                nodeData[hashes[0].index].data = System.IO.File.ReadAllBytes(nodeInfo[hashes[0].index].realname);
+                nodeData[hashes[0].index].startPos = 0; //first starting positon
+                nodeData[hashes[0].index].endPos = (uint)nodeData[hashes[0].index].data.Length; //first end position before padding
+                byte[] nodeBuild = AddPadding(nodeData[hashes[0].index].data, addOriPadding[0], nodeData[hashes[0].index]); //Prep first node for building
+                for (int i = 1; i < numFiles; i++)
+                {
+                    nodeData[hashes[i].index].startPos = (uint)nodeBuild.Length; //start position after padding
+                    nodeData[hashes[i].index].data = System.IO.File.ReadAllBytes(nodeInfo[hashes[i].index].realname);
+                    nodeBuild = nodeBuild.Concat(nodeData[hashes[i].index].data).ToArray(); //Concatenate next unpadded node
+                    nodeData[hashes[i].index].endPos = (uint)nodeBuild.Length; //end position before padding
+                    if (i != numFiles - 1) //As long as it's not the last node, add padding
+                    {
+                        nodeBuild = AddPadding(nodeBuild, addOriPadding[i], nodeData[hashes[i].index]);
+                    }
+                    GC.Collect();
+                }
+
+                uint fileSize = 0;
+                fileSize += 0x20; //SARC + SFAT reserve
+                fileSize += 0x10 * (uint)numFiles; //nodeInfo reserve 
+                fileSize += 0x08; //SFNT reserve
+                fileSize += totalNamesLength; //names of files 
+                uint nodeDataStart = fileSize; //node data table offset
+                if (dataFixedOffset > nodeDataStart) //if fixed data offset if larger than generated start...
+                {
+                    namePaddingToAdd += (uint)(dataFixedOffset - nodeDataStart);
+                    fileSize += (uint)(dataFixedOffset - nodeDataStart);
+                    nodeDataStart = (uint)dataFixedOffset;
+                }
+                fileSize += (uint)nodeBuild.Length; //finish calculating expected filesize 
+
+                //Write logic
+                System.IO.StreamWriter stream = new System.IO.StreamWriter(outFile);
+                //SARC ---
+                stream.BaseStream.Write(new byte[] { 83, 65, 82, 67, 0x00, 0x14, 0xFE, 0xFF }, 0, 8); //Write Fixed SARC Big Endian header
+                stream.BaseStream.Write(Breaku32(fileSize), 0, 4); //Write 0x08 split bytes of file size
+                stream.BaseStream.Write(Breaku32(nodeDataStart), 0, 4); //Write 0x0C split bytes of data table start offset
+                //SFAT ---
+                stream.BaseStream.Write(new byte[] { 0x01, 0x00, 0x00, 0x00, 83, 70, 65, 84, 0x00, 0x0C }, 0, 10); //Write Fixed SFAT header
+                stream.BaseStream.Write(Breaku16((ushort)numFiles), 0, 2); //Write 0x1A split bytes of number of nodes/files
+                stream.BaseStream.Write(Breaku32(0x65), 0, 4); //Write Fixed Hash Multiplier 
+                uint strpos = 0;
+                //Node ---
+                for (int i = 0; i < numFiles; i++)
+                {
+                    stream.BaseStream.Write(Breaku32(hashes[i].hash), 0, 4); //Node Hash 
+                    stream.BaseStream.WriteByte(0x01); //Node Fixed Unknown
+                    stream.BaseStream.Write(Breaku32((strpos >> 2)), 1, 3); //Node filename offset position (divided by 4)
+                    strpos += nodeInfo[hashes[i].index].namesize;
+                    stream.BaseStream.Write(Breaku32(nodeData[hashes[i].index].startPos), 0, 4); //Node start data offset position
+                    stream.BaseStream.Write(Breaku32(nodeData[hashes[i].index].endPos), 0, 4); //Node end data offset position
+                }
+                GC.Collect();
+                //SFNT ---
+                stream.BaseStream.Write(new byte[] { 83, 70, 78, 84, 0x00, 0x08, 0x00, 0x00 }, 0, 8); //Write fixed SFNT header
+                for (int i = 0; i < numFiles; i++)
+                {
+                    string fileName = nodeInfo[hashes[i].index].filename;
+                    for (int j = 0; j < fileName.Length; j++)
+                    {
+                        stream.BaseStream.WriteByte((byte)fileName[j]); //Write file names
+                    }
+                    int namePadding = (int)nodeInfo[hashes[i].index].namesize - nodeInfo[hashes[i].index].filename.Length; //short padding for file offset location (to be divisible by 4)
+                    for (int j = 0; j < namePadding; j++)
+                        stream.BaseStream.WriteByte(0);
+                }
+
+                for (int i = 0; i < namePaddingToAdd; i++)
+                {
+                    stream.BaseStream.WriteByte(0); //pad end of names
+                }
+                //Data ---
+                stream.BaseStream.Write(nodeBuild, 0, nodeBuild.Length); //Write node data
+
+                stream.Close();
+                stream.Dispose();
+                GC.Collect();
+            }
+            catch (System.Exception e)
+            {
+                lerror = "An error occurred: " + e.Message;
+                return false;
+            }
+
             return true;
         } //--------------------------------------------------------------------------------------------------------------------------------------------
         #endregion
