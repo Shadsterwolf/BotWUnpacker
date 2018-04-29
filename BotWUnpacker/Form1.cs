@@ -70,6 +70,16 @@ namespace BotWUnpacker
                 if (cbxReplaceDecodedFile.Checked) //Replace File
                     boolReplaceFile = true;
             }
+            else //Default, without any checkboxes
+            {
+                if (PACK.IsYaz0File(oFile.FileName))
+                {
+                    if (MessageBox.Show("This file is Yaz0 encoded!" + "\n\n" + "Want to decode it and attempt to extract?", "Decode and Extact?", MessageBoxButtons.YesNo) != DialogResult.No)
+                        boolAutoDecode = true; //Auto decode just this once since we prompted
+                    else
+                        goto toss; //User clicked no
+                }
+            }
             if (!PACK.Extract(oFile.FileName, oFolderPath, boolAutoDecode, boolReplaceFile)) //Extraction
             {
                 MessageBox.Show("Extraction error:" + "\n\n" + PACK.lerror);
@@ -161,11 +171,11 @@ namespace BotWUnpacker
             if (tbxFolderRoot.Text != "") oFile.InitialDirectory = tbxFolderRoot.Text;
             lblProcessStatus.Visible = true;
             if (oFile.ShowDialog() == DialogResult.Cancel) goto toss;
-
+            string outFile = oFile.FileName;
             //Yaz0 Decode
             if (cbxReplaceDecodedFile.Checked)
             {
-                if (!Yaz0.Decode(oFile.FileName, oFile.FileName))
+                if (!Yaz0.Decode(oFile.FileName, outFile))
                 {
                     MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
                     goto toss;
@@ -173,13 +183,44 @@ namespace BotWUnpacker
             }
             else
             {
-                string outFile = Path.GetDirectoryName(oFile.FileName) + "\\" + Path.GetFileNameWithoutExtension(oFile.FileName) + "Decoded" + Path.GetExtension(oFile.FileName);
+                outFile = Path.GetDirectoryName(oFile.FileName) + "\\" + Path.GetFileNameWithoutExtension(oFile.FileName) + "Decoded" + Path.GetExtension(oFile.FileName);
                 if (!Yaz0.Decode(oFile.FileName, outFile))
                 {
                     MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
                     goto toss;
                 }
             }
+
+            MessageBox.Show("Decode complete!" + "\n\n" + outFile);
+
+            toss:
+            oFile.Dispose();
+            GC.Collect();
+            lblProcessStatus.Visible = false;
+        }
+        #endregion
+
+        #region Button Yaz0 Encode
+        private void btnYaz0Encode_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog oFile = new OpenFileDialog();
+            oFile.Filter = "All Files|*.*";
+            if (tbxFolderRoot.Text != "") oFile.InitialDirectory = tbxFolderRoot.Text;
+            lblProcessStatus.Visible = true;
+            if (oFile.ShowDialog() == DialogResult.Cancel) goto toss;
+
+            String outFile = Path.GetDirectoryName(oFile.FileName) + "\\" + Path.GetFileNameWithoutExtension(oFile.FileName) + "Encoded" + Path.GetExtension(oFile.FileName);
+            outFile = outFile.Replace("Decoded", "");
+
+            //Yaz0 Encode
+            if (!Yaz0.Encode(oFile.FileName, outFile))
+            {
+                MessageBox.Show("Encode error:" + "\n\n" + Yaz0.lerror);
+                goto toss;
+            }
+
+            MessageBox.Show("Encode complete!" + "\n\n" + oFile.FileName);
+
             toss:
             oFile.Dispose();
             GC.Collect();
@@ -201,14 +242,7 @@ namespace BotWUnpacker
             oFolder.Description = "Select folder to build into Pack file";
             if (tbxFolderRoot.Text != "") oFolder.SelectedPath = tbxFolderRoot.Text;
             if (oFolder.ShowDialog() == DialogResult.Cancel) goto toss;
-            int numFiles = Directory.GetFiles(oFolder.SelectedPath, "*", SearchOption.AllDirectories).Length;
-            if (numFiles > 50)
-            {
-                DialogResult diagResult = MessageBox.Show("Hold up, you got " + numFiles + " files! \n\n" + "You sure you want to build? \nIt will take some time...", "Large Number of Files!", MessageBoxButtons.YesNo);
-                if (diagResult == DialogResult.No)
-                    goto toss;
-            }
-            
+            int numFiles = Directory.GetFiles(oFolder.SelectedPath, "*", SearchOption.AllDirectories).Length;            
 
             sFile.Filter = "PACK|*.pack|SARC|*.sarc|SSARC|*.ssarc|RARC|*.rarc|SGENVB|*.sgenvb|SBFARC|*.sbfarc|SBLARC|*.sblarc|SBACTORPACK|*sbactorpack|All Files|*.*";
             sFile.InitialDirectory = oFolder.SelectedPath.Remove(oFolder.SelectedPath.LastIndexOf("\\")); //Previous folder, as selected is to build outside of it.
@@ -220,17 +254,21 @@ namespace BotWUnpacker
             {
                 uint dataOffset = (uint)int.Parse(tbxDataOffset.Text, System.Globalization.NumberStyles.HexNumber);
                 if (!PACK.Build(oFolder.SelectedPath, sFile.FileName, dataOffset))
+                {
                     MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
-                else
-                    MessageBox.Show("Done!\n\n" + sFile.FileName);
+                    goto toss;
+                }
             }
             else
             {
                 if (!PACK.Build(oFolder.SelectedPath, sFile.FileName))
+                { 
                     MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
-                else
-                    MessageBox.Show("Done!\n\n" + sFile.FileName);
+                    goto toss;
+                }
             }
+
+            MessageBox.Show("Building Complete!" + "\n\n" + sFile.FileName);
 
             toss:
             oFolder.Dispose();
@@ -292,26 +330,7 @@ namespace BotWUnpacker
                 
         }
 
-        private void btnYaz0Encode_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog oFile = new OpenFileDialog();
-            oFile.Filter = "All Files|*.*";
-            if (tbxFolderRoot.Text != "") oFile.InitialDirectory = tbxFolderRoot.Text;
-            lblProcessStatus.Visible = true;
-            if (oFile.ShowDialog() == DialogResult.Cancel) goto toss;
-
-            //Yaz0 Encode
-            if (!Yaz0.Encode(oFile.FileName, oFile.FileName))
-            {
-                MessageBox.Show("Encode error:" + "\n\n" + Yaz0.lerror);
-                goto toss;
-            }
-
-            toss:
-            oFile.Dispose();
-            GC.Collect();
-            lblProcessStatus.Visible = false;
-        }
+        
         
         Form2 form2 = new Form2();
         private void btnCompareAndBuild_Click(object sender, EventArgs e)
@@ -321,7 +340,7 @@ namespace BotWUnpacker
                 if (form2.IsDisposed)
                     form2 = new Form2();
                 form2.StartPosition = FormStartPosition.Manual;
-                form2.Location = new Point (Form1.ActiveForm.DesktopLocation.X + 120, Form1.ActiveForm.DesktopLocation.Y + 200);
+                form2.Location = new Point (Form1.ActiveForm.DesktopLocation.X + 380, Form1.ActiveForm.DesktopLocation.Y);
                 form2.Show();
             }
             else
@@ -332,6 +351,26 @@ namespace BotWUnpacker
                 form2.BringToFront();
             }
 
+        }
+
+        Form3 form3 = new Form3();
+        private void btnSarcEditor_Click(object sender, EventArgs e)
+        {
+            if (!(form3.Visible))
+            {
+                if (form3.IsDisposed)
+                    form3 = new Form3();
+                form3.StartPosition = FormStartPosition.Manual;
+                form3.Location = new Point(Form1.ActiveForm.DesktopLocation.X + 380, Form1.ActiveForm.DesktopLocation.Y);
+                form3.Show();
+            }
+            else
+            {
+                form3.Refresh();
+                if (form3.WindowState == FormWindowState.Minimized)
+                    form3.WindowState = FormWindowState.Normal;
+                form3.BringToFront();
+            }
         }
     }
 }

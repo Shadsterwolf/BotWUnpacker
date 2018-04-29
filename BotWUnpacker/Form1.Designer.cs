@@ -48,7 +48,7 @@ namespace BotWUnpacker
             this.cbxCompileAllInOneFolder = new System.Windows.Forms.CheckBox();
             this.btnYaz0Encode = new System.Windows.Forms.Button();
             this.btnCompareAndBuild = new System.Windows.Forms.Button();
-            this.lblBeta = new System.Windows.Forms.Label();
+            this.btnPaddingEditor = new System.Windows.Forms.Button();
             imgIcon = new System.Windows.Forms.PictureBox();
             lblFootnote = new System.Windows.Forms.Label();
             line1 = new System.Windows.Forms.Label();
@@ -69,11 +69,11 @@ namespace BotWUnpacker
             // lblFootnote
             // 
             lblFootnote.AutoSize = true;
-            lblFootnote.Location = new System.Drawing.Point(12, 346);
+            lblFootnote.Location = new System.Drawing.Point(10, 353);
             lblFootnote.Name = "lblFootnote";
             lblFootnote.Size = new System.Drawing.Size(210, 39);
             lblFootnote.TabIndex = 10;
-            lblFootnote.Text = "Version: 1.7 \nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
+            lblFootnote.Text = "Version: 1.8 \nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
             // 
             // line1
             // 
@@ -147,7 +147,7 @@ namespace BotWUnpacker
             this.lblProcessStatus.AutoSize = true;
             this.lblProcessStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblProcessStatus.ForeColor = System.Drawing.Color.Blue;
-            this.lblProcessStatus.Location = new System.Drawing.Point(12, 333);
+            this.lblProcessStatus.Location = new System.Drawing.Point(12, 340);
             this.lblProcessStatus.Name = "lblProcessStatus";
             this.lblProcessStatus.Size = new System.Drawing.Size(81, 13);
             this.lblProcessStatus.TabIndex = 11;
@@ -252,32 +252,33 @@ namespace BotWUnpacker
             // 
             // btnCompareAndBuild
             // 
-            this.btnCompareAndBuild.Location = new System.Drawing.Point(272, 253);
+            this.btnCompareAndBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnCompareAndBuild.Location = new System.Drawing.Point(269, 253);
             this.btnCompareAndBuild.Name = "btnCompareAndBuild";
-            this.btnCompareAndBuild.Size = new System.Drawing.Size(100, 77);
+            this.btnCompareAndBuild.Size = new System.Drawing.Size(100, 48);
             this.btnCompareAndBuild.TabIndex = 24;
             this.btnCompareAndBuild.Text = "Compare and Build";
-            this.btnCompareAndBuild.UseVisualStyleBackColor = true;
+            this.btnCompareAndBuild.UseVisualStyleBackColor = false;
             this.btnCompareAndBuild.Click += new System.EventHandler(this.btnCompareAndBuild_Click);
             // 
-            // lblBeta
+            // btnPaddingEditor
             // 
-            this.lblBeta.AutoSize = true;
-            this.lblBeta.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBeta.ForeColor = System.Drawing.Color.Red;
-            this.lblBeta.Location = new System.Drawing.Point(74, 346);
-            this.lblBeta.Name = "lblBeta";
-            this.lblBeta.Size = new System.Drawing.Size(39, 13);
-            this.lblBeta.TabIndex = 25;
-            this.lblBeta.Text = "BETA";
+            this.btnPaddingEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnPaddingEditor.Location = new System.Drawing.Point(269, 307);
+            this.btnPaddingEditor.Name = "btnPaddingEditor";
+            this.btnPaddingEditor.Size = new System.Drawing.Size(100, 48);
+            this.btnPaddingEditor.TabIndex = 25;
+            this.btnPaddingEditor.Text = "Padding Editor";
+            this.btnPaddingEditor.UseVisualStyleBackColor = false;
+            this.btnPaddingEditor.Click += new System.EventHandler(this.btnSarcEditor_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(384, 391);
-            this.Controls.Add(this.lblBeta);
+            this.ClientSize = new System.Drawing.Size(384, 401);
+            this.Controls.Add(this.btnPaddingEditor);
             this.Controls.Add(this.btnCompareAndBuild);
             this.Controls.Add(line1);
             this.Controls.Add(this.btnYaz0Encode);
@@ -328,7 +329,7 @@ namespace BotWUnpacker
         private System.Windows.Forms.CheckBox cbxCompileAllInOneFolder;
         private System.Windows.Forms.Button btnYaz0Encode;
         private System.Windows.Forms.Button btnCompareAndBuild;
-        private System.Windows.Forms.Label lblBeta;
+        private System.Windows.Forms.Button btnPaddingEditor;
     }
 }
 
