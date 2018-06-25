@@ -58,7 +58,7 @@ namespace BotWUnpacker
             //Yaz0 header 0x00 - 0x0F
             if (inFile[0] != 'Y' || inFile[1] != 'a' || inFile[2] != 'z' || inFile[3] != '0')
             {
-                lerror = "File not Yaz0 encoded! " + "\n" + "( Your file header is: " + ((char)inFile[0]) + ((char)inFile[1]) + ((char)inFile[2]) + ((char)inFile[3]) + " )";
+                lerror = "File not Yaz0 encoded! " + "\n" + "(Your file header is: " + ((char)inFile[0]) + ((char)inFile[1]) + ((char)inFile[2]) + ((char)inFile[3]) + ")";
                 return false;
             }
             uint uncompressedSize = Makeu32(inFile[4], inFile[5], inFile[6], inFile[7]); //0x04

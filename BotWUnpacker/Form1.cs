@@ -20,7 +20,7 @@ namespace BotWUnpacker
             tbxFolderRoot.Text = Properties.Settings.Default.RootFolder;
             if (tbxFolderRoot.Text != "") btnExtractAll.Enabled = true;
             if (tbxFolderRoot.Text != "") btnOpenFolder.Enabled = true;
-            
+            lblFootnote.Text = "Version: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Major.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString() + "\nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
         }
 
 
@@ -371,6 +371,21 @@ namespace BotWUnpacker
                     form3.WindowState = FormWindowState.Normal;
                 form3.BringToFront();
             }
+        }
+
+        ToolTip t1 = new ToolTip();
+
+
+
+
+        private void cbxSetDataOffset_MouseHover(object sender, EventArgs e)
+        {
+            t1.Show("If you need to set where node data is", cbxSetDataOffset);
+        }
+
+        private void cbxFixSize_MouseHover(object sender, EventArgs e)
+        {
+            t1.Show("This will make every node filesize divisable by 4", cbxFixSize);
         }
     }
 }

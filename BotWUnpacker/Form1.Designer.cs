@@ -25,11 +25,11 @@ namespace BotWUnpacker
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
+        
         private void InitializeComponent()
         {
             System.Windows.Forms.PictureBox imgIcon;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.Label lblFootnote;
             System.Windows.Forms.Label line1;
             this.btnBrowseRoot = new System.Windows.Forms.Button();
             this.btnExtractPack = new System.Windows.Forms.Button();
@@ -49,8 +49,9 @@ namespace BotWUnpacker
             this.btnYaz0Encode = new System.Windows.Forms.Button();
             this.btnCompareAndBuild = new System.Windows.Forms.Button();
             this.btnPaddingEditor = new System.Windows.Forms.Button();
+            this.cbxFixSize = new System.Windows.Forms.CheckBox();
+            this.lblFootnote = new System.Windows.Forms.Label();
             imgIcon = new System.Windows.Forms.PictureBox();
-            lblFootnote = new System.Windows.Forms.Label();
             line1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(imgIcon)).BeginInit();
             this.SuspendLayout();
@@ -65,15 +66,6 @@ namespace BotWUnpacker
             imgIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             imgIcon.TabIndex = 1;
             imgIcon.TabStop = false;
-            // 
-            // lblFootnote
-            // 
-            lblFootnote.AutoSize = true;
-            lblFootnote.Location = new System.Drawing.Point(10, 353);
-            lblFootnote.Name = "lblFootnote";
-            lblFootnote.Size = new System.Drawing.Size(210, 39);
-            lblFootnote.TabIndex = 10;
-            lblFootnote.Text = "Version: 1.8 \nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
             // 
             // line1
             // 
@@ -147,7 +139,7 @@ namespace BotWUnpacker
             this.lblProcessStatus.AutoSize = true;
             this.lblProcessStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblProcessStatus.ForeColor = System.Drawing.Color.Blue;
-            this.lblProcessStatus.Location = new System.Drawing.Point(12, 340);
+            this.lblProcessStatus.Location = new System.Drawing.Point(12, 333);
             this.lblProcessStatus.Name = "lblProcessStatus";
             this.lblProcessStatus.Size = new System.Drawing.Size(81, 13);
             this.lblProcessStatus.TabIndex = 11;
@@ -157,18 +149,19 @@ namespace BotWUnpacker
             // cbxSetDataOffset
             // 
             this.cbxSetDataOffset.AutoSize = true;
-            this.cbxSetDataOffset.Location = new System.Drawing.Point(119, 253);
+            this.cbxSetDataOffset.Location = new System.Drawing.Point(118, 254);
             this.cbxSetDataOffset.Name = "cbxSetDataOffset";
-            this.cbxSetDataOffset.Size = new System.Drawing.Size(127, 17);
+            this.cbxSetDataOffset.Size = new System.Drawing.Size(99, 17);
             this.cbxSetDataOffset.TabIndex = 12;
-            this.cbxSetDataOffset.Text = "Set Fixed Data Offset";
+            this.cbxSetDataOffset.Text = "Set Data Offset";
             this.cbxSetDataOffset.UseVisualStyleBackColor = true;
             this.cbxSetDataOffset.CheckedChanged += new System.EventHandler(this.cbxSetDataOffset_CheckedChanged);
+            this.cbxSetDataOffset.MouseHover += new System.EventHandler(this.cbxSetDataOffset_MouseHover);
             // 
             // tbxDataOffset
             // 
             this.tbxDataOffset.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.tbxDataOffset.Location = new System.Drawing.Point(119, 276);
+            this.tbxDataOffset.Location = new System.Drawing.Point(212, 253);
             this.tbxDataOffset.MaxLength = 4;
             this.tbxDataOffset.Name = "tbxDataOffset";
             this.tbxDataOffset.ReadOnly = true;
@@ -272,12 +265,34 @@ namespace BotWUnpacker
             this.btnPaddingEditor.UseVisualStyleBackColor = false;
             this.btnPaddingEditor.Click += new System.EventHandler(this.btnSarcEditor_Click);
             // 
+            // cbxFixSize
+            // 
+            this.cbxFixSize.AutoSize = true;
+            this.cbxFixSize.Location = new System.Drawing.Point(118, 277);
+            this.cbxFixSize.Name = "cbxFixSize";
+            this.cbxFixSize.Size = new System.Drawing.Size(91, 17);
+            this.cbxFixSize.TabIndex = 26;
+            this.cbxFixSize.Text = "Fix Node Size";
+            this.cbxFixSize.UseVisualStyleBackColor = true;
+            this.cbxFixSize.MouseHover += new System.EventHandler(this.cbxFixSize_MouseHover);
+            // 
+            // lblFootnote
+            // 
+            this.lblFootnote.AutoSize = true;
+            this.lblFootnote.Location = new System.Drawing.Point(12, 346);
+            this.lblFootnote.Name = "lblFootnote";
+            this.lblFootnote.Size = new System.Drawing.Size(49, 13);
+            this.lblFootnote.TabIndex = 27;
+            this.lblFootnote.Text = "Footnote";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(384, 401);
+            this.Controls.Add(this.lblFootnote);
+            this.Controls.Add(this.cbxFixSize);
             this.Controls.Add(this.btnPaddingEditor);
             this.Controls.Add(this.btnCompareAndBuild);
             this.Controls.Add(line1);
@@ -291,7 +306,6 @@ namespace BotWUnpacker
             this.Controls.Add(this.tbxDataOffset);
             this.Controls.Add(this.cbxSetDataOffset);
             this.Controls.Add(this.lblProcessStatus);
-            this.Controls.Add(lblFootnote);
             this.Controls.Add(this.cbxWriteXml);
             this.Controls.Add(this.tbxFolderRoot);
             this.Controls.Add(this.lblFolderRoot);
@@ -330,6 +344,8 @@ namespace BotWUnpacker
         private System.Windows.Forms.Button btnYaz0Encode;
         private System.Windows.Forms.Button btnCompareAndBuild;
         private System.Windows.Forms.Button btnPaddingEditor;
+        private System.Windows.Forms.CheckBox cbxFixSize;
+        private System.Windows.Forms.Label lblFootnote;
     }
 }
 

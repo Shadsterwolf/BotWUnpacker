@@ -470,7 +470,7 @@ namespace BotWUnpacker
                 fileSize += 0x08; //SFNT reserve
                 fileSize += totalNamesLength; //names of files 
                 uint nodeDataStart = fileSize; //node data table offset
-                if (dataFixedOffset > nodeDataStart) //if fixed data offset if larger than generated start...
+                if (dataFixedOffset > nodeDataStart) //if fixed data offset is larger than generated start...
                 {
                     namePaddingToAdd += (dataFixedOffset - nodeDataStart);
                     fileSize += (dataFixedOffset - nodeDataStart);
