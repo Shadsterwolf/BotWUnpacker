@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotWUnpacker", "BotWUnpacker\BotWUnpacker.csproj", "{4D8116D8-DC40-4981-83E3-DB49349D8A79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotwUnpacker", "BotWUnpacker\BotwUnpacker.csproj", "{4D8116D8-DC40-4981-83E3-DB49349D8A79}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

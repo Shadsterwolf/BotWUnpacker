@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -18,10 +19,14 @@ namespace BotWUnpacker
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new Form1()); //Open application
             }
+            else if (args.Length > 0 && File.Exists(args[0])) //Drag n' drop
+            {
+                ConsoleHandler.DragAndDrop(args);
+            }
             else
             {
                 AttachConsole(-1); //Pass to parent console that sent the arguments
-                ConsoleHandler.Initialize(args);
+                ConsoleHandler.Commands(args);
                 SendKeys.SendWait("{ENTER}"); //Thank you StackOverflow (Rob L)
             }
                 

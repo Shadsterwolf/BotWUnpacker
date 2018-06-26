@@ -204,7 +204,7 @@ namespace BotWUnpacker
         {
             try
             {
-                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, false, false, inFile); //default
+                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, false, inFile); //default
             }
             catch (Exception e) //usually because file is in use
             {
@@ -213,11 +213,11 @@ namespace BotWUnpacker
             }
         }
 
-        public static bool Extract(string inFile, string outDir, bool autoDecode, bool replaceFile)
+        public static bool Extract(string inFile, string outDir, bool autoDecode)
         {
             try
             {
-                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, autoDecode, replaceFile, inFile);
+                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, autoDecode, inFile);
             }
             catch (Exception e) //usually because file is in use
             {
@@ -226,7 +226,7 @@ namespace BotWUnpacker
             }
         }
 
-        public static bool Extract(byte[] inFile, string outDir, bool autoDecode, bool replaceFile, string inFileName)
+        public static bool Extract(byte[] inFile, string outDir, bool autoDecode, string inFileName)
         {
 
             //SARC header 0x00 - 0x13
@@ -236,24 +236,13 @@ namespace BotWUnpacker
                 {
                     if (autoDecode)
                     {
-                        string outFile;
-                        if (replaceFile)
-                        {
-                            //replace the file decoded and recursively run the extract
-                            outFile = inFileName;
-                            Yaz0.Decode(inFileName, outFile);
-                        }
-                        else
-                        {
-                            //create the decoded file and recursively run the extract
-                            outFile = Path.GetDirectoryName(inFileName) + "\\" + Path.GetFileNameWithoutExtension(inFileName) + "Decoded" + Path.GetExtension(inFileName);
-                            Yaz0.Decode(inFileName, outFile);
-                        }
-                        return Extract(outFile, outDir, autoDecode, replaceFile); //recursively run the code again
+                        string outFile = Yaz0.DecodeOutputFileRename(inFileName);
+                        Yaz0.Decode(inFileName, outFile);
+                        return Extract(outFile, outDir, autoDecode); //recursively run the code again
                     }
                     else
                     {
-                        lerror = "Yaz0 file encoded, auto decode is off.";
+                        lerror = "Yaz0 file encoded, please decode it first";
                         return false;
                     }
                 }
@@ -352,24 +341,11 @@ namespace BotWUnpacker
                 {
                     nodeData = new byte[nodes[i].end - nodes[i].start];
                     Array.Copy(inFile, nodes[i].start + dataOffset, nodeData, 0, nodes[i].end - nodes[i].start);
-                    if (replaceFile)
-                    {
-                        if (!(Yaz0.Decode(nodeData, outDir + "/" + fileNames[i]))) //attempt decode, but if it fails, write it anyway.
-                        {
-                            stream = new System.IO.StreamWriter(outDir + "/" + fileNames[i]);
-                            stream.BaseStream.Write(inFile, (int)(nodes[i].start + dataOffset), (int)(nodes[i].end - nodes[i].start)); //Write 
-                            stream.Close();
-                            stream.Dispose();
-                        }
-                    }
-                    else
-                    {
-                        Yaz0.Decode(nodeData, outDir + "/" + fileNames[i].Split('.')[0] + "Decoded." + fileNames[i].Split('.')[1]);
-                        stream = new System.IO.StreamWriter(outDir + "/" + fileNames[i]);
-                        stream.BaseStream.Write(inFile, (int)(nodes[i].start + dataOffset), (int)(nodes[i].end - nodes[i].start)); //Write 
-                        stream.Close();
-                        stream.Dispose();
-                    }
+                    Yaz0.Decode(nodeData, Yaz0.DecodeOutputFileRename(fileNames[i]));
+                    stream = new System.IO.StreamWriter(outDir + "/" + fileNames[i]);
+                    stream.BaseStream.Write(inFile, (int)(nodes[i].start + dataOffset), (int)(nodes[i].end - nodes[i].start)); //Write 
+                    stream.Close();
+                    stream.Dispose();
                 }
                 else
                 {
@@ -446,14 +422,14 @@ namespace BotWUnpacker
 
                 //Node data build and position logic
                 NodeData[] nodeData = new NodeData[numFiles];
-                nodeData[hashes[0].index].data = FixNodeSize(System.IO.File.ReadAllBytes(nodeInfo[hashes[0].index].realname));
+                nodeData[hashes[0].index].data = System.IO.File.ReadAllBytes(nodeInfo[hashes[0].index].realname);
                 nodeData[hashes[0].index].startPos = 0; //first starting positon
                 nodeData[hashes[0].index].endPos = (uint)nodeData[hashes[0].index].data.Length; //first end position before padding
                 byte[] nodeBuild = AddPadding(nodeData[hashes[0].index].data, nodeData[hashes[0].index]); //Prep first node for building
                 for (int i = 1; i < numFiles; i++)
                 {
                     nodeData[hashes[i].index].startPos = (uint)nodeBuild.Length; //start position after padding
-                    nodeData[hashes[i].index].data = FixNodeSize(System.IO.File.ReadAllBytes(nodeInfo[hashes[i].index].realname));
+                    nodeData[hashes[i].index].data = System.IO.File.ReadAllBytes(nodeInfo[hashes[i].index].realname);
                     nodeBuild = nodeBuild.Concat(nodeData[hashes[i].index].data).ToArray(); //Concatenate next unpadded node
                     nodeData[hashes[i].index].endPos = (uint)nodeBuild.Length; //end position before padding
                     if (i != numFiles - 1) //As long as it's not the last node, add padding

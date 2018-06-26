@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Modding tool for Zelda: Breath of the Wild")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Shadsterwolf")]
-[assembly: AssemblyProduct("BotW Unpacker")]
+[assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

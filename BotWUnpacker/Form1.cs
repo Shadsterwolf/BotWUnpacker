@@ -17,7 +17,7 @@ namespace BotWUnpacker
         {
             InitializeComponent();
             //Load in previous instance
-            tbxFolderRoot.Text = Properties.Settings.Default.RootFolder;
+            tbxFolderRoot.Text = BotwUnpacker.Properties.Settings.Default.RootFolder;
             if (tbxFolderRoot.Text != "") btnExtractAll.Enabled = true;
             if (tbxFolderRoot.Text != "") btnOpenFolder.Enabled = true;
             lblFootnote.Text = "Version: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Major.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString() + "\nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
@@ -37,8 +37,8 @@ namespace BotWUnpacker
             btnOpenFolder.Enabled = true;
 
             //Save GameRoot property
-            Properties.Settings.Default.RootFolder = oFolder.SelectedPath; 
-            Properties.Settings.Default.Save();
+            BotwUnpacker.Properties.Settings.Default.RootFolder = oFolder.SelectedPath;
+            BotwUnpacker.Properties.Settings.Default.Save();
 
             toss:
             oFolder.Dispose();
@@ -49,7 +49,7 @@ namespace BotWUnpacker
         private void btnExtractPack_Click(object sender, EventArgs e) //Extract Pack button
         {
             OpenFileDialog oFile = new OpenFileDialog();
-            oFile.Filter = "PACK File (*.pack *.sarc *.ssarc *.rarc *.sgenvb *.sbfarc *.sblarc *.sbactorpack)|*.pack; *.sarc; *.ssarc; *.rarc; *.sgenvb; *.sbfarc; *.sblarc; *.sbactorpack|All Files|*.*";
+            oFile.Filter = "All Files|*.*";
             if (tbxFolderRoot.Text != "") oFile.InitialDirectory = tbxFolderRoot.Text;
             if (oFile.ShowDialog() == DialogResult.Cancel) goto toss;
 
@@ -63,13 +63,8 @@ namespace BotWUnpacker
             //SARC
             lblProcessStatus.Visible = true;
             bool boolAutoDecode = false;
-            bool boolReplaceFile = false;
             if (cbxAutoDecode.Checked) //Auto Yaz0 decoding
-            {
                 boolAutoDecode = true;
-                if (cbxReplaceDecodedFile.Checked) //Replace File
-                    boolReplaceFile = true;
-            }
             else //Default, without any checkboxes
             {
                 if (PACK.IsYaz0File(oFile.FileName))
@@ -80,7 +75,7 @@ namespace BotWUnpacker
                         goto toss; //User clicked no
                 }
             }
-            if (!PACK.Extract(oFile.FileName, oFolderPath, boolAutoDecode, boolReplaceFile)) //Extraction
+            if (!PACK.Extract(oFile.FileName, oFolderPath, boolAutoDecode)) //Extraction
             {
                 MessageBox.Show("Extraction error:" + "\n\n" + PACK.lerror);
                 goto toss;
@@ -122,12 +117,9 @@ namespace BotWUnpacker
             String oFolderName, oFolderPath;
             int sarcFileCount = 0;
             bool boolAutoDecode = false;
-            bool boolReplaceFile = false;
             if (cbxAutoDecode.Checked) //Auto Yaz0 decoding
             {
                 boolAutoDecode = true;
-                if (cbxReplaceDecodedFile.Checked) //Replace File
-                    boolReplaceFile = true;
             }
 
             if (cbxCompileAllInOneFolder.Checked) //Compile All to New Folder
@@ -139,7 +131,7 @@ namespace BotWUnpacker
                 {
                     oFolderName = Path.GetFileNameWithoutExtension(file.FullName);
                     oFolderPath = oFolder.SelectedPath;
-                    if (PACK.Extract(file.FullName, oFolderPath, boolAutoDecode, boolReplaceFile))
+                    if (PACK.Extract(file.FullName, oFolderPath, boolAutoDecode))
                         sarcFileCount++;
                 }
 
@@ -150,7 +142,7 @@ namespace BotWUnpacker
                 {
                     oFolderName = Path.GetFileNameWithoutExtension(file.FullName);
                     oFolderPath = Path.GetDirectoryName(file.FullName) + "\\" + oFolderName;
-                    if (PACK.Extract(file.FullName, oFolderPath, boolAutoDecode, boolReplaceFile))
+                    if (PACK.Extract(file.FullName, oFolderPath, boolAutoDecode))
                         sarcFileCount++;
                 }
             }
@@ -172,19 +164,8 @@ namespace BotWUnpacker
             lblProcessStatus.Visible = true;
             if (oFile.ShowDialog() == DialogResult.Cancel) goto toss;
             string outFile = oFile.FileName;
-            //Yaz0 Decode
-            if (cbxReplaceDecodedFile.Checked)
             {
-                if (!Yaz0.Decode(oFile.FileName, outFile))
-                {
-                    MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
-                    goto toss;
-                }
-            }
-            else
-            {
-                outFile = Path.GetDirectoryName(oFile.FileName) + "\\" + Path.GetFileNameWithoutExtension(oFile.FileName) + "Decoded" + Path.GetExtension(oFile.FileName);
-                if (!Yaz0.Decode(oFile.FileName, outFile))
+                if (!Yaz0.Decode(oFile.FileName, Yaz0.DecodeOutputFileRename(oFile.FileName)))
                 {
                     MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
                     goto toss;
@@ -302,8 +283,8 @@ namespace BotWUnpacker
         {
             if (tbxFolderRoot.Text == "")
             {
-                Properties.Settings.Default.RootFolder = "";
-                Properties.Settings.Default.Save();
+                BotwUnpacker.Properties.Settings.Default.RootFolder = "";
+                BotwUnpacker.Properties.Settings.Default.Save();
                 btnExtractAll.Enabled = false;
                 btnOpenFolder.Enabled = false;
             }
@@ -311,26 +292,10 @@ namespace BotWUnpacker
             {
                 btnExtractAll.Enabled = true;
                 btnOpenFolder.Enabled = true;
-                Properties.Settings.Default.RootFolder = tbxFolderRoot.Text;
-                Properties.Settings.Default.Save();
+                BotwUnpacker.Properties.Settings.Default.RootFolder = tbxFolderRoot.Text;
+                BotwUnpacker.Properties.Settings.Default.Save();
             }
-        }
-
-        private void cbxAutoDecode_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cbxAutoDecode.Checked)
-            {
-                cbxReplaceDecodedFile.Enabled = true;
-            }
-            else
-            {
-                cbxReplaceDecodedFile.Checked = false;
-                cbxReplaceDecodedFile.Enabled = false;
-            }
-                
-        }
-
-        
+        }        
         
         Form2 form2 = new Form2();
         private void btnCompareAndBuild_Click(object sender, EventArgs e)

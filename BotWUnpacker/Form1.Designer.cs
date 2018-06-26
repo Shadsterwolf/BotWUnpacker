@@ -43,7 +43,6 @@ namespace BotWUnpacker
             this.btnExtractAll = new System.Windows.Forms.Button();
             this.btnOpenFolder = new System.Windows.Forms.Button();
             this.btnYaz0Decode = new System.Windows.Forms.Button();
-            this.cbxReplaceDecodedFile = new System.Windows.Forms.CheckBox();
             this.cbxAutoDecode = new System.Windows.Forms.CheckBox();
             this.cbxCompileAllInOneFolder = new System.Windows.Forms.CheckBox();
             this.btnYaz0Encode = new System.Windows.Forms.Button();
@@ -71,7 +70,7 @@ namespace BotWUnpacker
             // 
             line1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             line1.Enabled = false;
-            line1.Location = new System.Drawing.Point(13, 248);
+            line1.Location = new System.Drawing.Point(12, 225);
             line1.Name = "line1";
             line1.Size = new System.Drawing.Size(356, 2);
             line1.TabIndex = 23;
@@ -92,13 +91,13 @@ namespace BotWUnpacker
             this.btnExtractPack.Name = "btnExtractPack";
             this.btnExtractPack.Size = new System.Drawing.Size(100, 23);
             this.btnExtractPack.TabIndex = 2;
-            this.btnExtractPack.Text = "Extract PACK";
+            this.btnExtractPack.Text = "Unpack PACK";
             this.btnExtractPack.UseVisualStyleBackColor = true;
             this.btnExtractPack.Click += new System.EventHandler(this.btnExtractPack_Click);
             // 
             // btnBuildPack
             // 
-            this.btnBuildPack.Location = new System.Drawing.Point(12, 253);
+            this.btnBuildPack.Location = new System.Drawing.Point(13, 238);
             this.btnBuildPack.Name = "btnBuildPack";
             this.btnBuildPack.Size = new System.Drawing.Size(100, 48);
             this.btnBuildPack.TabIndex = 3;
@@ -149,7 +148,7 @@ namespace BotWUnpacker
             // cbxSetDataOffset
             // 
             this.cbxSetDataOffset.AutoSize = true;
-            this.cbxSetDataOffset.Location = new System.Drawing.Point(118, 254);
+            this.cbxSetDataOffset.Location = new System.Drawing.Point(118, 238);
             this.cbxSetDataOffset.Name = "cbxSetDataOffset";
             this.cbxSetDataOffset.Size = new System.Drawing.Size(99, 17);
             this.cbxSetDataOffset.TabIndex = 12;
@@ -161,7 +160,7 @@ namespace BotWUnpacker
             // tbxDataOffset
             // 
             this.tbxDataOffset.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.tbxDataOffset.Location = new System.Drawing.Point(212, 253);
+            this.tbxDataOffset.Location = new System.Drawing.Point(213, 238);
             this.tbxDataOffset.MaxLength = 4;
             this.tbxDataOffset.Name = "tbxDataOffset";
             this.tbxDataOffset.ReadOnly = true;
@@ -201,27 +200,15 @@ namespace BotWUnpacker
             this.btnYaz0Decode.UseVisualStyleBackColor = true;
             this.btnYaz0Decode.Click += new System.EventHandler(this.btnYaz0Decode_Click);
             // 
-            // cbxReplaceDecodedFile
-            // 
-            this.cbxReplaceDecodedFile.AutoSize = true;
-            this.cbxReplaceDecodedFile.Enabled = false;
-            this.cbxReplaceDecodedFile.Location = new System.Drawing.Point(12, 228);
-            this.cbxReplaceDecodedFile.Name = "cbxReplaceDecodedFile";
-            this.cbxReplaceDecodedFile.Size = new System.Drawing.Size(215, 17);
-            this.cbxReplaceDecodedFile.TabIndex = 19;
-            this.cbxReplaceDecodedFile.Text = "Replace With Decoded File (No Copies)";
-            this.cbxReplaceDecodedFile.UseVisualStyleBackColor = true;
-            // 
             // cbxAutoDecode
             // 
             this.cbxAutoDecode.AutoSize = true;
             this.cbxAutoDecode.Location = new System.Drawing.Point(12, 205);
             this.cbxAutoDecode.Name = "cbxAutoDecode";
-            this.cbxAutoDecode.Size = new System.Drawing.Size(116, 17);
+            this.cbxAutoDecode.Size = new System.Drawing.Size(150, 17);
             this.cbxAutoDecode.TabIndex = 20;
-            this.cbxAutoDecode.Text = "Auto Yaz0 Decode";
+            this.cbxAutoDecode.Text = "Auto Yaz0 Decode Nodes";
             this.cbxAutoDecode.UseVisualStyleBackColor = true;
-            this.cbxAutoDecode.CheckedChanged += new System.EventHandler(this.cbxAutoDecode_CheckedChanged);
             // 
             // cbxCompileAllInOneFolder
             // 
@@ -235,7 +222,7 @@ namespace BotWUnpacker
             // 
             // btnYaz0Encode
             // 
-            this.btnYaz0Encode.Location = new System.Drawing.Point(13, 307);
+            this.btnYaz0Encode.Location = new System.Drawing.Point(12, 292);
             this.btnYaz0Encode.Name = "btnYaz0Encode";
             this.btnYaz0Encode.Size = new System.Drawing.Size(100, 23);
             this.btnYaz0Encode.TabIndex = 22;
@@ -246,7 +233,7 @@ namespace BotWUnpacker
             // btnCompareAndBuild
             // 
             this.btnCompareAndBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.btnCompareAndBuild.Location = new System.Drawing.Point(269, 253);
+            this.btnCompareAndBuild.Location = new System.Drawing.Point(272, 238);
             this.btnCompareAndBuild.Name = "btnCompareAndBuild";
             this.btnCompareAndBuild.Size = new System.Drawing.Size(100, 48);
             this.btnCompareAndBuild.TabIndex = 24;
@@ -257,7 +244,7 @@ namespace BotWUnpacker
             // btnPaddingEditor
             // 
             this.btnPaddingEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.btnPaddingEditor.Location = new System.Drawing.Point(269, 307);
+            this.btnPaddingEditor.Location = new System.Drawing.Point(272, 292);
             this.btnPaddingEditor.Name = "btnPaddingEditor";
             this.btnPaddingEditor.Size = new System.Drawing.Size(100, 48);
             this.btnPaddingEditor.TabIndex = 25;
@@ -268,7 +255,7 @@ namespace BotWUnpacker
             // cbxFixSize
             // 
             this.cbxFixSize.AutoSize = true;
-            this.cbxFixSize.Location = new System.Drawing.Point(118, 277);
+            this.cbxFixSize.Location = new System.Drawing.Point(118, 261);
             this.cbxFixSize.Name = "cbxFixSize";
             this.cbxFixSize.Size = new System.Drawing.Size(91, 17);
             this.cbxFixSize.TabIndex = 26;
@@ -299,7 +286,6 @@ namespace BotWUnpacker
             this.Controls.Add(this.btnYaz0Encode);
             this.Controls.Add(this.cbxCompileAllInOneFolder);
             this.Controls.Add(this.cbxAutoDecode);
-            this.Controls.Add(this.cbxReplaceDecodedFile);
             this.Controls.Add(this.btnYaz0Decode);
             this.Controls.Add(this.btnOpenFolder);
             this.Controls.Add(this.btnExtractAll);
@@ -338,7 +324,6 @@ namespace BotWUnpacker
         private System.Windows.Forms.Button btnExtractAll;
         private System.Windows.Forms.Button btnOpenFolder;
         private System.Windows.Forms.Button btnYaz0Decode;
-        private System.Windows.Forms.CheckBox cbxReplaceDecodedFile;
         private System.Windows.Forms.CheckBox cbxAutoDecode;
         private System.Windows.Forms.CheckBox cbxCompileAllInOneFolder;
         private System.Windows.Forms.Button btnYaz0Encode;

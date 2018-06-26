@@ -23,7 +23,7 @@ namespace BotWUnpacker
         {
             OpenFileDialog oriFile = new OpenFileDialog();
             oriFile.Filter = "PACK File (*.pack *.sarc *.ssarc *.rarc *.sgenvb *.sbfarc *.sblarc *.sbactorpack)|*.pack; *.sarc; *.ssarc; *.rarc; *.sgenvb; *.sbfarc; *.sblarc; *.sbactorpack|All Files|*.*";
-            if (Properties.Settings.Default.RootFolder != "") oriFile.InitialDirectory = Properties.Settings.Default.RootFolder;
+            if (BotwUnpacker.Properties.Settings.Default.RootFolder != "") oriFile.InitialDirectory = BotwUnpacker.Properties.Settings.Default.RootFolder;
             if (oriFile.ShowDialog() == DialogResult.Cancel) goto toss;
             tbxOriFile.Text = oriFile.FileName;
 
@@ -85,8 +85,8 @@ namespace BotWUnpacker
             if (rbnCustomFile.Checked)
             {
                 OpenFileDialog cusFile = new OpenFileDialog();
-                cusFile.Filter = "PACK File (*.pack *.sarc *.ssarc *.rarc *.sgenvb *.sbfarc *.sblarc *.sbactorpack)|*.pack; *.sarc; *.ssarc; *.rarc; *.sgenvb; *.sbfarc; *.sblarc; *.sbactorpack|All Files|*.*";
-                if (Properties.Settings.Default.RootFolder != "") cusFile.InitialDirectory = Properties.Settings.Default.RootFolder;
+                cusFile.Filter = "All Files|*.*";
+                if (BotwUnpacker.Properties.Settings.Default.RootFolder != "") cusFile.InitialDirectory = BotwUnpacker.Properties.Settings.Default.RootFolder;
                 if (cusFile.ShowDialog() == DialogResult.Cancel) goto toss;
                 tbxCustom.Text = cusFile.FileName;
 
@@ -143,7 +143,7 @@ namespace BotWUnpacker
             else if (rbnCustomFolder.Checked)
             {
                 FolderBrowserDialog cusFolder = new FolderBrowserDialog();
-                if (Properties.Settings.Default.RootFolder != "") cusFolder.SelectedPath = Properties.Settings.Default.RootFolder;
+                if (BotwUnpacker.Properties.Settings.Default.RootFolder != "") cusFolder.SelectedPath = BotwUnpacker.Properties.Settings.Default.RootFolder;
                 cusFolder.Description = "Select Custom Folder";
                 if (cusFolder.ShowDialog() == DialogResult.Cancel) goto toss;
                 tbxCustom.Text = cusFolder.SelectedPath;

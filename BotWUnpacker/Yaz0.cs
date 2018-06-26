@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 //Decode based off of thakis's and shevious's code, recoded in C#
 //Encode was re-researched and programmed by myself (Shadsterwolf) 
@@ -39,6 +40,43 @@ namespace BotWUnpacker
         static private int HexToInt(String hex)
         {
             return int.Parse(hex, System.Globalization.NumberStyles.HexNumber);
+        }
+        #endregion
+
+        #region Constructors
+        static public string DecodeOutputFileRename(string path)
+        {
+            if (File.Exists(path))
+            {
+                if (Path.GetExtension(path).StartsWith(".s"))
+                    return RemoveExtensionLetterS(path);
+                else
+                    return AddDecodedLabel(path);
+            }
+            return path;
+        }
+
+        static private string RemoveExtensionLetterS(string path) //Remove the "s" in the extension after decoding 
+        {
+            if (File.Exists(path))
+            {
+                string extension = Path.GetExtension(path);
+                if (extension.StartsWith(".s"))
+                {
+                    string convert = extension.Replace(".s", ".");
+                    return Path.ChangeExtension(path, convert);
+                }
+            }
+            return path;
+        }
+
+        static private string AddDecodedLabel(string path)
+        {
+            if (File.Exists(path))
+            {
+                path = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "Decoded" + Path.GetExtension(path);
+            }
+            return path;
         }
         #endregion
 
