@@ -48,8 +48,8 @@ namespace BotWUnpacker
             this.btnYaz0Encode = new System.Windows.Forms.Button();
             this.btnCompareAndBuild = new System.Windows.Forms.Button();
             this.btnPaddingEditor = new System.Windows.Forms.Button();
-            this.cbxFixSize = new System.Windows.Forms.CheckBox();
             this.lblFootnote = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             imgIcon = new System.Windows.Forms.PictureBox();
             line1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(imgIcon)).BeginInit();
@@ -91,7 +91,7 @@ namespace BotWUnpacker
             this.btnExtractPack.Name = "btnExtractPack";
             this.btnExtractPack.Size = new System.Drawing.Size(100, 23);
             this.btnExtractPack.TabIndex = 2;
-            this.btnExtractPack.Text = "Unpack PACK";
+            this.btnExtractPack.Text = "Unpack SARC";
             this.btnExtractPack.UseVisualStyleBackColor = true;
             this.btnExtractPack.Click += new System.EventHandler(this.btnExtractPack_Click);
             // 
@@ -101,7 +101,7 @@ namespace BotWUnpacker
             this.btnBuildPack.Name = "btnBuildPack";
             this.btnBuildPack.Size = new System.Drawing.Size(100, 48);
             this.btnBuildPack.TabIndex = 3;
-            this.btnBuildPack.Text = "Build PACK";
+            this.btnBuildPack.Text = "Build SARC";
             this.btnBuildPack.UseVisualStyleBackColor = true;
             this.btnBuildPack.Click += new System.EventHandler(this.btnBuildPack_Click);
             // 
@@ -175,7 +175,7 @@ namespace BotWUnpacker
             this.btnExtractAll.Name = "btnExtractAll";
             this.btnExtractAll.Size = new System.Drawing.Size(100, 23);
             this.btnExtractAll.TabIndex = 16;
-            this.btnExtractAll.Text = "Extract All";
+            this.btnExtractAll.Text = "Unpack All";
             this.btnExtractAll.UseVisualStyleBackColor = true;
             this.btnExtractAll.Click += new System.EventHandler(this.btnExtractAll_Click);
             // 
@@ -252,17 +252,6 @@ namespace BotWUnpacker
             this.btnPaddingEditor.UseVisualStyleBackColor = false;
             this.btnPaddingEditor.Click += new System.EventHandler(this.btnSarcEditor_Click);
             // 
-            // cbxFixSize
-            // 
-            this.cbxFixSize.AutoSize = true;
-            this.cbxFixSize.Location = new System.Drawing.Point(118, 261);
-            this.cbxFixSize.Name = "cbxFixSize";
-            this.cbxFixSize.Size = new System.Drawing.Size(91, 17);
-            this.cbxFixSize.TabIndex = 26;
-            this.cbxFixSize.Text = "Fix Node Size";
-            this.cbxFixSize.UseVisualStyleBackColor = true;
-            this.cbxFixSize.MouseHover += new System.EventHandler(this.cbxFixSize_MouseHover);
-            // 
             // lblFootnote
             // 
             this.lblFootnote.AutoSize = true;
@@ -272,14 +261,25 @@ namespace BotWUnpacker
             this.lblFootnote.TabIndex = 27;
             this.lblFootnote.Text = "Footnote";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Red;
+            this.label1.Location = new System.Drawing.Point(12, 318);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(39, 13);
+            this.label1.TabIndex = 28;
+            this.label1.Text = "BETA";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(384, 401);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.lblFootnote);
-            this.Controls.Add(this.cbxFixSize);
             this.Controls.Add(this.btnPaddingEditor);
             this.Controls.Add(this.btnCompareAndBuild);
             this.Controls.Add(line1);
@@ -329,8 +329,8 @@ namespace BotWUnpacker
         private System.Windows.Forms.Button btnYaz0Encode;
         private System.Windows.Forms.Button btnCompareAndBuild;
         private System.Windows.Forms.Button btnPaddingEditor;
-        private System.Windows.Forms.CheckBox cbxFixSize;
         private System.Windows.Forms.Label lblFootnote;
+        private System.Windows.Forms.Label label1;
     }
 }
 

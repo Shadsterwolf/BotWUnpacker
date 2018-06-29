@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace BotWUnpacker
 {
@@ -27,17 +22,17 @@ namespace BotWUnpacker
         #region Button Browse Root 
         private void btnBrowseRoot_Click(object sender, EventArgs e) //Browse Root button
         {
-            FolderBrowserDialog oFolder = new FolderBrowserDialog();
+            CommonOpenFileDialog oFolder = new CommonOpenFileDialog();
+            oFolder.IsFolderPicker = true;
             if (tbxFolderRoot.Text != "")
-                oFolder.SelectedPath = tbxFolderRoot.Text;
-            oFolder.Description = "Select a game root folder";
-            if (oFolder.ShowDialog() == DialogResult.Cancel) goto toss;
-            tbxFolderRoot.Text = oFolder.SelectedPath;
+                oFolder.InitialDirectory = tbxFolderRoot.Text;
+            if (oFolder.ShowDialog() == CommonFileDialogResult.Cancel) goto toss;
+            tbxFolderRoot.Text = oFolder.FileName;
             btnExtractAll.Enabled = true;
             btnOpenFolder.Enabled = true;
 
             //Save GameRoot property
-            BotwUnpacker.Properties.Settings.Default.RootFolder = oFolder.SelectedPath;
+            BotwUnpacker.Properties.Settings.Default.RootFolder = oFolder.FileName;
             BotwUnpacker.Properties.Settings.Default.Save();
 
             toss:
@@ -124,13 +119,14 @@ namespace BotWUnpacker
 
             if (cbxCompileAllInOneFolder.Checked) //Compile All to New Folder
             {
-                FolderBrowserDialog oFolder = new FolderBrowserDialog();
-                if (tbxFolderRoot.Text != "") oFolder.SelectedPath = tbxFolderRoot.Text;
-                if (oFolder.ShowDialog() == DialogResult.Cancel) goto toss;
+                CommonOpenFileDialog oFolder = new CommonOpenFileDialog();
+                oFolder.IsFolderPicker = true;
+                if (tbxFolderRoot.Text != "") oFolder.InitialDirectory = tbxFolderRoot.Text;
+                if (oFolder.ShowDialog() == CommonFileDialogResult.Cancel) goto toss;
                 foreach (FileInfo file in dirFolder.GetFiles()) //Extraction
                 {
                     oFolderName = Path.GetFileNameWithoutExtension(file.FullName);
-                    oFolderPath = oFolder.SelectedPath;
+                    oFolderPath = oFolder.FileName;
                     if (PACK.Extract(file.FullName, oFolderPath, boolAutoDecode))
                         sarcFileCount++;
                 }
@@ -212,7 +208,8 @@ namespace BotWUnpacker
         #region Button Build Pack 
         private void btnBuildPack_Click(object sender, EventArgs e) // Build Pack button
         {
-            FolderBrowserDialog oFolder = new FolderBrowserDialog();
+            CommonOpenFileDialog oFolder = new CommonOpenFileDialog();
+            oFolder.IsFolderPicker = true;
             SaveFileDialog sFile = new SaveFileDialog();
 
             if (cbxSetDataOffset.Checked)
@@ -220,21 +217,20 @@ namespace BotWUnpacker
                 try{int.Parse(tbxDataOffset.Text, System.Globalization.NumberStyles.HexNumber);} //check if it's a hex value (textbox limited to 4 characters)
                 catch{MessageBox.Show("Error:" + "\n\n" + "Fixed Data Offset is not a hex value!"); goto toss;}
             }
-            oFolder.Description = "Select folder to build into Pack file";
-            if (tbxFolderRoot.Text != "") oFolder.SelectedPath = tbxFolderRoot.Text;
-            if (oFolder.ShowDialog() == DialogResult.Cancel) goto toss;
-            int numFiles = Directory.GetFiles(oFolder.SelectedPath, "*", SearchOption.AllDirectories).Length;            
+            if (tbxFolderRoot.Text != "") oFolder.InitialDirectory = tbxFolderRoot.Text;
+            if (oFolder.ShowDialog() == CommonFileDialogResult.Cancel) goto toss;
+            int numFiles = Directory.GetFiles(oFolder.FileName, "*", SearchOption.AllDirectories).Length;            
 
             sFile.Filter = "PACK|*.pack|SARC|*.sarc|SSARC|*.ssarc|RARC|*.rarc|SGENVB|*.sgenvb|SBFARC|*.sbfarc|SBLARC|*.sblarc|SBACTORPACK|*sbactorpack|All Files|*.*";
-            sFile.InitialDirectory = oFolder.SelectedPath.Remove(oFolder.SelectedPath.LastIndexOf("\\")); //Previous folder, as selected is to build outside of it.
-            sFile.FileName = System.IO.Path.GetFileName(oFolder.SelectedPath);
+            sFile.InitialDirectory = oFolder.FileName.Remove(oFolder.FileName.LastIndexOf("\\")); //Previous folder, as selected is to build outside of it.
+            sFile.FileName = System.IO.Path.GetFileName(oFolder.FileName);
             lblProcessStatus.Visible = true;
             if (sFile.ShowDialog() == DialogResult.Cancel) goto toss;
 
             if (cbxSetDataOffset.Checked)
             {
                 uint dataOffset = (uint)int.Parse(tbxDataOffset.Text, System.Globalization.NumberStyles.HexNumber);
-                if (!PACK.Build(oFolder.SelectedPath, sFile.FileName, dataOffset))
+                if (!PACK.Build(oFolder.FileName, sFile.FileName, dataOffset))
                 {
                     MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
                     goto toss;
@@ -242,7 +238,7 @@ namespace BotWUnpacker
             }
             else
             {
-                if (!PACK.Build(oFolder.SelectedPath, sFile.FileName))
+                if (!PACK.Build(oFolder.FileName, sFile.FileName))
                 { 
                     MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
                     goto toss;
@@ -346,11 +342,6 @@ namespace BotWUnpacker
         private void cbxSetDataOffset_MouseHover(object sender, EventArgs e)
         {
             t1.Show("If you need to set where node data is", cbxSetDataOffset);
-        }
-
-        private void cbxFixSize_MouseHover(object sender, EventArgs e)
-        {
-            t1.Show("This will make every node filesize divisable by 4", cbxFixSize);
         }
     }
 }

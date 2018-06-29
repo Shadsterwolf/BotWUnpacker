@@ -90,19 +90,19 @@ namespace BotWUnpacker
             ConsoleEncode(args);
         }
 
-        static private void ConsoleEncode(string[] args) //Console Decode
+        static private void ConsoleEncode(string[] args) //Console Encode
         {
             if (args.Length == 2 && File.Exists(args[1]))
 
                 if (Yaz0.Decode(args[1], Yaz0.DecodeOutputFileRename(args[1])))
-                    Console.WriteLine("Decode Successful");
+                    Console.WriteLine("Encode Successful");
                 else
-                    Console.WriteLine("Decode error: " + Yaz0.lerror);
+                    Console.WriteLine("Encode error: " + Yaz0.lerror);
             else if (args.Length == 3 && File.Exists(args[1]) && File.Exists(args[2]))
                 if (Yaz0.Decode(args[1], args[2]))
-                    Console.WriteLine("Decode Successful");
+                    Console.WriteLine("Encode Successful");
                 else
-                    Console.WriteLine("Decode error: " + Yaz0.lerror);
+                    Console.WriteLine("Encode error: " + Yaz0.lerror);
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;

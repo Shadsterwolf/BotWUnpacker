@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -39,7 +40,7 @@ namespace BotWUnpacker
                     tbxOriFile.Text = "";
                     goto toss;
                 }
-                string outFile = Path.GetDirectoryName(oriFile.FileName) + "\\" + Path.GetFileNameWithoutExtension(oriFile.FileName) + "Decoded" + Path.GetExtension(oriFile.FileName);
+                string outFile = Yaz0.DecodeOutputFileRename(oriFile.FileName);
                 if (!Yaz0.Decode(oriFile.FileName, outFile))
                 {
                     MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
@@ -102,7 +103,7 @@ namespace BotWUnpacker
                         tbxCustom.Text = "";
                         goto toss;
                     }
-                    string outFile = Path.GetDirectoryName(cusFile.FileName) + "\\" + Path.GetFileNameWithoutExtension(cusFile.FileName) + "Decoded" + Path.GetExtension(cusFile.FileName);
+                    string outFile = Yaz0.DecodeOutputFileRename(cusFile.FileName);
                     if (!Yaz0.Decode(cusFile.FileName, outFile))
                     {
                         MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
@@ -142,15 +143,15 @@ namespace BotWUnpacker
             }
             else if (rbnCustomFolder.Checked)
             {
-                FolderBrowserDialog cusFolder = new FolderBrowserDialog();
-                if (BotwUnpacker.Properties.Settings.Default.RootFolder != "") cusFolder.SelectedPath = BotwUnpacker.Properties.Settings.Default.RootFolder;
-                cusFolder.Description = "Select Custom Folder";
-                if (cusFolder.ShowDialog() == DialogResult.Cancel) goto toss;
-                tbxCustom.Text = cusFolder.SelectedPath;
+                CommonOpenFileDialog cusFolder = new CommonOpenFileDialog();
+                cusFolder.IsFolderPicker = true;
+                if (BotwUnpacker.Properties.Settings.Default.RootFolder != "") cusFolder.InitialDirectory = BotwUnpacker.Properties.Settings.Default.RootFolder;
+                if (cusFolder.ShowDialog() == CommonFileDialogResult.Cancel) goto toss;
+                tbxCustom.Text = cusFolder.FileName;
 
                 dgvCusTable.Rows.Clear();
                 dgvCusTable.Refresh();
-                string[] cusFolderFiles = System.IO.Directory.GetFiles(cusFolder.SelectedPath == "" ? System.Environment.CurrentDirectory : cusFolder.SelectedPath, "*.*", System.IO.SearchOption.AllDirectories);
+                string[] cusFolderFiles = System.IO.Directory.GetFiles(cusFolder.FileName == "" ? System.Environment.CurrentDirectory : cusFolder.FileName, "*.*", System.IO.SearchOption.AllDirectories);
                 int nodeCount = cusFolderFiles.Length;
                 if (nodeCount > 1000)
                 {
@@ -158,9 +159,9 @@ namespace BotWUnpacker
                     tbxCustom.Text = "";
                     goto toss;
                 }
-                uint[] nodeSizes = PACK.GetFolderFileSizes(cusFolder.SelectedPath);
-                string[] nodeTypes = PACK.GetFolderFileTypes(cusFolder.SelectedPath);
-                string[] nodePaths = PACK.GetFolderFilePaths(cusFolder.SelectedPath);
+                uint[] nodeSizes = PACK.GetFolderFileSizes(cusFolder.FileName);
+                string[] nodeTypes = PACK.GetFolderFileTypes(cusFolder.FileName);
+                string[] nodePaths = PACK.GetFolderFilePaths(cusFolder.FileName);
 
                 for (int i = 0; i < nodeCount; i++)
                 {
