@@ -4,7 +4,7 @@
 
 # Features
 - General Unpack, Build, Decode, and Encode <br />
-- Auto Decode Unpacked Files Decode <br />
+- Auto Decode Unpacked Yaz0 Files <br />
 - Mass Unpack all SARC Files in one go to seperate folders or compile all to one <br />
 - Smart extension handling <b>(.sbactorpack <-> .bactorpack)</b> <br />
 - Build and Compare tool (To better align special size and padding rules) <br />
