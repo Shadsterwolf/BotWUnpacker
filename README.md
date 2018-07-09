@@ -25,7 +25,7 @@
 -Unpack <br />
   /u <Input File> [Output Folder] <br />
 -Build
-  /b <Input Folder> [Output File]
+  /b <Input Folder> [Output File] <br />
 -For more details/examples <br />
   /?
 
