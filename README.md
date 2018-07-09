@@ -18,27 +18,28 @@
 - Automatically builds, upon detecting folder(s) (will overwrite existing, adds ".pack") <br />
 
 # Console
--Decode <br />
+- Decode <br />
   ```
   /d <Input File> [Output File]
   ```
--Encode <br />
+- Encode <br />
  ```
  /e <Input File> [Output File]
  ```
--Unpack <br />
+- Unpack <br />
   ```
   /u <Input File> [Output Folder]
   ``` 
--Build
+- Build
   ```
   /b <Input Folder> [Output File]
   ``` 
--For more details/examples <br />
+- Examples
   ```
-  /?
+  BotwUnpacker.exe /d "C:\OrignalFiles\Model.sbacktorpack" "C:\CustomFiles\LinkModel\Model.backtorpack"
+  BotwUnpacker.exe /u "C:\CustomFiles\LinkModel\Model.backtorpack"
+  BotwUnpacker.exe /b "C:\CustomFiles\LinkModel\Model" "C:\CustomFiles\Model.backtorpack"
   ```
-
 # Credits
 Made by Shadsterwolf <br />
 Uwizard code SARC.cs heavily modified (and mostly commented!) <br />
