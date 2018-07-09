@@ -2,16 +2,16 @@
 <img src="https://github.com/Shadsterwolf/BotWUnpacker/blob/master/BotWUnpacker/images/ZeldaUnpackerLogo.png"/>
 </p>
 
-# BotW Unpacker
-<b>Operation:</b> <br />
--UI <br />
-Double-click the exe for an easier experience <br />
--Drag n' Drop files/folders over the exe <br />
-Automatically unpack, decode, build, and encode files and folders <br />
--Console Support <br />
-Typein "BotwUnpacker.exe /?" for more details <br />
+# Operation
+<b>UI: </b> <br />
+-Double-click the exe for an easier experience <br />
+<b>Drag n' Drop: </b> <br />
+-Drag multiple or single files/folders! <br />
+-Automatically unpack, decode, build, and encode files and folders <br />
+<b>Console Support: </b> <br />
+-Typein "BotwUnpacker.exe /?" for more details <br />
 
-<b>Features:</b> <br />
+# Features:
 -General Extract, Build, Decode, and Encode <br />
 -Auto Decode Unpacked Files Decode <br />
 -Mass Extract all Pack Files in one go to seperate folders or compile all to one <br />
