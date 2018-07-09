@@ -4,7 +4,7 @@ using System.IO;
 //Modified code From Uwizard SARC master branch as of 10/16/2017, 
 
 
-namespace BotWUnpacker
+namespace BotwUnpacker
 {
     public struct PACK
     {
@@ -204,7 +204,7 @@ namespace BotWUnpacker
         {
             try
             {
-                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, false, inFile); //default
+                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, false, false, inFile); //default
             }
             catch (Exception e) //usually because file is in use
             {
@@ -217,7 +217,7 @@ namespace BotWUnpacker
         {
             try
             {
-                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, autoDecode, inFile);
+                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, autoDecode, false, inFile); //autoDecode
             }
             catch (Exception e) //usually because file is in use
             {
@@ -226,7 +226,20 @@ namespace BotWUnpacker
             }
         }
 
-        public static bool Extract(byte[] inFile, string outDir, bool autoDecode, string inFileName)
+        public static bool Extract(string inFile, string outDir, bool autoDecode, bool nodeDecode)
+        {
+            try
+            {
+                return Extract(System.IO.File.ReadAllBytes(inFile), outDir, autoDecode, nodeDecode, inFile); //autoDecode + nodeDecode
+            }
+            catch (Exception e) //usually because file is in use
+            {
+                lerror = e.Message;
+                return false;
+            }
+        }
+
+        public static bool Extract(byte[] inFile, string outDir, bool autoDecode, bool nodeDecode, string inFileName)
         {
 
             //SARC header 0x00 - 0x13
@@ -337,22 +350,13 @@ namespace BotWUnpacker
             for (int i = 0; i < nodeCount; i++) //Write files based from node information
             {
                 MakeDirExist(System.IO.Path.GetDirectoryName(outDir + "/" + fileNames[i]));
-                if (autoDecode)
+                stream = new System.IO.StreamWriter(outDir + "/" + fileNames[i]);
+                stream.BaseStream.Write(inFile, (int)(nodes[i].start + dataOffset), (int)(nodes[i].end - nodes[i].start)); //Write 
+                stream.Close();
+                stream.Dispose();
+                if (nodeDecode)
                 {
-                    nodeData = new byte[nodes[i].end - nodes[i].start];
-                    Array.Copy(inFile, nodes[i].start + dataOffset, nodeData, 0, nodes[i].end - nodes[i].start);
-                    Yaz0.Decode(nodeData, Yaz0.DecodeOutputFileRename(fileNames[i]));
-                    stream = new System.IO.StreamWriter(outDir + "/" + fileNames[i]);
-                    stream.BaseStream.Write(inFile, (int)(nodes[i].start + dataOffset), (int)(nodes[i].end - nodes[i].start)); //Write 
-                    stream.Close();
-                    stream.Dispose();
-                }
-                else
-                {
-                    stream = new System.IO.StreamWriter(outDir + "/" + fileNames[i]);
-                    stream.BaseStream.Write(inFile, (int)(nodes[i].start + dataOffset), (int)(nodes[i].end - nodes[i].start)); //Write 
-                    stream.Close();
-                    stream.Dispose();
+                    Yaz0.Decode(outDir + "/" + fileNames[i], Yaz0.DecodeOutputFileRename(outDir + "/" + fileNames[i]));
                 }
             }
             GC.Collect();

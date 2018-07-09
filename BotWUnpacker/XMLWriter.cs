@@ -5,7 +5,7 @@ using System.Xml;
 //Modified code From Uwizard master branch as of 10/16/2017
 
 
-namespace BotWUnpacker
+namespace BotwUnpacker
 {
     public struct XMLWriter
     {

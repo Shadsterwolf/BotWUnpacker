@@ -10,16 +10,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BotWUnpacker
+namespace BotwUnpacker
 {
-    public partial class Form2 : Form
+    public partial class FrmCompareBuild : Form
     {
-        public Form2()
+        public FrmCompareBuild()
         {
             InitializeComponent();
         }
 
-        #region Button Browse Original
+      #region Button Browse Original
         private void btnOriBrowse_Click(object sender, EventArgs e)
         {
             OpenFileDialog oriFile = new OpenFileDialog();
@@ -223,10 +223,10 @@ namespace BotWUnpacker
             int numFiles = Directory.GetFiles(cusFolder.SelectedPath, "*", SearchOption.AllDirectories).Length;
 
             //Save file path
-            sFile.Filter = "PACK|*.pack|SARC|*.sarc|SSARC|*.ssarc|RARC|*.rarc|SGENVB|*.sgenvb|SBFARC|*.sbfarc|SBLARC|*.sblarc|SBACTORPACK|*sbactorpack|All Files|*.*";
+            sFile.Filter = "All Files|*.*";
             sFile.InitialDirectory = cusFolder.SelectedPath.Remove(cusFolder.SelectedPath.LastIndexOf("\\")); //Previous folder, as selected is to build outside of it.
             sFile.FileName = System.IO.Path.GetFileName(cusFolder.SelectedPath);
-            lblProcessStatus.Visible = true;
+            loadingBar.Visible = true;
             if (sFile.ShowDialog() == DialogResult.Cancel) goto toss;
 
             if (!PACK.CompareAndBuild(oriFile.FileName, cusFolder.SelectedPath, sFile.FileName, true))
@@ -239,7 +239,7 @@ namespace BotWUnpacker
             oriFile.Dispose();
             sFile.Dispose();
             GC.Collect();
-            lblProcessStatus.Visible = false;
+            loadingBar.Visible = false;
         }
         #endregion
 

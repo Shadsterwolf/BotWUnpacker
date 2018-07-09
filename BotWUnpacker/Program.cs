@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 
-namespace BotWUnpacker
+namespace BotwUnpacker
 {
     static class Program
     {
@@ -17,11 +17,17 @@ namespace BotWUnpacker
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1()); //Open application
+                Application.Run(new FrmMain()); //Open application
             }
-            else if (args.Length > 0 && File.Exists(args[0])) //Drag n' drop
+            else if (args.Length > 0 && (!args[0].StartsWith("/"))) //Drag n' drop (no slash command executed)
             {
-                ConsoleHandler.DragAndDrop(args);
+                for (int i = 0; i < args.Length; i++)
+                {
+                    if (File.Exists(args[i])) 
+                        ConsoleHandler.DragAndDropFile(args[i]);
+                    else if (Directory.Exists(args[i]))
+                        ConsoleHandler.DragAndDropFolder(args[i]);
+                }
             }
             else
             {

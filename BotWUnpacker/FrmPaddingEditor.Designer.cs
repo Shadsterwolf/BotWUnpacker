@@ -1,6 +1,6 @@
-﻿namespace BotWUnpacker
+﻿namespace BotwUnpacker
 {
-    partial class Form3
+    partial class FrmPaddingEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -33,7 +33,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form3));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPaddingEditor));
             this.btnBrowse = new System.Windows.Forms.Button();
             this.tbxFile = new System.Windows.Forms.TextBox();
             this.tbxFileSize = new System.Windows.Forms.TextBox();

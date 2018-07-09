@@ -4,7 +4,7 @@ using System.Linq;
 //Decode based off of thakis's and shevious's code, recoded in C#
 //Encode was re-researched and programmed by myself (Shadsterwolf) 
 
-namespace BotWUnpacker
+namespace BotwUnpacker
 {
     public struct Yaz0
     {
@@ -56,6 +56,18 @@ namespace BotWUnpacker
             return path;
         }
 
+        static public string EncodeOutputFileRename(string path)
+        {
+            if (File.Exists(path))
+            {
+                if (IsKnownDecodedExtension(Path.GetExtension(path)))
+                    return AddExtensionLetterS(path);
+                else
+                    return RemoveDecodedLabel(path);
+            }
+            return path;
+        }
+
         static private string RemoveExtensionLetterS(string path) //Remove the "s" in the extension after decoding 
         {
             if (File.Exists(path))
@@ -70,6 +82,30 @@ namespace BotWUnpacker
             return path;
         }
 
+        static private string RemoveDecodedLabel(string path)
+        {
+            if (File.Exists(path))
+            {
+                string fileName = Path.GetFileNameWithoutExtension(path).Replace("Decoded","");
+                path = Path.GetDirectoryName(path) + "\\" + fileName + Path.GetExtension(path);
+            }
+            return path;
+        }
+
+        static private string AddExtensionLetterS(string path)
+        {
+            if (File.Exists(path))
+            {
+                string extension = Path.GetExtension(path);
+                if (IsKnownDecodedExtension(extension))
+                {
+                    string convert = extension.Replace(".", ".s");
+                    return Path.ChangeExtension(path, convert);
+                }
+            }
+            return path;
+        }
+
         static private string AddDecodedLabel(string path)
         {
             if (File.Exists(path))
@@ -77,6 +113,36 @@ namespace BotWUnpacker
                 path = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "Decoded" + Path.GetExtension(path);
             }
             return path;
+        }
+
+        static public bool IsKnownDecodedExtension(string ext)
+        {
+            string[] knownExtensions = new string[]
+            {
+            ".bactorpack",
+            ".beco",
+            ".bfarc",
+            ".bfres",
+            ".blarc",
+            ".blwp",
+            ".bmapopen",
+            ".bmaptex",
+            ".breviewtex",
+            ".bstftex",
+            ".byml",
+            ".esetlist",
+            ".genvb",
+            ".hknm2",
+            ".hksc",
+            ".hktmrb",
+            ".mubin",
+            ".rsizetable",
+            ".sarc",
+            ".stera"
+            };
+            if (knownExtensions.Any(ext.Contains))
+                return true;
+            return false;
         }
         #endregion
 

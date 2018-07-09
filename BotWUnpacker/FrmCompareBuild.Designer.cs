@@ -1,6 +1,6 @@
-﻿namespace BotWUnpacker
+﻿namespace BotwUnpacker
 {
-    partial class Form2
+    partial class FrmCompareBuild
     {
         /// <summary>
         /// Required designer variable.
@@ -28,14 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCompareBuild));
             this.tbxOriFile = new System.Windows.Forms.TextBox();
             this.tbxCustom = new System.Windows.Forms.TextBox();
             this.lblOriFile = new System.Windows.Forms.Label();
             this.btnOriBrowse = new System.Windows.Forms.Button();
             this.btnCusBrowse = new System.Windows.Forms.Button();
             this.btnBuild = new System.Windows.Forms.Button();
-            this.lblProcessStatus = new System.Windows.Forms.Label();
             this.dgvOriTable = new System.Windows.Forms.DataGridView();
             this.nodeId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nodeType = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -53,8 +52,10 @@
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.rbnCustomFolder = new System.Windows.Forms.RadioButton();
             this.rbnCustomFile = new System.Windows.Forms.RadioButton();
+            this.loadingBar = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvOriTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCusTable)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loadingBar)).BeginInit();
             this.SuspendLayout();
             // 
             // tbxOriFile
@@ -114,18 +115,6 @@
             this.btnBuild.Text = "Build";
             this.btnBuild.UseVisualStyleBackColor = true;
             this.btnBuild.Click += new System.EventHandler(this.btnBuild_Click);
-            // 
-            // lblProcessStatus
-            // 
-            this.lblProcessStatus.AutoSize = true;
-            this.lblProcessStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProcessStatus.ForeColor = System.Drawing.Color.Blue;
-            this.lblProcessStatus.Location = new System.Drawing.Point(13, 386);
-            this.lblProcessStatus.Name = "lblProcessStatus";
-            this.lblProcessStatus.Size = new System.Drawing.Size(81, 13);
-            this.lblProcessStatus.TabIndex = 12;
-            this.lblProcessStatus.Text = "Processing...";
-            this.lblProcessStatus.Visible = false;
             // 
             // dgvOriTable
             // 
@@ -308,18 +297,28 @@
             this.rbnCustomFile.UseVisualStyleBackColor = true;
             this.rbnCustomFile.CheckedChanged += new System.EventHandler(this.rbnCustomFile_CheckedChanged);
             // 
-            // Form2
+            // loadingBar
+            // 
+            this.loadingBar.Image = ((System.Drawing.Image)(resources.GetObject("loadingBar.Image")));
+            this.loadingBar.Location = new System.Drawing.Point(12, 376);
+            this.loadingBar.Name = "loadingBar";
+            this.loadingBar.Size = new System.Drawing.Size(181, 23);
+            this.loadingBar.TabIndex = 16;
+            this.loadingBar.TabStop = false;
+            this.loadingBar.Visible = false;
+            // 
+            // FrmCompareBuild
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(704, 401);
+            this.Controls.Add(this.loadingBar);
             this.Controls.Add(this.rbnCustomFile);
             this.Controls.Add(this.rbnCustomFolder);
             this.Controls.Add(this.dgvCusTable);
             this.Controls.Add(this.btnCompare);
             this.Controls.Add(this.dgvOriTable);
-            this.Controls.Add(this.lblProcessStatus);
             this.Controls.Add(this.btnBuild);
             this.Controls.Add(this.btnCusBrowse);
             this.Controls.Add(this.btnOriBrowse);
@@ -329,10 +328,11 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.Name = "Form2";
+            this.Name = "FrmCompareBuild";
             this.Text = "Compare and Build";
             ((System.ComponentModel.ISupportInitialize)(this.dgvOriTable)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCusTable)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loadingBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -346,7 +346,6 @@
         private System.Windows.Forms.Button btnOriBrowse;
         private System.Windows.Forms.Button btnCusBrowse;
         private System.Windows.Forms.Button btnBuild;
-        private System.Windows.Forms.Label lblProcessStatus;
         private System.Windows.Forms.DataGridView dgvOriTable;
         private System.Windows.Forms.Button btnCompare;
         private System.Windows.Forms.DataGridView dgvCusTable;
@@ -364,5 +363,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private System.Windows.Forms.PictureBox loadingBar;
     }
 }

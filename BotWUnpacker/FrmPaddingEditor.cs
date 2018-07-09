@@ -9,11 +9,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BotWUnpacker
+namespace BotwUnpacker
 {
-    public partial class Form3 : Form
+    public partial class FrmPaddingEditor : Form
     {
-        public Form3()
+        public FrmPaddingEditor()
         {
             InitializeComponent();
         }
@@ -43,7 +43,7 @@ namespace BotWUnpacker
                     btnSave.Enabled = false;
                     goto toss;
                 }
-                string outFile = Path.GetDirectoryName(inFile.FileName) + "\\" + Path.GetFileNameWithoutExtension(inFile.FileName) + "Decoded" + Path.GetExtension(inFile.FileName);
+                string outFile = Yaz0.DecodeOutputFileRename(inFile.FileName);
                 if (!Yaz0.Decode(inFile.FileName, outFile))
                 {
                     MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
