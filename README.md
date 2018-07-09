@@ -2,7 +2,7 @@
 <img src="https://github.com/Shadsterwolf/BotWUnpacker/blob/master/BotWUnpacker/images/ZeldaUnpackerLogo.png"/>
 </p>
 
-# UI Features:
+# UI Features
 - General Unpack, Build, Decode, and Encode <br />
 - Auto Decode Unpacked Files Decode <br />
 - Mass Unpack all SARC Files in one go to seperate folders or compile all to one <br />
