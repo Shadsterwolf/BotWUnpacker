@@ -19,15 +19,25 @@
 
 # Console
 -Decode <br />
-  ```/d <Input File> [Output File] <br />```
+  ```
+  /d <Input File> [Output File]
+  ```
 -Encode <br />
- ```/e <Input File> [Output File] <br />```
+ ```
+ /e <Input File> [Output File]
+ ```
 -Unpack <br />
-  ```/u <Input File> [Output Folder] <br />```
+  ```
+  /u <Input File> [Output Folder]
+  ``` 
 -Build
-  ```/b <Input Folder> [Output File] <br />```
+  ```
+  /b <Input Folder> [Output File]
+  ``` 
 -For more details/examples <br />
-  ```/?```
+  ```
+  /?
+  ```
 
 # Credits
 Made by Shadsterwolf <br />
