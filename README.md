@@ -34,8 +34,8 @@
   ```
   /b <Input Folder> [Output File]
   ``` 
-- Examples
   ```
+  Examples:
   BotwUnpacker.exe /d "C:\OrignalFiles\Model.sbactorpack" "C:\CustomFiles\LinkModel\Model.bactorpack"
   BotwUnpacker.exe /u "C:\CustomFiles\LinkModel\Model.bactorpack"
   BotwUnpacker.exe /b "C:\CustomFiles\LinkModel\Model" "C:\CustomFiles\Model.bactorpack"
