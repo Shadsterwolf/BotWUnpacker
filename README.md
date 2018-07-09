@@ -23,9 +23,9 @@
   /d <Input File> [Output File]
   ```
 - Encode <br />
- ```
- /e <Input File> [Output File]
- ```
+  ```
+  /e <Input File> [Output File]
+  ```
 - Unpack <br />
   ```
   /u <Input File> [Output Folder]
