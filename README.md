@@ -2,61 +2,44 @@
 <img src="https://github.com/Shadsterwolf/BotWUnpacker/blob/master/BotWUnpacker/images/ZeldaUnpackerLogo.png"/>
 </p>
 
-# Change Log
-<b>Version 1.1:</b> <br />
--Added support to adjust files that need a fixed data offset (add padding) <br />
--Various tweaks for user experience.
+# Features
+- General Unpack, Build, Decode, and Encode <br />
+- Auto Decode Unpacked Yaz0 Files <br />
+- Mass Unpack all SARC Files in one go to seperate folders or compile all to one <br />
+- Smart extension handling <b>(.sbactorpack <-> .bactorpack)</b> when decoding/encoding <br />
+- Build and Compare tool (To better align special size and padding rules) <br />
+- Padding Editor tool (for special rare cases) <br />
 
-<b>Version 1.2:</b> <br />
--Added Extract All to mass extract SARC types (does not support Yaz0 yet)<br />
--Added simple Open Root Folder button<br />
--Added placeholder button for Compare and Build Pack
+# Drag and Drop
+- Supports multiple/single files and folders, from the same source location! <br />
+- Automatically decodes, upon detecting Yaz0 file(s) (will overwrite existing) <br />
+- Automatically encodes, upon detecting SARC files(s) <b>AND</b> detect existing decoded folder(s) (will overwrite existing) <br />
+- Automatically unpacks, upon detecting SARC file(s) (will <b>NOT</B> overwrite existing) <br />
+- Automatically builds, upon detecting folder(s) (will overwrite existing, adds ".pack") <br />
 
-<b>Version 1.3:</b> <br />
--Added Auto Yaz0 Decoding!<br />
--Cleaned up unused code and adjusted for readability
-
-<b>Version 1.4:</b> <br />
--Added Compile All to Extract All process to combine common folders from other SARC sources
-
-<b>Version 1.5:</b> <br />
--Bugfix Auto Yaz0 decode first pass for encoded SARC data, falsely handling inital Yaz0 encoded files while checked on <br />
-
-<b>Version 1.6:</b> <br />
--Added Yaz0 Encoding! Which currently abides by most rules for Nintendo's algorithem.<br />
-
-<b>Version 1.7:</b> <br />
--Added Compare and Build which only mirrored the additional padding <br />
-
-<b>Version 1.8:</b> <br />
--Fixed huge performance issue (Concatenation of arrays) <br />
--Fixed Yaz0 calculation for copy positioning when it reached true max value <br />
--Fixed operation logic for encoding/decoding <br />
--Fixed Compare and Build operation logic
--Added Compare and Build to spoof original file size <br />
--Added Compare and Build to compare file-to-file, but not allow building <br />
--Added Padding Editor for special cases <br />
--Added some necessary prompts <br />
--Removed some unecessary prompts <br />
--Adjusted UI changes to improve User-Friendliness, even though it's kinda bad still.
-
-# BotW Unpacker
-<b>Purpose:</b> <br />
--Extract and Build PACK/SARC files in a convenient environment
-
-<b>Operation:</b> <br />
--Set a default path of your workspace to make your life easier <br />
--Extract PACK files (BotW origin, SARC big endian) <br />
--ReBuild PACK files (BotW origin, SARC big endian) 
-
-<b>Features:</b> <br />
--General Extract, Build, Decode, and Encode <br />
--Auto Yaz0 Decode <br />
--Extract all Pack Files in one go to seperate folders or compile all to one <br />
--Build with a fixed data start offset (Add padding) <br />
--Compare and build, spoof file size and padding from the original <br />
--Padding Editor, change the extra padding Nintendo put in for special cases
-
+# Console
+- Decode <br />
+  ```
+  /d <Input File> [Output File]
+  ```
+- Encode <br />
+  ```
+  /e <Input File> [Output File]
+  ```
+- Unpack <br />
+  ```
+  /u <Input File> [Output Folder]
+  ``` 
+- Build
+  ```
+  /b <Input Folder> [Output File]
+  ``` 
+  ```
+  Examples:
+  BotwUnpacker.exe /d "C:\OrignalFiles\Model.sbactorpack" "C:\CustomFiles\LinkModel\Model.bactorpack"
+  BotwUnpacker.exe /u "C:\CustomFiles\LinkModel\Model.bactorpack"
+  BotwUnpacker.exe /b "C:\CustomFiles\LinkModel\Model" "C:\CustomFiles\Model.bactorpack"
+  ```
 # Credits
 Made by Shadsterwolf <br />
 Uwizard code SARC.cs heavily modified (and mostly commented!) <br />
