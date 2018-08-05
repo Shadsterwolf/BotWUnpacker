@@ -101,7 +101,7 @@ namespace BotwUnpacker
                 else
                     Console.WriteLine("Encode error: " + Yaz0.lerror);
             else if (args.Length == 3 && File.Exists(args[1]))
-                if (Yaz0.Decode(args[1], args[2]))
+                if (Yaz0.Encode(args[1], args[2]))
                     Console.WriteLine("Encode Successful");
                 else
                     Console.WriteLine("Encode error: " + Yaz0.lerror);

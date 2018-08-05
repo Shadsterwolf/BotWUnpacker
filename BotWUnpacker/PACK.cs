@@ -58,13 +58,14 @@ namespace BotwUnpacker
         private struct NodeData //Build only
         {
             public byte[] data;
-            public uint startPos, endPos;
+            public uint startPos, endPos, padding;
 
             public NodeData(byte[] inData, uint inStartPos, uint inEndPos)
             {
                 data = inData;
                 startPos = inStartPos;
                 endPos = inEndPos;
+                padding = 0; //blank 
             }
         }
         #endregion
@@ -137,17 +138,12 @@ namespace BotwUnpacker
 
         private static byte[] AddPadding(byte[] dataBuild, NodeData nodeData) //Add padding to adjust to Nintendo's logic
         {
-            byte[] pad = { 0x00 };
             int baseValue = nodeData.data.Length % 16;
             if (baseValue == 4 || baseValue == 12)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    dataBuild = dataBuild.Concat(pad).ToArray();
-                }
-            }
+                dataBuild = dataBuild.Concat(new byte[] { 0x00, 0x00, 0x00, 0x00 }).ToArray();
             return dataBuild;
         }
+
         private static byte[] AddPadding(byte[] dataBuild, uint padding) //Add padding 
         {
             byte[] pad = new byte[padding];
@@ -345,7 +341,6 @@ namespace BotwUnpacker
 
             if (!System.IO.Directory.Exists(outDir)) System.IO.Directory.CreateDirectory(outDir); //folder creation
             System.IO.StreamWriter stream;
-            byte[] nodeData;
 
             for (int i = 0; i < nodeCount; i++) //Write files based from node information
             {
@@ -426,21 +421,19 @@ namespace BotwUnpacker
 
                 //Node data build and position logic
                 NodeData[] nodeData = new NodeData[numFiles];
-                nodeData[hashes[0].index].data = System.IO.File.ReadAllBytes(nodeInfo[hashes[0].index].realname);
-                nodeData[hashes[0].index].startPos = 0; //first starting positon
-                nodeData[hashes[0].index].endPos = (uint)nodeData[hashes[0].index].data.Length; //first end position before padding
-                byte[] nodeBuild = AddPadding(nodeData[hashes[0].index].data, nodeData[hashes[0].index]); //Prep first node for building
-                for (int i = 1; i < numFiles; i++)
+                uint nodePosition = 0;
+                for (int i = 0; i < numFiles; i++)
                 {
-                    nodeData[hashes[i].index].startPos = (uint)nodeBuild.Length; //start position after padding
+                    nodeData[hashes[i].index].startPos = nodePosition; //start position after padding
                     nodeData[hashes[i].index].data = System.IO.File.ReadAllBytes(nodeInfo[hashes[i].index].realname);
-                    nodeBuild = nodeBuild.Concat(nodeData[hashes[i].index].data).ToArray(); //Concatenate next unpadded node
-                    nodeData[hashes[i].index].endPos = (uint)nodeBuild.Length; //end position before padding
-                    if (i != numFiles - 1) //As long as it's not the last node, add padding
+                    nodePosition += (uint)nodeData[hashes[i].index].data.Length;
+                    nodeData[hashes[i].index].endPos = nodePosition; //end position before padding
+                    if (i != numFiles - 1) //As long as it's not the last node, add padding data
                     {
-                        nodeBuild = AddPadding(nodeBuild, nodeData[hashes[i].index]);
+                        if ((nodeData[hashes[i].index].data.Length % 4) != 0) 
+                            nodeData[hashes[i].index].padding = 4 - (uint)(nodeData[hashes[i].index].data.Length % 4);
                     }
-                    GC.Collect(); //I know, I know, ill fix it later...
+                        nodePosition += nodeData[hashes[i].index].padding;
                 }
 
 
@@ -456,8 +449,11 @@ namespace BotwUnpacker
                     fileSize += (dataFixedOffset - nodeDataStart);
                     nodeDataStart = dataFixedOffset;
                 }
-                fileSize += (uint)nodeBuild.Length; //finish calculating expected filesize 
-
+                for (int i = 0; i < numFiles; i++)
+                {
+                    fileSize += (uint)(nodeData[hashes[i].index].data.Length);
+                    fileSize += nodeData[hashes[i].index].padding;
+                }
 
                 //Write logic
                 System.IO.StreamWriter stream = new System.IO.StreamWriter(outFile);
@@ -500,7 +496,15 @@ namespace BotwUnpacker
                     stream.BaseStream.WriteByte(0); //pad end of names
                 }
                 //Data ---
-                stream.BaseStream.Write(nodeBuild, 0, nodeBuild.Length); //Write node data
+                for (int i = 0; i < numFiles; i++)
+                {
+                    stream.BaseStream.Write(nodeData[hashes[i].index].data, 0, nodeData[hashes[i].index].data.Length);
+                    if (nodeData[hashes[i].index].padding != 0)
+                    {
+                        for(int j = 0; j < nodeData[hashes[i].index].padding; j++)
+                            stream.BaseStream.WriteByte(0);
+                    }
+                }
 
                 stream.Close();
                 stream.Dispose();

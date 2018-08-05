@@ -138,7 +138,9 @@ namespace BotwUnpacker
             ".mubin",
             ".rsizetable",
             ".sarc",
-            ".stera"
+            ".stera",
+            ".bitemico",
+            ".beventpack"
             };
             if (knownExtensions.Any(ext.Contains))
                 return true;
