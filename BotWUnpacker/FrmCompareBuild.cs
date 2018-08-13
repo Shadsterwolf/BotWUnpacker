@@ -19,7 +19,7 @@ namespace BotwUnpacker
             InitializeComponent();
         }
 
-      #region Button Browse Original
+        #region Button Browse Original
         private void btnOriBrowse_Click(object sender, EventArgs e)
         {
             OpenFileDialog oriFile = new OpenFileDialog();
@@ -66,14 +66,14 @@ namespace BotwUnpacker
             for (int i = 0; i < nodeCount; i++)
             {
                 dgvOriTable.Rows.Add();
-                dgvOriTable.Rows[i].Cells[0].Value = i+1;
+                dgvOriTable.Rows[i].Cells[0].Value = i + 1;
                 dgvOriTable.Rows[i].Cells[1].Value = nodeTypes[i];
                 dgvOriTable.Rows[i].Cells[2].Value = nodeSizes[i];
                 dgvOriTable.Rows[i].Cells[3].Value = nodeSizes[i].ToString("X");
                 dgvOriTable.Rows[i].Cells[4].Value = nodePaths[i];
                 dgvOriTable.Rows[i].Cells[5].Value = nodePaddings[i];
             }
-            
+
             toss:
             oriFile.Dispose();
             GC.Collect();
@@ -229,10 +229,10 @@ namespace BotwUnpacker
             loadingBar.Visible = true;
             if (sFile.ShowDialog() == DialogResult.Cancel) goto toss;
 
-            if (!PACK.CompareAndBuild(oriFile.FileName, cusFolder.SelectedPath, sFile.FileName, true))
-                MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
-            else
-                MessageBox.Show("Done!\n\n" + sFile.FileName);
+            //if (!PACK.CompareAndBuild(oriFile.FileName, cusFolder.SelectedPath, sFile.FileName, true))
+            //    MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
+            //else
+            //    MessageBox.Show("Done!\n\n" + sFile.FileName);
 
             toss:
             cusFolder.Dispose();
@@ -257,7 +257,7 @@ namespace BotwUnpacker
                 goto toss;
             }
 
-            
+
             for (int i = 0; i < dgvCusTable.Rows.Count; i++)
             {
                 if (((int)dgvCusTable.Rows[i].Cells[0].Value - 1) < dgvOriTable.Rows.Count) //compare number of nodes
@@ -300,7 +300,7 @@ namespace BotwUnpacker
                         ColorRowRed(dgvOriTable, i); //More original nodes than custom
                         MessageBox.Show("Error found" + "\n\n" + "You have LESS files than the original!");
                     }
-                } 
+                }
                 else
                 {
                     ColorRowRed(dgvCusTable, i); //More custom nodes than original

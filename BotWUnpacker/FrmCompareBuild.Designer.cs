@@ -300,6 +300,7 @@
             // loadingBar
             // 
             this.loadingBar.Image = ((System.Drawing.Image)(resources.GetObject("loadingBar.Image")));
+            this.loadingBar.InitialImage = ((System.Drawing.Image)(resources.GetObject("loadingBar.InitialImage")));
             this.loadingBar.Location = new System.Drawing.Point(12, 376);
             this.loadingBar.Name = "loadingBar";
             this.loadingBar.Size = new System.Drawing.Size(181, 23);
