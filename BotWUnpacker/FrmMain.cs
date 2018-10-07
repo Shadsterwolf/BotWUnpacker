@@ -63,7 +63,7 @@ namespace BotwUnpacker
                 boolNodeDecode = true;
             else //Default, without any checkboxes
             {
-                if (PACK.IsYaz0File(oFile.FileName))
+                if (SARC.IsYaz0File(oFile.FileName))
                 {
                     if (MessageBox.Show("This file is Yaz0 encoded!" + "\n\n" + "Want to decode it and attempt to extract?", "Decode and Extact?", MessageBoxButtons.YesNo) != DialogResult.No)
                         boolAutoDecode = true; //Auto decode just this once since we prompted
@@ -71,9 +71,9 @@ namespace BotwUnpacker
                         goto toss; //User clicked no
                 }
             }
-            if (!PACK.Extract(oFile.FileName, oFolderPath, boolAutoDecode, boolNodeDecode)) //Extraction
+            if (!SARC.Extract(oFile.FileName, oFolderPath, boolAutoDecode, boolNodeDecode)) //Extraction
             {
-                MessageBox.Show("Extraction error:" + "\n\n" + PACK.lerror);
+                MessageBox.Show("Extraction error:" + "\n\n" + SARC.lerror);
                 goto toss;
             }
             else
@@ -129,7 +129,7 @@ namespace BotwUnpacker
                 {
                     oFolderName = Path.GetFileNameWithoutExtension(file.FullName);
                     oFolderPath = oFolder.FileName;
-                    if (PACK.Extract(file.FullName, oFolderPath, boolAutoDecode, boolNodeDecode))
+                    if (SARC.Extract(file.FullName, oFolderPath, boolAutoDecode, boolNodeDecode))
                         sarcFileCount++;
                 }
 
@@ -140,7 +140,7 @@ namespace BotwUnpacker
                 {
                     oFolderName = Path.GetFileNameWithoutExtension(file.FullName);
                     oFolderPath = Path.GetDirectoryName(file.FullName) + "\\" + oFolderName;
-                    if (PACK.Extract(file.FullName, oFolderPath, boolAutoDecode, boolNodeDecode))
+                    if (SARC.Extract(file.FullName, oFolderPath, boolAutoDecode, boolNodeDecode))
                         sarcFileCount++;
                 }
             }
@@ -186,7 +186,7 @@ namespace BotwUnpacker
             loadingBar.Visible = true;
             if (!(oFile.ShowDialog() == DialogResult.Cancel))
             {
-                if (!PACK.IsYaz0File(oFile.FileName))
+                if (!SARC.IsYaz0File(oFile.FileName))
                 {
                     string outFile = Yaz0.EncodeOutputFileRename(oFile.FileName);
                     if (File.Exists(outFile))
@@ -238,17 +238,17 @@ namespace BotwUnpacker
             if (cbxSetDataOffset.Checked)
             {
                 uint dataOffset = (uint)int.Parse(tbxDataOffset.Text, System.Globalization.NumberStyles.HexNumber);
-                if (!PACK.Build(oFolder.FileName, sFile.FileName, dataOffset))
+                if (!SARC.Build(oFolder.FileName, sFile.FileName, dataOffset))
                 {
-                    MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
+                    MessageBox.Show("Failed to build!" + "\n\n" + SARC.lerror);
                     goto toss;
                 }
             }
             else
             {
-                if (!PACK.Build(oFolder.FileName, sFile.FileName))
+                if (!SARC.Build(oFolder.FileName, sFile.FileName))
                 { 
-                    MessageBox.Show("Failed to build!" + "\n\n" + PACK.lerror);
+                    MessageBox.Show("Failed to build!" + "\n\n" + SARC.lerror);
                     goto toss;
                 }
             }

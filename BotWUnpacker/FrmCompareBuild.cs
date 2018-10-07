@@ -57,11 +57,11 @@ namespace BotwUnpacker
                 goto toss;
             }
 
-            int nodeCount = PACK.GetFileNodeCount(tbxOriFile.Text);
-            string[] nodeTypes = PACK.GetFileNodeType(tbxOriFile.Text);
-            uint[] nodeSizes = PACK.GetFileNodeSizes(tbxOriFile.Text);
-            string[] nodePaths = PACK.GetFileNodePaths(tbxOriFile.Text);
-            uint[] nodePaddings = PACK.GetFileNodePaddings(tbxOriFile.Text);
+            int nodeCount = SARC.GetFileNodeCount(tbxOriFile.Text);
+            string[] nodeTypes = SARC.GetFileNodeType(tbxOriFile.Text);
+            uint[] nodeSizes = SARC.GetFileNodeSizes(tbxOriFile.Text);
+            string[] nodePaths = SARC.GetFileNodePaths(tbxOriFile.Text);
+            uint[] nodePaddings = SARC.GetFileNodePaddings(tbxOriFile.Text);
 
             for (int i = 0; i < nodeCount; i++)
             {
@@ -120,11 +120,11 @@ namespace BotwUnpacker
                     goto toss;
                 }
 
-                int nodeCount = PACK.GetFileNodeCount(tbxCustom.Text);
-                string[] nodeTypes = PACK.GetFileNodeType(tbxCustom.Text);
-                uint[] nodeSizes = PACK.GetFileNodeSizes(tbxCustom.Text);
-                string[] nodePaths = PACK.GetFileNodePaths(tbxCustom.Text);
-                uint[] nodePaddings = PACK.GetFileNodePaddings(tbxCustom.Text);
+                int nodeCount = SARC.GetFileNodeCount(tbxCustom.Text);
+                string[] nodeTypes = SARC.GetFileNodeType(tbxCustom.Text);
+                uint[] nodeSizes = SARC.GetFileNodeSizes(tbxCustom.Text);
+                string[] nodePaths = SARC.GetFileNodePaths(tbxCustom.Text);
+                uint[] nodePaddings = SARC.GetFileNodePaddings(tbxCustom.Text);
 
                 for (int i = 0; i < nodeCount; i++)
                 {
@@ -159,9 +159,9 @@ namespace BotwUnpacker
                     tbxCustom.Text = "";
                     goto toss;
                 }
-                uint[] nodeSizes = PACK.GetFolderFileSizes(cusFolder.FileName);
-                string[] nodeTypes = PACK.GetFolderFileTypes(cusFolder.FileName);
-                string[] nodePaths = PACK.GetFolderFilePaths(cusFolder.FileName);
+                uint[] nodeSizes = SARC.GetFolderFileSizes(cusFolder.FileName);
+                string[] nodeTypes = SARC.GetFolderFileTypes(cusFolder.FileName);
+                string[] nodePaths = SARC.GetFolderFilePaths(cusFolder.FileName);
 
                 for (int i = 0; i < nodeCount; i++)
                 {
@@ -213,7 +213,7 @@ namespace BotwUnpacker
                 goto toss;
             }
 
-            int oriNodeCount = PACK.GetFileNodeCount(oriFile.FileName);
+            int oriNodeCount = SARC.GetFileNodeCount(oriFile.FileName);
             string[] cusFolderFiles = System.IO.Directory.GetFiles(cusFolder.SelectedPath == "" ? System.Environment.CurrentDirectory : cusFolder.SelectedPath, "*.*", System.IO.SearchOption.AllDirectories);
             if (oriNodeCount != cusFolderFiles.Length)
             {

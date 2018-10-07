@@ -6,7 +6,7 @@ using System.IO;
 
 namespace BotwUnpacker
 {
-    public struct PACK
+    public struct SARC
     {
         public static string lerror = ""; // Gets the last error
 
@@ -99,6 +99,43 @@ namespace BotwUnpacker
         static private int HexToInt(String hex)
         {
             return int.Parse(hex, System.Globalization.NumberStyles.HexNumber);
+        }
+
+        public static uint SwapLongEndian(uint value)
+        {
+            var b1 = (value >> 0) & 0xff;
+            var b2 = (value >> 8) & 0xff;
+            var b3 = (value >> 16) & 0xff;
+            var b4 = (value >> 24) & 0xff;
+
+            return b1 << 24 | b2 << 16 | b3 << 8 | b4 << 0;
+        }
+
+        public static uint SwapShortEndian(uint value)
+        {
+            var b1 = (value >> 0) & 0xff;
+            var b2 = (value >> 8) & 0xff;
+
+            return b1 << 8 | b2 << 0;
+        }
+        #endregion
+
+        #region Binary Operatiors
+        public static byte ReadByte(byte[] file, uint pos)
+        {
+            return file[pos];
+        }
+
+        public static uint ReadLong(byte[] file, uint pos)
+        {
+            return ReadLong(file, pos, false);
+        }
+        public static uint ReadLong(byte[] file, uint pos, Boolean swapEndian)
+        {
+            if (swapEndian)
+                return SwapLongEndian(Makeu32(file[pos], file[pos + 1], file[pos + 2], file[pos + 3]));
+            else
+                return Makeu32(file[pos], file[pos + 1], file[pos + 2], file[pos + 3]);
         }
         #endregion
 
@@ -487,9 +524,13 @@ namespace BotwUnpacker
                         stream.BaseStream.WriteByte((byte)fileName[j]); //Write file names
                     }
                     int namePadding = (int)nodeInfo[hashes[i].index].namesize - nodeInfo[hashes[i].index].filename.Length; //short padding for file offset location (to be divisible by 4)
+                    if ((i == numFiles - 1) && (namePadding == 4)) //if the last filename conveniently ended at 0x0F, then do not add any padding
+                        namePadding = 0;
                     for (int j = 0; j < namePadding; j++)
                         stream.BaseStream.WriteByte(0);
                 }
+
+                System.Windows.Forms.MessageBox.Show(namePaddingToAdd.ToString());
 
                 for (int i = 0; i < namePaddingToAdd; i++)
                 {
@@ -598,7 +639,7 @@ namespace BotwUnpacker
                 return null;
         }
 
-        public static uint[] GetFileNodeSizes(string file) //Get Paddings
+        public static uint[] GetFileNodeSizes(string file) //Get File Sizes
         {
             if (IsSarcFile(file))
             {

@@ -146,6 +146,8 @@ namespace BotwUnpacker
                 return true;
             return false;
         }
+
+
         #endregion
 
         #region Decode
@@ -239,7 +241,10 @@ namespace BotwUnpacker
         #region Encode
         public static bool Encode(string inFile, string outFile) //Encode ---------------------------------------------------------
         {
-            try { return Encode(System.IO.File.ReadAllBytes(inFile), outFile); }
+            try
+            {
+                return Encode(System.IO.File.ReadAllBytes(inFile), outFile);
+            }
             catch (System.Exception e)
             {
                 lerror = "An error occurred: " + e.Message;
@@ -263,7 +268,7 @@ namespace BotwUnpacker
             uint writePos = 0;
             uint groupPos;
             uint copyPos;
-            byte[] encodedData = new byte[uncompressedSize];
+            byte[] encodedData = new byte[uncompressedSize + (uncompressedSize/2)];
             byte[] groupData = new byte[24]; //24 bytes at most in special cases, 16 if all normal pairs, 8 if all straight copy...
             byte groupHeader;
             string groupHeaderFlag;

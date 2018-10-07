@@ -10,9 +10,9 @@ namespace BotwUnpacker
         #region DragAndDrop
         static public void DragAndDropFile(string arg)
         {
-            if (PACK.IsSarcFile(arg) && !(Directory.Exists(Path.GetDirectoryName(arg) + "\\" + Path.GetFileNameWithoutExtension(arg)))) //dont overwrite existing folders
+            if (SARC.IsSarcFile(arg) && !(Directory.Exists(Path.GetDirectoryName(arg) + "\\" + Path.GetFileNameWithoutExtension(arg)))) //dont overwrite existing folders
                 ConsoleUnpack(arg);
-            else if (PACK.IsYaz0File(arg))
+            else if (SARC.IsYaz0File(arg))
                 ConsoleDecode(arg);
             else if (Yaz0.IsKnownDecodedExtension(arg))
                 ConsoleEncode(arg);
@@ -125,15 +125,15 @@ namespace BotwUnpacker
         {
             if (args.Length == 2 && File.Exists(args[1]))
 
-                if (PACK.Extract(args[1], Path.GetDirectoryName(args[1]) + "\\" + Path.GetFileNameWithoutExtension(args[1])))
+                if (SARC.Extract(args[1], Path.GetDirectoryName(args[1]) + "\\" + Path.GetFileNameWithoutExtension(args[1])))
                     Console.WriteLine("Unpack Successful");
                 else
-                    Console.WriteLine("Unpack error: " + PACK.lerror);
+                    Console.WriteLine("Unpack error: " + SARC.lerror);
             else if (args.Length == 3 && File.Exists(args[1]))
-                if (PACK.Extract(args[1], args[2]))
+                if (SARC.Extract(args[1], args[2]))
                     Console.WriteLine("Unpack Successful");
                 else
-                    Console.WriteLine("Unpack error: " + PACK.lerror);
+                    Console.WriteLine("Unpack error: " + SARC.lerror);
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -153,15 +153,15 @@ namespace BotwUnpacker
         static private void ConsoleBuild(string[] args)
         {
             if (args.Length == 2 && Directory.Exists(args[1]))
-                if (PACK.Build(args[1], args[1].Remove(args[1].LastIndexOf("\\")) + "\\" + Path.GetFileName(args[1]) + ".pack" ))
+                if (SARC.Build(args[1], args[1].Remove(args[1].LastIndexOf("\\")) + "\\" + Path.GetFileName(args[1]) + ".pack" ))
                     Console.WriteLine("Build Successful");
                 else
-                    Console.WriteLine("Build error: " + PACK.lerror);
+                    Console.WriteLine("Build error: " + SARC.lerror);
             else if (args.Length == 3 && Directory.Exists(args[1]))
-                if (PACK.Build(args[1], args[2]))
+                if (SARC.Build(args[1], args[2]))
                     Console.WriteLine("Build Successful");
                 else
-                    Console.WriteLine("Build error: " + PACK.lerror);
+                    Console.WriteLine("Build error: " + SARC.lerror);
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;

@@ -55,11 +55,11 @@ namespace BotwUnpacker
                 goto toss;
             }
 
-            int nodeCount = PACK.GetFileNodeCount(tbxFile.Text);
-            string[] nodeTypes = PACK.GetFileNodeType(tbxFile.Text);
-            uint[] nodeSizes = PACK.GetFileNodeSizes(tbxFile.Text);
-            string[] nodePaths = PACK.GetFileNodePaths(tbxFile.Text);
-            uint[] nodePaddings = PACK.GetFileNodePaddings(tbxFile.Text);
+            int nodeCount = SARC.GetFileNodeCount(tbxFile.Text);
+            string[] nodeTypes = SARC.GetFileNodeType(tbxFile.Text);
+            uint[] nodeSizes = SARC.GetFileNodeSizes(tbxFile.Text);
+            string[] nodePaths = SARC.GetFileNodePaths(tbxFile.Text);
+            uint[] nodePaddings = SARC.GetFileNodePaddings(tbxFile.Text);
 
             for (int i = 0; i < nodeCount; i++)
             {
@@ -74,7 +74,7 @@ namespace BotwUnpacker
 
             fileSize = fileCheck.Length;
             tbxFileSize.Text = fileSize.ToString();
-            dataOffset = PACK.GetFileDataOffset(tbxFile.Text);
+            dataOffset = SARC.GetFileDataOffset(tbxFile.Text);
             tbxDataOffset.Text = "0x" + dataOffset.ToString("X");
 
             toss:
@@ -126,8 +126,8 @@ namespace BotwUnpacker
                 MessageBox.Show("Whoops, browse for a file first!");
             else
             {
-                int nodeCount = PACK.GetFileNodeCount(tbxFile.Text);
-                uint[] currentPaddings = PACK.GetFileNodePaddings(tbxFile.Text);
+                int nodeCount = SARC.GetFileNodeCount(tbxFile.Text);
+                uint[] currentPaddings = SARC.GetFileNodePaddings(tbxFile.Text);
                 int[] gridPaddings = new int[nodeCount];
                 bool dataChanged = false;
 
@@ -137,14 +137,14 @@ namespace BotwUnpacker
 
                     if (gridPaddings[i] != currentPaddings[i]) //check if paddings need to be changed
                     {
-                        PACK.UpdateFilePadding(tbxFile.Text, i, (gridPaddings[i] - (int)(currentPaddings[i])));
+                        SARC.UpdateFilePadding(tbxFile.Text, i, (gridPaddings[i] - (int)(currentPaddings[i])));
                         dataChanged = true;
                     }
                 }
 
                 if (dataChanged)
                 {
-                    PACK.UpdateFileSize(tbxFile.Text);
+                    SARC.UpdateFileSize(tbxFile.Text);
                     MessageBox.Show("Save Complete!" + "\n\n" + tbxFile.Text);
                 }
                 else //if no change occured in the data upon saving
