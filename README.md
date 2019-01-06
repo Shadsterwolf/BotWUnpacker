@@ -40,6 +40,14 @@
   BotwUnpacker.exe /u "C:\CustomFiles\LinkModel\Model.bactorpack"
   BotwUnpacker.exe /b "C:\CustomFiles\LinkModel\Model" "C:\CustomFiles\Model.bactorpack"
   ```
+# Solution Build
+1. Open the .sln project in Visual Studio
+2. Open Tools > NuGet Package Manager > Manage NuGet Packages for Solution...
+3. Search and Install the following:
+- Fody & Costura (This is to compile any .DLL files into the EXE)
+- Microsoft.WindowsAPICodePack-Core  (Common .DLL library, used make folder select operations similar to file select)
+- Microsoft.WindowsAPICodePack-Shell
+
 # Credits
 Made by Shadsterwolf <br />
 Uwizard code SARC.cs heavily modified (and mostly commented!) <br />
