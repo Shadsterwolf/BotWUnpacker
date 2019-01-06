@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace BotwUnpacker
 {
-    public partial class FrmPaddingEditor : Form
+    public partial class FrmPaddingTool : Form
     {
-        public FrmPaddingEditor()
+        public FrmPaddingTool()
         {
             InitializeComponent();
         }

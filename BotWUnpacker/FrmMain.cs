@@ -99,14 +99,19 @@ namespace BotwUnpacker
         #region Button Extract All
         private void btnExtractAll_Click(object sender, EventArgs e)
         {
-            if (!(Directory.Exists(tbxFolderRoot.Text))) {
+            if (tbxFolderRoot.Text == "")
+            {
+                MessageBox.Show("Browse for a default folder to unpack from first!");
+                goto toss;
+            }
+            if (!(Directory.Exists(tbxFolderRoot.Text)))
+            {
                 MessageBox.Show("Error: Invalid path" + "\n" + tbxFolderRoot.Text);
                 goto toss;
             }
-            if (cbxCompileAllInOneFolder.Checked) { if (MessageBox.Show("Extract all SARC data type files from default path?" + "\n" + tbxFolderRoot.Text + "\n\n" + "You are choosing to compile all extracted data to one folder!" + "\n" + "This does not include subfolders", "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.No) goto toss; }
-            else { if (MessageBox.Show("Extract all SARC data type files from default path?" + "\n" + tbxFolderRoot.Text + "\n\n" + "This will generate seperate folders of every file it unpacks" + "\n" + "This does not include subfolders", "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.No) goto toss; }
             loadingBar.Visible = true;
-
+            if (cbxCompileAllInOneFolder.Checked) { if (MessageBox.Show("Extract all SARC data type files from default path?" + "\n" + tbxFolderRoot.Text + "\n" + "*This does not include subfolders" + "\n\n" + "You are choosing to compile all extracted data to ONE folder!" + "\n" + "You'll then select a folder where you want to place them all in.", "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.No) goto toss; }
+            else { if (MessageBox.Show("Extract all SARC data type files from default path?" + "\n" + tbxFolderRoot.Text + "\n" + "*This does not include subfolders" + "\n\n" + "This will generate SEPERATE folders of every file it unpacks!" , "Are you sure?", MessageBoxButtons.YesNo) == DialogResult.No) goto toss; }
             DirectoryInfo dirFolder = new DirectoryInfo(tbxFolderRoot.Text);
 
 
@@ -267,20 +272,31 @@ namespace BotwUnpacker
         {
             if (cbxSetDataOffset.Checked)
             {
-                tbxDataOffset.ReadOnly = false;
-                tbxDataOffset.BackColor = SystemColors.Window;
+                tbxDataOffset.Enabled = true;
             }
             else
             {
-                tbxDataOffset.ReadOnly = true;
-                tbxDataOffset.BackColor = SystemColors.ControlLight;
+                tbxDataOffset.Enabled = false;
             }
         }
 
         private void btnOpenFolder_Click(object sender, EventArgs e)
         {
-            try { System.Diagnostics.Process.Start(tbxFolderRoot.Text); }
-            catch { MessageBox.Show("Error: Invalid path" + "\n" + tbxFolderRoot.Text); }
+            if (tbxFolderRoot.Text == "")
+            {
+                MessageBox.Show("Browse for a default folder first!");
+            }
+            else
+            {
+                try
+                {
+                    System.Diagnostics.Process.Start(tbxFolderRoot.Text);
+                }
+                catch
+                {
+                    MessageBox.Show("Error: Invalid path" + "\n" + tbxFolderRoot.Text);
+                }
+            }
         }
 
         private void tbxFolderRoot_TextChanged(object sender, EventArgs e)
@@ -289,25 +305,21 @@ namespace BotwUnpacker
             {
                 BotwUnpacker.Properties.Settings.Default.RootFolder = "";
                 BotwUnpacker.Properties.Settings.Default.Save();
-                btnExtractAll.Enabled = false;
-                btnOpenFolder.Enabled = false;
             }
             else
             {
-                btnExtractAll.Enabled = true;
-                btnOpenFolder.Enabled = true;
                 BotwUnpacker.Properties.Settings.Default.RootFolder = tbxFolderRoot.Text;
                 BotwUnpacker.Properties.Settings.Default.Save();
             }
         }        
         
-        FrmCompareBuild frmCompareBuild = new FrmCompareBuild();
+        FrmCompareTool frmCompareBuild = new FrmCompareTool();
         private void btnCompareAndBuild_Click(object sender, EventArgs e)
         {
             if (!(frmCompareBuild.Visible))
             {
                 if (frmCompareBuild.IsDisposed)
-                    frmCompareBuild = new FrmCompareBuild();
+                    frmCompareBuild = new FrmCompareTool();
                 frmCompareBuild.StartPosition = FormStartPosition.Manual;
                 frmCompareBuild.Location = new Point (FrmMain.ActiveForm.DesktopLocation.X + 380, FrmMain.ActiveForm.DesktopLocation.Y);
                 frmCompareBuild.Show();
@@ -322,13 +334,13 @@ namespace BotwUnpacker
 
         }
 
-        FrmPaddingEditor frmPaddingEditor = new FrmPaddingEditor();
+        FrmPaddingTool frmPaddingEditor = new FrmPaddingTool();
         private void btnSarcEditor_Click(object sender, EventArgs e)
         {
             if (!(frmPaddingEditor.Visible))
             {
                 if (frmPaddingEditor.IsDisposed)
-                    frmPaddingEditor = new FrmPaddingEditor();
+                    frmPaddingEditor = new FrmPaddingTool();
                 frmPaddingEditor.StartPosition = FormStartPosition.Manual;
                 frmPaddingEditor.Location = new Point(FrmMain.ActiveForm.DesktopLocation.X + 380, FrmMain.ActiveForm.DesktopLocation.Y);
                 frmPaddingEditor.Show();

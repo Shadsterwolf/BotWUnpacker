@@ -1,6 +1,6 @@
 ﻿namespace BotwUnpacker
 {
-    partial class FrmCompareBuild
+    partial class FrmCompareTool
     {
         /// <summary>
         /// Required designer variable.
@@ -28,13 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCompareBuild));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCompareTool));
             this.tbxOriFile = new System.Windows.Forms.TextBox();
             this.tbxCustom = new System.Windows.Forms.TextBox();
-            this.lblOriFile = new System.Windows.Forms.Label();
             this.btnOriBrowse = new System.Windows.Forms.Button();
             this.btnCusBrowse = new System.Windows.Forms.Button();
-            this.btnBuild = new System.Windows.Forms.Button();
             this.dgvOriTable = new System.Windows.Forms.DataGridView();
             this.nodeId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nodeType = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -50,18 +52,23 @@
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rbnOriFile = new System.Windows.Forms.RadioButton();
+            this.rbnOriFolder = new System.Windows.Forms.RadioButton();
+            this.panelOri = new System.Windows.Forms.Panel();
+            this.panelCus = new System.Windows.Forms.Panel();
             this.rbnCustomFolder = new System.Windows.Forms.RadioButton();
             this.rbnCustomFile = new System.Windows.Forms.RadioButton();
-            this.loadingBar = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvOriTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCusTable)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.loadingBar)).BeginInit();
+            this.panelOri.SuspendLayout();
+            this.panelCus.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbxOriFile
             // 
-            this.tbxOriFile.BackColor = System.Drawing.SystemColors.Control;
-            this.tbxOriFile.Location = new System.Drawing.Point(12, 33);
+            this.tbxOriFile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
+            this.tbxOriFile.ForeColor = System.Drawing.SystemColors.Window;
+            this.tbxOriFile.Location = new System.Drawing.Point(12, 53);
             this.tbxOriFile.Name = "tbxOriFile";
             this.tbxOriFile.ReadOnly = true;
             this.tbxOriFile.Size = new System.Drawing.Size(297, 20);
@@ -69,26 +76,18 @@
             // 
             // tbxCustom
             // 
-            this.tbxCustom.BackColor = System.Drawing.SystemColors.Control;
-            this.tbxCustom.Location = new System.Drawing.Point(397, 33);
+            this.tbxCustom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
+            this.tbxCustom.ForeColor = System.Drawing.SystemColors.Window;
+            this.tbxCustom.Location = new System.Drawing.Point(397, 53);
             this.tbxCustom.Name = "tbxCustom";
             this.tbxCustom.ReadOnly = true;
             this.tbxCustom.Size = new System.Drawing.Size(297, 20);
             this.tbxCustom.TabIndex = 8;
             // 
-            // lblOriFile
-            // 
-            this.lblOriFile.AutoSize = true;
-            this.lblOriFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOriFile.Location = new System.Drawing.Point(13, 14);
-            this.lblOriFile.Name = "lblOriFile";
-            this.lblOriFile.Size = new System.Drawing.Size(74, 13);
-            this.lblOriFile.TabIndex = 2;
-            this.lblOriFile.Text = "Original File";
-            // 
             // btnOriBrowse
             // 
-            this.btnOriBrowse.Location = new System.Drawing.Point(118, 9);
+            this.btnOriBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnOriBrowse.Location = new System.Drawing.Point(128, 23);
             this.btnOriBrowse.Name = "btnOriBrowse";
             this.btnOriBrowse.Size = new System.Drawing.Size(75, 23);
             this.btnOriBrowse.TabIndex = 0;
@@ -98,7 +97,8 @@
             // 
             // btnCusBrowse
             // 
-            this.btnCusBrowse.Location = new System.Drawing.Point(506, 9);
+            this.btnCusBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCusBrowse.Location = new System.Drawing.Point(513, 23);
             this.btnCusBrowse.Name = "btnCusBrowse";
             this.btnCusBrowse.Size = new System.Drawing.Size(75, 23);
             this.btnCusBrowse.TabIndex = 1;
@@ -106,22 +106,20 @@
             this.btnCusBrowse.UseVisualStyleBackColor = true;
             this.btnCusBrowse.Click += new System.EventHandler(this.btnCusBrowse_Click);
             // 
-            // btnBuild
-            // 
-            this.btnBuild.Location = new System.Drawing.Point(315, 376);
-            this.btnBuild.Name = "btnBuild";
-            this.btnBuild.Size = new System.Drawing.Size(75, 23);
-            this.btnBuild.TabIndex = 4;
-            this.btnBuild.Text = "Build";
-            this.btnBuild.UseVisualStyleBackColor = true;
-            this.btnBuild.Click += new System.EventHandler(this.btnBuild_Click);
-            // 
             // dgvOriTable
             // 
             this.dgvOriTable.AllowUserToAddRows = false;
             this.dgvOriTable.AllowUserToDeleteRows = false;
             this.dgvOriTable.AllowUserToResizeRows = false;
-            this.dgvOriTable.BackgroundColor = System.Drawing.SystemColors.ControlDark;
+            this.dgvOriTable.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.DimGray;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvOriTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvOriTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvOriTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.nodeId,
@@ -130,7 +128,15 @@
             this.nodeSizeHex,
             this.nodePath,
             this.nodePadding});
-            this.dgvOriTable.Location = new System.Drawing.Point(12, 52);
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.DimGray;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvOriTable.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvOriTable.Location = new System.Drawing.Point(12, 72);
             this.dgvOriTable.Name = "dgvOriTable";
             this.dgvOriTable.ReadOnly = true;
             this.dgvOriTable.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -192,7 +198,8 @@
             // 
             // btnCompare
             // 
-            this.btnCompare.Location = new System.Drawing.Point(315, 184);
+            this.btnCompare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCompare.Location = new System.Drawing.Point(315, 204);
             this.btnCompare.Name = "btnCompare";
             this.btnCompare.Size = new System.Drawing.Size(75, 43);
             this.btnCompare.TabIndex = 3;
@@ -205,7 +212,15 @@
             this.dgvCusTable.AllowUserToAddRows = false;
             this.dgvCusTable.AllowUserToDeleteRows = false;
             this.dgvCusTable.AllowUserToResizeRows = false;
-            this.dgvCusTable.BackgroundColor = System.Drawing.SystemColors.ControlDark;
+            this.dgvCusTable.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.DimGray;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvCusTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvCusTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCusTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
@@ -214,7 +229,15 @@
             this.dataGridViewTextBoxColumn4,
             this.dataGridViewTextBoxColumn5,
             this.dataGridViewTextBoxColumn6});
-            this.dgvCusTable.Location = new System.Drawing.Point(397, 52);
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.DimGray;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvCusTable.DefaultCellStyle = dataGridViewCellStyle4;
+            this.dgvCusTable.Location = new System.Drawing.Point(397, 72);
             this.dgvCusTable.Name = "dgvCusTable";
             this.dgvCusTable.ReadOnly = true;
             this.dgvCusTable.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -274,14 +297,57 @@
             this.dataGridViewTextBoxColumn6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.dataGridViewTextBoxColumn6.Width = 50;
             // 
+            // rbnOriFile
+            // 
+            this.rbnOriFile.AutoSize = true;
+            this.rbnOriFile.Checked = true;
+            this.rbnOriFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rbnOriFile.Location = new System.Drawing.Point(3, 20);
+            this.rbnOriFile.Name = "rbnOriFile";
+            this.rbnOriFile.Size = new System.Drawing.Size(40, 17);
+            this.rbnOriFile.TabIndex = 17;
+            this.rbnOriFile.TabStop = true;
+            this.rbnOriFile.Text = "File";
+            this.rbnOriFile.UseVisualStyleBackColor = true;
+            // 
+            // rbnOriFolder
+            // 
+            this.rbnOriFolder.AutoSize = true;
+            this.rbnOriFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rbnOriFolder.Location = new System.Drawing.Point(3, 3);
+            this.rbnOriFolder.Name = "rbnOriFolder";
+            this.rbnOriFolder.Size = new System.Drawing.Size(53, 17);
+            this.rbnOriFolder.TabIndex = 16;
+            this.rbnOriFolder.Text = "Folder";
+            this.rbnOriFolder.UseVisualStyleBackColor = true;
+            // 
+            // panelOri
+            // 
+            this.panelOri.Controls.Add(this.rbnOriFolder);
+            this.panelOri.Controls.Add(this.rbnOriFile);
+            this.panelOri.Location = new System.Drawing.Point(12, 9);
+            this.panelOri.Name = "panelOri";
+            this.panelOri.Size = new System.Drawing.Size(57, 37);
+            this.panelOri.TabIndex = 18;
+            // 
+            // panelCus
+            // 
+            this.panelCus.Controls.Add(this.rbnCustomFolder);
+            this.panelCus.Controls.Add(this.rbnCustomFile);
+            this.panelCus.Location = new System.Drawing.Point(397, 12);
+            this.panelCus.Name = "panelCus";
+            this.panelCus.Size = new System.Drawing.Size(57, 37);
+            this.panelCus.TabIndex = 19;
+            // 
             // rbnCustomFolder
             // 
             this.rbnCustomFolder.AutoSize = true;
             this.rbnCustomFolder.Checked = true;
-            this.rbnCustomFolder.Location = new System.Drawing.Point(397, 0);
+            this.rbnCustomFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rbnCustomFolder.Location = new System.Drawing.Point(3, 3);
             this.rbnCustomFolder.Name = "rbnCustomFolder";
-            this.rbnCustomFolder.Size = new System.Drawing.Size(54, 17);
-            this.rbnCustomFolder.TabIndex = 14;
+            this.rbnCustomFolder.Size = new System.Drawing.Size(53, 17);
+            this.rbnCustomFolder.TabIndex = 16;
             this.rbnCustomFolder.TabStop = true;
             this.rbnCustomFolder.Text = "Folder";
             this.rbnCustomFolder.UseVisualStyleBackColor = true;
@@ -289,51 +355,41 @@
             // rbnCustomFile
             // 
             this.rbnCustomFile.AutoSize = true;
-            this.rbnCustomFile.Location = new System.Drawing.Point(397, 15);
+            this.rbnCustomFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rbnCustomFile.Location = new System.Drawing.Point(3, 20);
             this.rbnCustomFile.Name = "rbnCustomFile";
-            this.rbnCustomFile.Size = new System.Drawing.Size(41, 17);
-            this.rbnCustomFile.TabIndex = 15;
+            this.rbnCustomFile.Size = new System.Drawing.Size(40, 17);
+            this.rbnCustomFile.TabIndex = 17;
             this.rbnCustomFile.Text = "File";
             this.rbnCustomFile.UseVisualStyleBackColor = true;
-            this.rbnCustomFile.CheckedChanged += new System.EventHandler(this.rbnCustomFile_CheckedChanged);
-            // 
-            // loadingBar
-            // 
-            this.loadingBar.Image = ((System.Drawing.Image)(resources.GetObject("loadingBar.Image")));
-            this.loadingBar.InitialImage = ((System.Drawing.Image)(resources.GetObject("loadingBar.InitialImage")));
-            this.loadingBar.Location = new System.Drawing.Point(12, 376);
-            this.loadingBar.Name = "loadingBar";
-            this.loadingBar.Size = new System.Drawing.Size(181, 23);
-            this.loadingBar.TabIndex = 16;
-            this.loadingBar.TabStop = false;
-            this.loadingBar.Visible = false;
             // 
             // FrmCompareBuild
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Window;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
             this.ClientSize = new System.Drawing.Size(704, 401);
-            this.Controls.Add(this.loadingBar);
-            this.Controls.Add(this.rbnCustomFile);
-            this.Controls.Add(this.rbnCustomFolder);
+            this.Controls.Add(this.panelCus);
+            this.Controls.Add(this.panelOri);
             this.Controls.Add(this.dgvCusTable);
             this.Controls.Add(this.btnCompare);
             this.Controls.Add(this.dgvOriTable);
-            this.Controls.Add(this.btnBuild);
             this.Controls.Add(this.btnCusBrowse);
             this.Controls.Add(this.btnOriBrowse);
-            this.Controls.Add(this.lblOriFile);
             this.Controls.Add(this.tbxCustom);
             this.Controls.Add(this.tbxOriFile);
+            this.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "FrmCompareBuild";
-            this.Text = "Compare and Build";
+            this.Text = "Compare Tool";
             ((System.ComponentModel.ISupportInitialize)(this.dgvOriTable)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCusTable)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.loadingBar)).EndInit();
+            this.panelOri.ResumeLayout(false);
+            this.panelOri.PerformLayout();
+            this.panelCus.ResumeLayout(false);
+            this.panelCus.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -343,15 +399,11 @@
 
         private System.Windows.Forms.TextBox tbxOriFile;
         private System.Windows.Forms.TextBox tbxCustom;
-        private System.Windows.Forms.Label lblOriFile;
         private System.Windows.Forms.Button btnOriBrowse;
         private System.Windows.Forms.Button btnCusBrowse;
-        private System.Windows.Forms.Button btnBuild;
         private System.Windows.Forms.DataGridView dgvOriTable;
         private System.Windows.Forms.Button btnCompare;
         private System.Windows.Forms.DataGridView dgvCusTable;
-        private System.Windows.Forms.RadioButton rbnCustomFolder;
-        private System.Windows.Forms.RadioButton rbnCustomFile;
         private System.Windows.Forms.DataGridViewTextBoxColumn nodeId;
         private System.Windows.Forms.DataGridViewTextBoxColumn nodeType;
         private System.Windows.Forms.DataGridViewTextBoxColumn nodeSize;
@@ -364,6 +416,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
-        private System.Windows.Forms.PictureBox loadingBar;
+        private System.Windows.Forms.RadioButton rbnOriFile;
+        private System.Windows.Forms.RadioButton rbnOriFolder;
+        private System.Windows.Forms.Panel panelOri;
+        private System.Windows.Forms.Panel panelCus;
+        private System.Windows.Forms.RadioButton rbnCustomFolder;
+        private System.Windows.Forms.RadioButton rbnCustomFile;
     }
 }
