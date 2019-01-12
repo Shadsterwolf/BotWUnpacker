@@ -530,8 +530,6 @@ namespace BotwUnpacker
                         stream.BaseStream.WriteByte(0);
                 }
 
-                System.Windows.Forms.MessageBox.Show(namePaddingToAdd.ToString());
-
                 for (int i = 0; i < namePaddingToAdd; i++)
                 {
                     stream.BaseStream.WriteByte(0); //pad end of names
