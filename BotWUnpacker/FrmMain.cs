@@ -81,11 +81,11 @@ namespace BotwUnpacker
 
             //XML
             xml:
-            if (cbxWriteXml.Checked)
+            if (cbxWriteSarcXml.Checked)
             {
-                if (File.Exists(oFolderPath + ".xml"))
+                if (File.Exists(oFolderPath + "_SarcDebug.xml"))
                     if (MessageBox.Show(oFolderName + ".xml already exists!" + "\n\n" + "Proceed anyway?", "Overwrite?", MessageBoxButtons.YesNo) == DialogResult.No) goto toss;
-                if (!XMLWriter.SaveXml(oFile.FileName, (oFolderPath + ".xml")))
+                if (!DebugWriter.WriteSarcXml(oFile.FileName, (oFolderPath + "_SarcDebug.xml")))
                     MessageBox.Show("XML file failed to write by unknown reasons");
             }
 
@@ -172,6 +172,17 @@ namespace BotwUnpacker
                     MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
                     goto toss;
                 }
+            }
+
+            //XML
+            if (cbxWriteYaz0Xml.Checked)
+            {
+                String oFolderName = Path.GetFileNameWithoutExtension(oFile.FileName);
+                String oFolderPath = Path.GetDirectoryName(oFile.FileName) + "\\" + oFolderName;
+                if (File.Exists(oFolderPath + "_Yaz0Debug.xml"))
+                    if (MessageBox.Show(oFolderName + ".xml already exists!" + "\n\n" + "Proceed anyway?", "Overwrite?", MessageBoxButtons.YesNo) == DialogResult.No) goto toss;
+                if (!DebugWriter.WriteYaz0Xml(oFile.FileName, (oFolderPath + "_Yaz0Debug.xml")))
+                    MessageBox.Show("XML file failed to write by unknown reasons");
             }
 
             MessageBox.Show("Decode complete!" + "\n\n" + outFile);

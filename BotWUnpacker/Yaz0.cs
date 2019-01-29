@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-//Decode based off of thakis's and shevious's code, recoded in C#
+//Decode based off of thakis's and shevious's python code, recoded in C#
 //Encode was re-researched and programmed by myself (Shadsterwolf) 
 
 namespace BotwUnpacker
@@ -182,12 +182,12 @@ namespace BotwUnpacker
             while (writePos < uncompressedSize)
             {
                 //System.Windows.Forms.MessageBox.Show(groupHead.ToString("X") + "|" + validBitCount);
-                if (validBitCount == 0)
+                if (validBitCount == 0) //new group header 
                 {
                     groupHead = inFile[sourcePos];
                     lastGroupHead = groupHead;
-                    ++sourcePos;
-                    validBitCount = 8;
+                    ++sourcePos; 
+                    validBitCount = 8; //reset count
                 }
                 if ((groupHead & 0x80) != 0) //straight copy as long as groupheader maintains left most bit as 1 (1000 0000)
                 {
@@ -197,17 +197,17 @@ namespace BotwUnpacker
                 }
                 else 
                 {
-                    byte b1 = inFile[sourcePos];
-                    byte b2 = inFile[sourcePos + 1];
-                    sourcePos += 2;
+                    byte b1 = inFile[sourcePos]; //byte 1 
+                    byte b2 = inFile[sourcePos + 1]; //byte 2
+                    sourcePos += 2; //move past those two bytes
                     uint dist = ((uint)((b1 & 0xF) << 8) | b2); //distance
-                    uint copySource = writePos - (dist + 1); //copy
-                    uint numBytes = (uint)b1 >> 4; //how many bytes
+                    uint copySource = writePos - (dist + 1); //copy 
+                    uint numBytes = (uint)b1 >> 4; //how many bytes to copy
 
                     //if (sourcePos-2 > 0x13C0) //debug decode
                         //System.Windows.Forms.MessageBox.Show("lastGroupHead: 0x" + lastGroupHead.ToString("X") + "\n" + "b1: 0x" + b1.ToString("X") + "\n" + "b2: 0x" + b2.ToString("X") + "\n" + "sourcePos: 0x" + sourcePos.ToString("X") + "\n" + "dist: " + dist + "\n" + "copySource: 0x" + copySource.ToString("X") + "\n" + "writePos: 0x" + writePos.ToString("X") + "\n" + "numBytes: " + numBytes);
 
-                    if (numBytes == 0)
+                    if (numBytes == 0) //If the first 4 bits of the first byte is 0...
                     {
                         numBytes = inFile[sourcePos] + (uint)0x12;
                         sourcePos++;
@@ -223,7 +223,6 @@ namespace BotwUnpacker
                         writePos++;
                     }
                 }
-                //use next bit from "code" byte
                 groupHead <<= 1; //left shift!!!
                 validBitCount -= 1; //group header validation count of the binary position
             }
@@ -271,7 +270,7 @@ namespace BotwUnpacker
             byte[] encodedData = new byte[uncompressedSize + (uncompressedSize/2)];
             byte[] groupData = new byte[24]; //24 bytes at most in special cases, 16 if all normal pairs, 8 if all straight copy...
             byte groupHeader;
-            string groupHeaderFlag;
+            string groupHeaderFlag; //To build the binary flags to clearly know what is being flagged, then convert to a byte.
             uint numBytes = 0;
             uint rleNumBytes;
             uint copyNumBytes;
@@ -452,5 +451,6 @@ namespace BotwUnpacker
             return true;
         }
         #endregion
+
     }
 }

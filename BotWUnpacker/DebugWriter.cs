@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace BotwUnpacker
 {
-    public struct XMLWriter
+    public struct DebugWriter
     {
         #region Structures
         private struct SarcNode //SARC node row
@@ -49,12 +49,12 @@ namespace BotwUnpacker
         }
         #endregion
 
-        #region SaveXml
+        #region WriteSarcXml
          //SAVE ----------------------------------------------------------------------
-        public static bool SaveXml(string inFileName, string outDir)
+        public static bool WriteSarcXml(string inFileName, string outFile)
         {
             byte[] inFile = File.ReadAllBytes(inFileName);
-            XmlTextWriter writer = new XmlTextWriter(outDir, null);
+            XmlTextWriter writer = new XmlTextWriter(outFile, null);
             writer.Formatting = Formatting.Indented;
 
             writer.WriteStartElement("PACK");
@@ -166,11 +166,112 @@ namespace BotwUnpacker
             }
             
 
-            writer.WriteEndElement(); //</PACKfile>
+            writer.WriteEndElement(); //</PACK>
             writer.Close();
             GC.Collect();
             return true;
         } //--------------------------------------------------------------------------------------------------------------------------------------------
+        #endregion
+
+        #region WriteYaz0Xml
+        public static bool WriteYaz0Xml(string inFile, string outFile) //Decode -----------------------------------------
+        {
+            //try
+            //{
+                return WriteYaz0Xml(System.IO.File.ReadAllBytes(inFile), outFile);
+            //}
+            //catch 
+            //{
+            //    return false;
+            //}
+        }
+
+        public static bool WriteYaz0Xml(byte[] inFile, string outFile)
+        {
+            //Yaz0 header 0x00 - 0x0F
+            if (inFile[0] != 'Y' || inFile[1] != 'a' || inFile[2] != 'z' || inFile[3] != '0')
+            {
+                return false;
+            }
+            uint uncompressedSize = Makeu32(inFile[4], inFile[5], inFile[6], inFile[7]); //0x04
+
+            XmlTextWriter writer = new XmlTextWriter(outFile, null);
+            writer.Formatting = Formatting.Indented;
+
+            //Decode Logic
+            uint sourcePos = 16; //start at 0x10
+            uint writePos = 0; //destination to write data to
+            byte[] decodedData = new byte[uncompressedSize + 1];
+            byte groupHead = 0;
+            string groupHeadBinary;
+            string groupValues = "";
+            byte lastGroupHead = 0;
+            uint validBitCount = 0;
+            writer.WriteStartElement("Yaz0");
+
+            while (writePos < uncompressedSize)
+            {
+                if (validBitCount == 0) //new group header 
+                {
+                    writer.WriteStartElement("Group");
+                    groupHead = inFile[sourcePos];
+                    writer.WriteElementString("Position", "0x" + sourcePos.ToString("X"));
+                    groupHeadBinary = Convert.ToString(groupHead, 2).PadLeft(8, '0');
+                    writer.WriteElementString("Header", "0x" + groupHead.ToString("X") + " | " + groupHeadBinary);
+                    lastGroupHead = groupHead;
+                    ++sourcePos;
+                    validBitCount = 8; //reset count
+                }
+                if ((groupHead & 0x80) != 0) //straight copy as long as groupheader maintains left most bit as 1 (1000 0000)
+                {
+                    groupValues += " | " + inFile[sourcePos];
+                    decodedData[writePos] = inFile[sourcePos];
+                    writePos++;
+                    sourcePos++;
+                }
+                else
+                {
+                    byte b1 = inFile[sourcePos]; //byte 1 
+                    byte b2 = inFile[sourcePos + 1]; //byte 2
+                    sourcePos += 2; //move past those two bytes
+                    uint dist = ((uint)((b1 & 0xF) << 8) | b2); //distance
+                    uint copySource = writePos - (dist + 1); //copy 
+                    uint numBytes = (uint)b1 >> 4; //how many bytes to copy
+
+                    //if (sourcePos-2 > 0x13C0) //debug decode
+                    //System.Windows.Forms.MessageBox.Show("lastGroupHead: 0x" + lastGroupHead.ToString("X") + "\n" + "b1: 0x" + b1.ToString("X") + "\n" + "b2: 0x" + b2.ToString("X") + "\n" + "sourcePos: 0x" + sourcePos.ToString("X") + "\n" + "dist: " + dist + "\n" + "copySource: 0x" + copySource.ToString("X") + "\n" + "writePos: 0x" + writePos.ToString("X") + "\n" + "numBytes: " + numBytes);
+
+                    if (numBytes == 0) //If the first 4 bits of the first byte is 0...
+                    {
+                        byte b3 = inFile[sourcePos];
+                        numBytes = inFile[sourcePos] + (uint)0x12;
+                        sourcePos++;
+                        groupValues += " | " + "";
+                     
+                    }
+                    else
+                    {
+                        numBytes += 2;
+                    }
+                    for (int i = 0; i < numBytes; ++i)
+                    {
+                        decodedData[writePos] = decodedData[copySource];
+                        copySource++;
+                        writePos++;
+                    }
+
+                }
+                groupHead <<= 1; //left shift!!!
+                validBitCount -= 1; //group header validation count of the binary position
+                if (validBitCount == 0)
+                    writer.WriteEndElement(); //</Group>
+            }
+
+            writer.WriteEndElement(); //</Yaz0>
+            writer.Close();
+            GC.Collect();
+            return true;
+        }
         #endregion
     }
 }

@@ -37,7 +37,7 @@ namespace BotwUnpacker
             this.btnBuildPack = new System.Windows.Forms.Button();
             this.lblFolderRoot = new System.Windows.Forms.Label();
             this.tbxFolderRoot = new System.Windows.Forms.TextBox();
-            this.cbxWriteXml = new System.Windows.Forms.CheckBox();
+            this.cbxWriteSarcXml = new System.Windows.Forms.CheckBox();
             this.cbxSetDataOffset = new System.Windows.Forms.CheckBox();
             this.tbxDataOffset = new System.Windows.Forms.TextBox();
             this.btnExtractAll = new System.Windows.Forms.Button();
@@ -51,6 +51,7 @@ namespace BotwUnpacker
             this.lblFootnote = new System.Windows.Forms.Label();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.loadingBar = new System.Windows.Forms.PictureBox();
+            this.cbxWriteYaz0Xml = new System.Windows.Forms.CheckBox();
             imgIcon = new System.Windows.Forms.PictureBox();
             line1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(imgIcon)).BeginInit();
@@ -130,16 +131,16 @@ namespace BotwUnpacker
             this.tbxFolderRoot.TabIndex = 14;
             this.tbxFolderRoot.TextChanged += new System.EventHandler(this.tbxFolderRoot_TextChanged);
             // 
-            // cbxWriteXml
+            // cbxWriteSarcXml
             // 
-            this.cbxWriteXml.AutoSize = true;
-            this.cbxWriteXml.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.cbxWriteXml.Location = new System.Drawing.Point(118, 122);
-            this.cbxWriteXml.Name = "cbxWriteXml";
-            this.cbxWriteXml.Size = new System.Drawing.Size(111, 17);
-            this.cbxWriteXml.TabIndex = 1;
-            this.cbxWriteXml.Text = "Write XML Debug";
-            this.cbxWriteXml.UseVisualStyleBackColor = true;
+            this.cbxWriteSarcXml.AutoSize = true;
+            this.cbxWriteSarcXml.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.cbxWriteSarcXml.Location = new System.Drawing.Point(118, 122);
+            this.cbxWriteSarcXml.Name = "cbxWriteSarcXml";
+            this.cbxWriteSarcXml.Size = new System.Drawing.Size(138, 17);
+            this.cbxWriteSarcXml.TabIndex = 1;
+            this.cbxWriteSarcXml.Text = "Write SARC Xml Debug";
+            this.cbxWriteSarcXml.UseVisualStyleBackColor = true;
             // 
             // cbxSetDataOffset
             // 
@@ -278,12 +279,24 @@ namespace BotwUnpacker
             this.loadingBar.TabStop = false;
             this.loadingBar.Visible = false;
             // 
+            // cbxWriteYaz0Xml
+            // 
+            this.cbxWriteYaz0Xml.AutoSize = true;
+            this.cbxWriteYaz0Xml.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.cbxWriteYaz0Xml.Location = new System.Drawing.Point(118, 180);
+            this.cbxWriteYaz0Xml.Name = "cbxWriteYaz0Xml";
+            this.cbxWriteYaz0Xml.Size = new System.Drawing.Size(133, 17);
+            this.cbxWriteYaz0Xml.TabIndex = 101;
+            this.cbxWriteYaz0Xml.Text = "Write Yaz0 Xml Debug";
+            this.cbxWriteYaz0Xml.UseVisualStyleBackColor = true;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
             this.ClientSize = new System.Drawing.Size(384, 401);
+            this.Controls.Add(this.cbxWriteYaz0Xml);
             this.Controls.Add(this.loadingBar);
             this.Controls.Add(this.lblFootnote);
             this.Controls.Add(this.btnPaddingEditor);
@@ -297,7 +310,7 @@ namespace BotwUnpacker
             this.Controls.Add(this.btnExtractAll);
             this.Controls.Add(this.tbxDataOffset);
             this.Controls.Add(this.cbxSetDataOffset);
-            this.Controls.Add(this.cbxWriteXml);
+            this.Controls.Add(this.cbxWriteSarcXml);
             this.Controls.Add(this.tbxFolderRoot);
             this.Controls.Add(this.lblFolderRoot);
             this.Controls.Add(this.btnBrowseRoot);
@@ -324,7 +337,7 @@ namespace BotwUnpacker
         private System.Windows.Forms.Button btnBuildPack;
         private System.Windows.Forms.Label lblFolderRoot;
         private System.Windows.Forms.TextBox tbxFolderRoot;
-        private System.Windows.Forms.CheckBox cbxWriteXml;
+        private System.Windows.Forms.CheckBox cbxWriteSarcXml;
         private System.Windows.Forms.CheckBox cbxSetDataOffset;
         private System.Windows.Forms.TextBox tbxDataOffset;
         private System.Windows.Forms.Button btnExtractAll;
@@ -338,6 +351,7 @@ namespace BotwUnpacker
         private System.Windows.Forms.Label lblFootnote;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.PictureBox loadingBar;
+        private System.Windows.Forms.CheckBox cbxWriteYaz0Xml;
     }
 }
 
