@@ -73,12 +73,28 @@ namespace BotwUnpacker
         #region Conversions
         private static ushort Makeu16(byte b1, byte b2) //16-bit change (ushort, 0xFFFF)
         {
-            return (ushort)(((ushort)b1 << 8) | (ushort)b2);
+            return Makeu16(b1, b2, false);
+        }
+
+        private static ushort Makeu16(byte b1, byte b2, bool swapEndian) //16-bit change (ushort, 0xFFFF)
+        {
+            if (swapEndian)
+                return SwapShortEndian((ushort)(((ushort)b1 << 8) | (ushort)b2));
+            else
+                return (ushort)(((ushort)b1 << 8) | (ushort)b2);
         }
 
         private static uint Makeu32(byte b1, byte b2, byte b3, byte b4) //32-bit change (uint, 0xFFFFFFFF)
         {
-            return ((uint)b1 << 24) | ((uint)b2 << 16) | ((uint)b3 << 8) | (uint)b4;
+            return Makeu32(b1, b2, b3, b4, false);
+        }
+
+        private static uint Makeu32(byte b1, byte b2, byte b3, byte b4, bool swapEndian) //32-bit change (uint, 0xFFFFFFFF)
+        {
+            if (swapEndian)
+                return SwapIntEndian(((uint)b1 << 24) | ((uint)b2 << 16) | ((uint)b3 << 8) | (uint)b4);
+            else
+                return ((uint)b1 << 24) | ((uint)b2 << 16) | ((uint)b3 << 8) | (uint)b4;
         }
 
         private static byte[] Breaku16(ushort u16) //Byte change from 16-bits (byte, 0xFF, 0xFF)
@@ -101,7 +117,7 @@ namespace BotwUnpacker
             return int.Parse(hex, System.Globalization.NumberStyles.HexNumber);
         }
 
-        public static uint SwapLongEndian(uint value)
+        public static uint SwapIntEndian(uint value)
         {
             var b1 = (value >> 0) & 0xff;
             var b2 = (value >> 8) & 0xff;
@@ -111,31 +127,12 @@ namespace BotwUnpacker
             return b1 << 24 | b2 << 16 | b3 << 8 | b4 << 0;
         }
 
-        public static uint SwapShortEndian(uint value)
+        public static ushort SwapShortEndian(ushort value)
         {
             var b1 = (value >> 0) & 0xff;
             var b2 = (value >> 8) & 0xff;
 
-            return b1 << 8 | b2 << 0;
-        }
-        #endregion
-
-        #region Binary Operatiors
-        public static byte ReadByte(byte[] file, uint pos)
-        {
-            return file[pos];
-        }
-
-        public static uint ReadLong(byte[] file, uint pos)
-        {
-            return ReadLong(file, pos, false);
-        }
-        public static uint ReadLong(byte[] file, uint pos, Boolean swapEndian)
-        {
-            if (swapEndian)
-                return SwapLongEndian(Makeu32(file[pos], file[pos + 1], file[pos + 2], file[pos + 3]));
-            else
-                return Makeu32(file[pos], file[pos + 1], file[pos + 2], file[pos + 3]);
+            return (ushort)(b1 << 8 | b2 << 0);
         }
         #endregion
 
@@ -298,22 +295,19 @@ namespace BotwUnpacker
                     return false;
                 }
             }
+
+            ushort bom = Makeu16(inFile[6], inFile[7]); //Byte Order (Big or Little Endian)
+            bool isLittleEndian = false;
+            if (bom == 65534) //Is the byte order little endian? (Switch version)
+                isLittleEndian = true;
             int pos = 4; //0x04
-            ushort hdr = Makeu16(inFile[pos], inFile[pos + 1]); //SARC Header length
-            pos += 2; //0x06
-            ushort bom = Makeu16(inFile[pos], inFile[pos + 1]); //Byte Order Mark
-            if (bom != 65279) //Check 0x06 for Byte Order Mark (if not 0xFEFF)
-            {
-                if (bom == 65518) lerror = "Unable to support Little Endian! (Byte Order Mark 0x06)";
-                else lerror = "Unknown SARC header (Byte Order Mark 0x06)";
-                return false;
-            }
-            pos += 2; //0x08
-            uint fileSize = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]);
+            ushort hdr = Makeu16(inFile[pos], inFile[pos + 1], isLittleEndian); //SARC Header length
+            pos += 4; //0x08
+            uint fileSize = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], isLittleEndian);
             pos += 4; //0x0C
-            uint dataOffset = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //Data offset start position
+            uint dataOffset = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], isLittleEndian); //Data offset start position
             pos += 4; //0x10
-            uint unknown = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //unknown, always 0x01?
+            uint unknown = Makeu16(inFile[pos], inFile[pos + 1], isLittleEndian); //unknown, always 1? (01 00 00 00) or (00 01 00 00)  
             pos += 4; //0x14
 
             //SFAT header 0x14 - 0x1F
@@ -323,11 +317,11 @@ namespace BotwUnpacker
                 return false;
             }
             pos += 4; //0x18
-            ushort hdr2 = Makeu16(inFile[pos], inFile[pos + 1]); //SFAT Header length
+            ushort hdr2 = Makeu16(inFile[pos], inFile[pos + 1], isLittleEndian); //SFAT Header length
             pos += 2; //0x1A
-            ushort nodeCount = Makeu16(inFile[pos], inFile[pos + 1]); //Node Cluster count
+            ushort nodeCount = Makeu16(inFile[pos], inFile[pos + 1], isLittleEndian); //Node Cluster count
             pos += 2; //0x1C
-            uint hashr = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //Hash multiplier, always 0x65
+            uint hashr = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], isLittleEndian); //Hash multiplier, always 0x65 (so it seems for BotW)
             pos += 4; //0x20
 
             SarcNode[] nodes = new SarcNode[nodeCount];
@@ -335,15 +329,22 @@ namespace BotwUnpacker
 
             for (int i = 0; i < nodeCount; i++) //Node cluster 
             {
-                tmpnode.hash = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]);
+                tmpnode.hash = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], isLittleEndian);
                 pos += 4; //0x?4
-                tmpnode.unknown = inFile[pos]; //unknown, always 0x01? (not used in this case)
-                pos += 1; //0x?5
-                tmpnode.offset = Makeu32(0, inFile[pos], inFile[pos + 1], inFile[pos + 2]); //Node SFNT filename offset divided by 4 (not used)
-                pos += 3; //0x?8
-                tmpnode.start = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //Start Data offset position
+                if (isLittleEndian)
+                {
+                    tmpnode.offset = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], 0, isLittleEndian); //Node SFNT filename offset divided by 4 (not used)
+                    tmpnode.unknown = inFile[pos]; //unknown, always 0x01? (not used in this case)
+                }
+                else
+                {
+                    tmpnode.unknown = inFile[pos]; //unknown, always 0x01? (not used in this case)
+                    tmpnode.offset = Makeu32(0, inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //Node SFNT filename offset divided by 4 (not used)
+                }
+                pos += 4; //0x?8
+                tmpnode.start = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], isLittleEndian); //Start Data offset position
                 pos += 4; //0x?C
-                tmpnode.end = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]); //End Data offset position
+                tmpnode.end = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], isLittleEndian); //End Data offset position
                 pos += 4; //0x?0
                 nodes[i] = tmpnode; //Store node data into array
             }
@@ -355,9 +356,9 @@ namespace BotwUnpacker
                 return false;
             }
             pos += 4; //0x?4
-            ushort hdr3 = Makeu16(inFile[pos], inFile[pos + 1]); //SFNT Header length, always 0x08
+            ushort hdr3 = Makeu16(inFile[pos], inFile[pos + 1], isLittleEndian); //SFNT Header length, always 0x08
             pos += 2; //0x?6
-            ushort unk2 = Makeu16(inFile[pos], inFile[pos + 1]); //unknown, always 0x00?
+            ushort unk2 = Makeu16(inFile[pos], inFile[pos + 1], isLittleEndian); //unknown, always 0x00?
             pos += 2; //0x?8
 
             string[] fileNames = new string[nodeCount];

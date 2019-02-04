@@ -52,6 +52,8 @@ namespace BotwUnpacker
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.loadingBar = new System.Windows.Forms.PictureBox();
             this.cbxWriteYaz0Xml = new System.Windows.Forms.CheckBox();
+            this.rbnWiiU = new System.Windows.Forms.RadioButton();
+            this.rbnSwitch = new System.Windows.Forms.RadioButton();
             imgIcon = new System.Windows.Forms.PictureBox();
             line1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(imgIcon)).BeginInit();
@@ -137,9 +139,9 @@ namespace BotwUnpacker
             this.cbxWriteSarcXml.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.cbxWriteSarcXml.Location = new System.Drawing.Point(118, 122);
             this.cbxWriteSarcXml.Name = "cbxWriteSarcXml";
-            this.cbxWriteSarcXml.Size = new System.Drawing.Size(138, 17);
+            this.cbxWriteSarcXml.Size = new System.Drawing.Size(106, 17);
             this.cbxWriteSarcXml.TabIndex = 1;
-            this.cbxWriteSarcXml.Text = "Write SARC Xml Debug";
+            this.cbxWriteSarcXml.Text = "Write Xml Debug";
             this.cbxWriteSarcXml.UseVisualStyleBackColor = true;
             // 
             // cbxSetDataOffset
@@ -285,10 +287,33 @@ namespace BotwUnpacker
             this.cbxWriteYaz0Xml.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.cbxWriteYaz0Xml.Location = new System.Drawing.Point(118, 180);
             this.cbxWriteYaz0Xml.Name = "cbxWriteYaz0Xml";
-            this.cbxWriteYaz0Xml.Size = new System.Drawing.Size(133, 17);
+            this.cbxWriteYaz0Xml.Size = new System.Drawing.Size(106, 17);
             this.cbxWriteYaz0Xml.TabIndex = 101;
-            this.cbxWriteYaz0Xml.Text = "Write Yaz0 Xml Debug";
+            this.cbxWriteYaz0Xml.Text = "Write Xml Debug";
             this.cbxWriteYaz0Xml.UseVisualStyleBackColor = true;
+            // 
+            // rbnWiiU
+            // 
+            this.rbnWiiU.AutoSize = true;
+            this.rbnWiiU.Checked = true;
+            this.rbnWiiU.Location = new System.Drawing.Point(118, 261);
+            this.rbnWiiU.Name = "rbnWiiU";
+            this.rbnWiiU.Size = new System.Drawing.Size(48, 17);
+            this.rbnWiiU.TabIndex = 102;
+            this.rbnWiiU.TabStop = true;
+            this.rbnWiiU.Text = "WiiU";
+            this.rbnWiiU.UseVisualStyleBackColor = true;
+            // 
+            // rbnSwitch
+            // 
+            this.rbnSwitch.AutoSize = true;
+            this.rbnSwitch.Location = new System.Drawing.Point(166, 261);
+            this.rbnSwitch.Name = "rbnSwitch";
+            this.rbnSwitch.Size = new System.Drawing.Size(57, 17);
+            this.rbnSwitch.TabIndex = 103;
+            this.rbnSwitch.Text = "Switch";
+            this.rbnSwitch.UseVisualStyleBackColor = true;
+            this.rbnSwitch.CheckedChanged += new System.EventHandler(this.rbnSwitch_CheckedChanged);
             // 
             // FrmMain
             // 
@@ -296,6 +321,8 @@ namespace BotwUnpacker
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
             this.ClientSize = new System.Drawing.Size(384, 401);
+            this.Controls.Add(this.rbnSwitch);
+            this.Controls.Add(this.rbnWiiU);
             this.Controls.Add(this.cbxWriteYaz0Xml);
             this.Controls.Add(this.loadingBar);
             this.Controls.Add(this.lblFootnote);
@@ -352,6 +379,8 @@ namespace BotwUnpacker
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.PictureBox loadingBar;
         private System.Windows.Forms.CheckBox cbxWriteYaz0Xml;
+        private System.Windows.Forms.RadioButton rbnWiiU;
+        private System.Windows.Forms.RadioButton rbnSwitch;
     }
 }
 

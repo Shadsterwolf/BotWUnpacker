@@ -30,12 +30,28 @@ namespace BotwUnpacker
         #region Conversions
         private static ushort Makeu16(byte b1, byte b2) //16-bit change (ushort, 0xFFFF)
         {
-            return (ushort)(((ushort)b1 << 8) | (ushort)b2);
+            return Makeu16(b1, b2, false);
+        }
+
+        private static ushort Makeu16(byte b1, byte b2, bool swapEndian) //16-bit change (ushort, 0xFFFF)
+        {
+            if (swapEndian)
+                return SwapShortEndian((ushort)(((ushort)b1 << 8) | (ushort)b2));
+            else
+                return (ushort)(((ushort)b1 << 8) | (ushort)b2);
         }
 
         private static uint Makeu32(byte b1, byte b2, byte b3, byte b4) //32-bit change (uint, 0xFFFFFFFF)
         {
-            return ((uint)b1 << 24) | ((uint)b2 << 16) | ((uint)b3 << 8) | (uint)b4;
+            return Makeu32(b1, b2, b3, b4, false);
+        }
+
+        private static uint Makeu32(byte b1, byte b2, byte b3, byte b4, bool swapEndian) //32-bit change (uint, 0xFFFFFFFF)
+        {
+            if (swapEndian)
+                return SwapIntEndian(((uint)b1 << 24) | ((uint)b2 << 16) | ((uint)b3 << 8) | (uint)b4);
+            else
+                return ((uint)b1 << 24) | ((uint)b2 << 16) | ((uint)b3 << 8) | (uint)b4;
         }
 
         private static byte[] Breaku16(ushort u16) //Byte change from 16-bits (byte, 0xFF, 0xFF)
@@ -47,10 +63,38 @@ namespace BotwUnpacker
         {
             return new byte[] { (byte)(u32 >> 24), (byte)((u32 >> 16) & 0xFF), (byte)((u32 >> 8) & 0xFF), (byte)(u32 & 0xFF) };
         }
+
+        static private string IntToHex(int num)
+        {
+            return num.ToString("X");
+        }
+
+        static private int HexToInt(String hex)
+        {
+            return int.Parse(hex, System.Globalization.NumberStyles.HexNumber);
+        }
+
+        public static uint SwapIntEndian(uint value)
+        {
+            var b1 = (value >> 0) & 0xff;
+            var b2 = (value >> 8) & 0xff;
+            var b3 = (value >> 16) & 0xff;
+            var b4 = (value >> 24) & 0xff;
+
+            return b1 << 24 | b2 << 16 | b3 << 8 | b4 << 0;
+        }
+
+        public static ushort SwapShortEndian(ushort value)
+        {
+            var b1 = (value >> 0) & 0xff;
+            var b2 = (value >> 8) & 0xff;
+
+            return (ushort)(b1 << 8 | b2 << 0);
+        }
         #endregion
 
         #region WriteSarcXml
-         //SAVE ----------------------------------------------------------------------
+        //SAVE ----------------------------------------------------------------------
         public static bool WriteSarcXml(string inFileName, string outFile)
         {
             byte[] inFile = File.ReadAllBytes(inFileName);

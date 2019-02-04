@@ -17,6 +17,16 @@ namespace BotwUnpacker
             tbxFolderRoot.Text = BotwUnpacker.Properties.Settings.Default.RootFolder;
             if (tbxFolderRoot.Text != "") btnExtractAll.Enabled = true;
             if (tbxFolderRoot.Text != "") btnOpenFolder.Enabled = true;
+
+            if (BotwUnpacker.Properties.Settings.Default.LittleEndian)
+            {
+                rbnWiiU.Checked = false;
+                rbnSwitch.Checked = true;
+            }
+
+            cbxWriteSarcXml.Visible = false; //hidden for release version
+            cbxWriteYaz0Xml.Visible = false; //hidden for release version
+
             lblFootnote.Text = "Version: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Major.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Build.ToString() + "\nMade by Shadsterwolf\nHeavily modified code from UWizard SARC";
         }
 
@@ -44,6 +54,7 @@ namespace BotwUnpacker
         #region Button Extract Pack
         private void btnExtractPack_Click(object sender, EventArgs e) //Extract Pack button
         {
+            loadingBar.Visible = true;
             OpenFileDialog oFile = new OpenFileDialog();
             if (tbxFolderRoot.Text != "") oFile.InitialDirectory = tbxFolderRoot.Text;
             if (oFile.ShowDialog() == DialogResult.Cancel) goto toss;
@@ -56,7 +67,6 @@ namespace BotwUnpacker
                 if (MessageBox.Show(oFolderName + " already exists!" + "\n\n" + "Proceed anyway?", "Overwrite?", MessageBoxButtons.YesNo) == DialogResult.No) goto xml;
 
             //SARC
-            loadingBar.Visible = true;
             bool boolAutoDecode = false;
             bool boolNodeDecode = false;
             if (cbxNodeDecode.Checked) //Node Yaz0 decoding
@@ -161,12 +171,12 @@ namespace BotwUnpacker
         #region Button Yaz0 Decode
         private void btnYaz0Decode_Click(object sender, EventArgs e)
         {
+            loadingBar.Visible = true;
             OpenFileDialog oFile = new OpenFileDialog();
             if (tbxFolderRoot.Text != "") oFile.InitialDirectory = tbxFolderRoot.Text;
             if (oFile.ShowDialog() == DialogResult.Cancel) goto toss;
             string outFile = oFile.FileName;
             {
-                loadingBar.Visible = true;
                 if (!Yaz0.Decode(oFile.FileName, Yaz0.DecodeOutputFileRename(oFile.FileName)))
                 {
                     MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
@@ -197,9 +207,9 @@ namespace BotwUnpacker
         #region Button Yaz0 Encode
         private void btnYaz0Encode_Click(object sender, EventArgs e)
         {
+            loadingBar.Visible = true;
             OpenFileDialog oFile = new OpenFileDialog();
             if (tbxFolderRoot.Text != "") oFile.InitialDirectory = tbxFolderRoot.Text;
-            loadingBar.Visible = true;
             if (!(oFile.ShowDialog() == DialogResult.Cancel))
             {
                 if (!SARC.IsYaz0File(oFile.FileName))
@@ -232,6 +242,7 @@ namespace BotwUnpacker
         #region Button Build Pack 
         private void btnBuildPack_Click(object sender, EventArgs e) // Build Pack button
         {
+            loadingBar.Visible = true;
             CommonOpenFileDialog oFolder = new CommonOpenFileDialog();
             oFolder.IsFolderPicker = true;
             SaveFileDialog sFile = new SaveFileDialog();
@@ -248,7 +259,6 @@ namespace BotwUnpacker
             sFile.Filter = "All Files|*.*";
             sFile.InitialDirectory = oFolder.FileName.Remove(oFolder.FileName.LastIndexOf("\\")); //Previous folder, as selected is to build outside of it.
             sFile.FileName = System.IO.Path.GetFileName(oFolder.FileName);
-            loadingBar.Visible = true;
             if (sFile.ShowDialog() == DialogResult.Cancel) goto toss;
 
             if (cbxSetDataOffset.Checked)
@@ -313,15 +323,10 @@ namespace BotwUnpacker
         private void tbxFolderRoot_TextChanged(object sender, EventArgs e)
         {
             if (tbxFolderRoot.Text == "")
-            {
                 BotwUnpacker.Properties.Settings.Default.RootFolder = "";
-                BotwUnpacker.Properties.Settings.Default.Save();
-            }
             else
-            {
                 BotwUnpacker.Properties.Settings.Default.RootFolder = tbxFolderRoot.Text;
-                BotwUnpacker.Properties.Settings.Default.Save();
-            }
+            BotwUnpacker.Properties.Settings.Default.Save();
         }        
         
         FrmCompareTool frmCompareBuild = new FrmCompareTool();
@@ -374,6 +379,15 @@ namespace BotwUnpacker
         private void cbxNodeDecode_MouseHover(object sender, EventArgs e)
         {
             t1.Show("This will decode all the unpacked node files (will also keep the encoded file)", cbxNodeDecode);
+        }
+
+        private void rbnSwitch_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbnSwitch.Checked == true)
+                BotwUnpacker.Properties.Settings.Default.LittleEndian = true;
+            else
+                BotwUnpacker.Properties.Settings.Default.LittleEndian = false;
+            BotwUnpacker.Properties.Settings.Default.Save();
         }
     }
 }
