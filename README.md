@@ -11,7 +11,7 @@
 - As for what to do with those files is up to you! Do research, look up a guide, join a community, and have fun with it!
 
 # Features
-- Wii U & Switch Support (Version 3.0.0+)
+- <b>Wii U & Switch Support (Version 3.0.0+)</b>
 - Unpack & Build SARC files! <br />
 - Decode & Encode Yaz0 files! <br />
 - Smart extension handling <b>(.sbactorpack <-> .bactorpack)</b> when decoding/encoding <br />
