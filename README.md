@@ -5,12 +5,13 @@
 # Intro
 - <b>This is a tool for both NEW and PRO modders for Zelda: Breath of the Wild</b>
 - <b>SARC</b> is a collection of files(nodes), usually in the form of ".pack" files for this game.
-- <b>Yaz0</b> is a compression algotithem, usually containing an ".s" at the beginning of the extension.
-- You can easily read these file's headers using HxD, which is a free hex editor.
+- <b>Yaz0</b> is a compression algorithm, usually containing an ".s" at the beginning of the extension.
+- You can easily read these file's headers using HxD, which is a free hex editor tool.
 - This modding tool can help you take apart those files and put them back together to play and test!
 - As for what to do with those files is up to you! Do research, look up a guide, join a community, and have fun with it!
 
 # Features
+- Wii U & Switch Support (Version 3.0.0+)
 - Unpack & Build SARC files! <br />
 - Decode & Encode Yaz0 files! <br />
 - Smart extension handling <b>(.sbactorpack <-> .bactorpack)</b> when decoding/encoding <br />
@@ -21,11 +22,9 @@
 
 # Drag and Drop
 - Drag a SARC or Yaz0 file over the .exe and watch the magic happen!
-- Supports multiple files and folders, from the same source location where you dropped it from ! <br />
 - Automatically decodes, upon detecting Yaz0 file(s) (will overwrite existing) <br />
-- Automatically encodes, upon detecting SARC files(s) <b>AND</b> detect existing decoded folder(s) (will overwrite existing) <br />
 - Automatically unpacks, upon detecting SARC file(s) (will <b>NOT</B> overwrite existing) <br />
-- Automatically builds, upon detecting folder(s) (will overwrite existing, adds ".pack") <br />
+- Supports multiple files and folders, from the same source location where you dropped it from ! <br />
 
 # Console
 - Decode <br />
