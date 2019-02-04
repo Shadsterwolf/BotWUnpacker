@@ -97,14 +97,30 @@ namespace BotwUnpacker
                 return ((uint)b1 << 24) | ((uint)b2 << 16) | ((uint)b3 << 8) | (uint)b4;
         }
 
-        private static byte[] Breaku16(ushort u16) //Byte change from 16-bits (byte, 0xFF, 0xFF)
+        private static byte[] Breaku16(ushort u16) //Break from 16-bits into 2 bytes (0xFF, 0xFF)
         {
-            return new byte[] { (byte)(u16 >> 8), (byte)(u16 & 0xFF) };
+            return Breaku16(u16, false);
         }
 
-        private static byte[] Breaku32(uint u32) //Byte change from 32-bits (byte, 0xFF, 0xFF, 0xFF, 0xFF)
+        private static byte[] Breaku16(ushort u16, bool swapEndian) //Break from 16-bits into 2 bytes (0xFF, 0xFF)
         {
-            return new byte[] { (byte)(u32 >> 24), (byte)((u32 >> 16) & 0xFF), (byte)((u32 >> 8) & 0xFF), (byte)(u32 & 0xFF) };
+            if (swapEndian)
+                return new byte[] { (byte)(u16 & 0xFF), (byte)(u16 >> 8) };
+            else
+                return new byte[] { (byte)(u16 >> 8), (byte)(u16 & 0xFF) };
+        }
+
+        private static byte[] Breaku32(uint u32) //Break from 32-bits into 4 bytes (0xFF, 0xFF, 0xFF, 0xFF)
+        {
+            return Breaku32(u32, false);
+        }
+
+        private static byte[] Breaku32(uint u32, bool swapEndian) //Break from 32-bits into 4 bytes (0xFF, 0xFF, 0xFF, 0xFF)
+        {
+            if (swapEndian)
+                return new byte[] { (byte)(u32 & 0xFF), (byte)((u32 >> 8) & 0xFF), (byte)((u32 >> 16) & 0xFF), (byte)(u32 >> 24) };
+            else
+                return new byte[] { (byte)(u32 >> 24), (byte)((u32 >> 16) & 0xFF), (byte)((u32 >> 8) & 0xFF), (byte)(u32 & 0xFF) };
         }
 
         static private string IntToHex(int num)
@@ -400,10 +416,20 @@ namespace BotwUnpacker
         #region Build
         public static bool Build(string inDir, string outFile)
         {
-            return Build(inDir, outFile, 0); //if no fixed data offset is set.
+            return Build(inDir, outFile, 0, false); //if no fixed data offset is set (defaut 0) and no endian is set (default big endian)
         }
 
-        public static bool Build(string inDir, string outFile, uint dataFixedOffset) //BUILD ----------------------------------------------------------------------
+        public static bool Build(string inDir, string outFile, uint dataFixedOffset)
+        {
+            return Build(inDir, outFile, dataFixedOffset, false); //if no endian is set (default big endian)
+        }
+
+        public static bool Build(string inDir, string outFile, bool isLittleEndian)
+        {
+            return Build(inDir, outFile, 0, isLittleEndian); //if no fixed data offset is set (defaut 0)
+        }
+
+        public static bool Build(string inDir, string outFile, uint dataFixedOffset, bool isLittleEndian) //BUILD ----------------------------------------------------------------------
         {
             try
             {
@@ -496,27 +522,44 @@ namespace BotwUnpacker
                 //Write logic
                 System.IO.StreamWriter stream = new System.IO.StreamWriter(outFile);
                 //SARC ---
-                stream.BaseStream.Write(new byte[] { 83, 65, 82, 67, 0x00, 0x14, 0xFE, 0xFF }, 0, 8); //Write Fixed SARC Big Endian header
-                stream.BaseStream.Write(Breaku32(fileSize), 0, 4); //Write 0x08 split bytes of file size
-                stream.BaseStream.Write(Breaku32(nodeDataStart), 0, 4); //Write 0x0C split bytes of data table start offset
+                if (isLittleEndian)
+                    stream.BaseStream.Write(new byte[] { 83, 65, 82, 67, 0x14, 0x00, 0xFF, 0xFE }, 0, 8); //Write Fixed SARC (Little Endian) 
+                else
+                    stream.BaseStream.Write(new byte[] { 83, 65, 82, 67, 0x00, 0x14, 0xFE, 0xFF }, 0, 8); //Write Fixed SARC (Big Endian)
+                stream.BaseStream.Write(Breaku32(fileSize, isLittleEndian), 0, 4); //Write 0x08 split bytes of file size
+                stream.BaseStream.Write(Breaku32(nodeDataStart, isLittleEndian), 0, 4); //Write 0x0C split bytes of data table start offset
                 //SFAT ---
-                stream.BaseStream.Write(new byte[] { 0x01, 0x00, 0x00, 0x00, 83, 70, 65, 84, 0x00, 0x0C }, 0, 10); //Write Fixed SFAT header
-                stream.BaseStream.Write(Breaku16((ushort)numFiles), 0, 2); //Write 0x1A split bytes of number of nodes/files
-                stream.BaseStream.Write(Breaku32(0x65), 0, 4); //Write Fixed Hash Multiplier 
+                if (isLittleEndian)
+                    stream.BaseStream.Write(new byte[] { 0x00, 0x01, 0x00, 0x00, 83, 70, 65, 84, 0x0C, 0x00 }, 0, 10); //Write Fixed SFAT (Little Endian)
+                else
+                    stream.BaseStream.Write(new byte[] { 0x01, 0x00, 0x00, 0x00, 83, 70, 65, 84, 0x00, 0x0C }, 0, 10); //Write Fixed SFAT (Big Endian)
+                stream.BaseStream.Write(Breaku16((ushort)numFiles, isLittleEndian), 0, 2); //Write 0x1A split bytes of number of nodes/files
+                stream.BaseStream.Write(Breaku32(0x65, isLittleEndian), 0, 4); //Write Fixed Hash Multiplier 
                 uint strpos = 0;
                 //Node ---
                 for (int i = 0; i < numFiles; i++)
                 {
-                    stream.BaseStream.Write(Breaku32(hashes[i].hash), 0, 4); //Node Hash 
-                    stream.BaseStream.WriteByte(0x01); //Node Fixed Unknown
-                    stream.BaseStream.Write(Breaku32((strpos >> 2)), 1, 3); //Node filename offset position (divided by 4)
+                    stream.BaseStream.Write(Breaku32(hashes[i].hash, isLittleEndian), 0, 4); //Node Hash 
+                    if (isLittleEndian)
+                    {
+                        stream.BaseStream.Write(Breaku32((strpos / 4), isLittleEndian), 0, 3); //Node filename offset position (divided by 4)
+                        stream.BaseStream.WriteByte(0x01); //Node Fixed Unknown (is enabled flag?)
+                    }
+                    else
+                    {
+                        stream.BaseStream.WriteByte(0x01); //Node Fixed Unknown (is enabled flag?)
+                        stream.BaseStream.Write(Breaku32((strpos >> 2)), 1, 3); //Node filename offset position (divided by 4)
+                    }
                     strpos += nodeInfo[hashes[i].index].namesize;
-                    stream.BaseStream.Write(Breaku32(nodeData[hashes[i].index].startPos), 0, 4); //Node start data offset position
-                    stream.BaseStream.Write(Breaku32(nodeData[hashes[i].index].endPos), 0, 4); //Node end data offset position
+                    stream.BaseStream.Write(Breaku32(nodeData[hashes[i].index].startPos, isLittleEndian), 0, 4); //Node start data offset position
+                    stream.BaseStream.Write(Breaku32(nodeData[hashes[i].index].endPos, isLittleEndian), 0, 4); //Node end data offset position
                 }
                 GC.Collect();
                 //SFNT ---
-                stream.BaseStream.Write(new byte[] { 83, 70, 78, 84, 0x00, 0x08, 0x00, 0x00 }, 0, 8); //Write fixed SFNT header
+                if (isLittleEndian)
+                    stream.BaseStream.Write(new byte[] { 83, 70, 78, 84, 0x08, 0x00, 0x00, 0x00 }, 0, 8); //Write fixed SFNT header (Little endian)
+                else
+                    stream.BaseStream.Write(new byte[] { 83, 70, 78, 84, 0x00, 0x08, 0x00, 0x00 }, 0, 8); //Write fixed SFNT header (Bid Endian)
                 for (int i = 0; i < numFiles; i++)
                 {
                     string fileName = nodeInfo[hashes[i].index].filename;
@@ -525,7 +568,7 @@ namespace BotwUnpacker
                         stream.BaseStream.WriteByte((byte)fileName[j]); //Write file names
                     }
                     int namePadding = (int)nodeInfo[hashes[i].index].namesize - nodeInfo[hashes[i].index].filename.Length; //short padding for file offset location (to be divisible by 4)
-                    if ((i == numFiles - 1) && (namePadding == 4)) //if the last filename conveniently ended at 0x0F, then do not add any padding
+                    if ((i == numFiles - 1) && (namePadding == 16)) //if the last filename conveniently ended at 0x0F, then do not add any padding
                         namePadding = 0;
                     for (int j = 0; j < namePadding; j++)
                         stream.BaseStream.WriteByte(0);
@@ -582,6 +625,15 @@ namespace BotwUnpacker
                 return false;
         }
 
+        public static Boolean IsLittleEndian(string file)
+        {
+            byte[] inFile = System.IO.File.ReadAllBytes(file);
+            if (Makeu16(inFile[6], inFile[7]) == 65534)
+                return true;
+            else
+                return false;
+        }
+
         public static int GetFileNodeCount(string file) //Get # of Nodes
         {
             try
@@ -590,7 +642,7 @@ namespace BotwUnpacker
                 {
                     byte[] inFile = System.IO.File.ReadAllBytes(file);
                     int nodeCount = 0;
-                    nodeCount = Makeu16(inFile[0x1A], inFile[0x1B]);
+                    nodeCount = Makeu16(inFile[0x1A], inFile[0x1B], IsLittleEndian(file));
                     return nodeCount;
                 }
                 else
@@ -607,7 +659,7 @@ namespace BotwUnpacker
             if (IsSarcFile(file))
             { 
                 byte[] inFile = System.IO.File.ReadAllBytes(file);
-                uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F]);
+                uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F], IsLittleEndian(file));
                 return (int)dataStartPos;
             }
             else
@@ -624,11 +676,11 @@ namespace BotwUnpacker
                 int pos;
                 uint[] nodeDataStartPos = new uint[nodeCount];
                 string[] nodeTypes = new string[nodeCount];
-                uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F]);
+                uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F], IsLittleEndian(file));
                 pos = 0x28;
                 for (int i = 0; i < nodeCount; i++)
                 {
-                    nodeDataStartPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]) + dataStartPos;
+                    nodeDataStartPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], IsLittleEndian(file)) + dataStartPos;
                     pos += 0x10;
                     nodeTypes[i] = ((char)inFile[nodeDataStartPos[i]]) + "" + ((char)inFile[nodeDataStartPos[i] + 1]) + "" + ((char)inFile[nodeDataStartPos[i] + 2]) + "" + ((char)inFile[nodeDataStartPos[i] + 3]);
                 }
@@ -647,14 +699,14 @@ namespace BotwUnpacker
                 int pos;
                 uint[] nodeDataStartPos = new uint[nodeCount];
                 uint[] nodeDataEndPos = new uint[nodeCount];
-                uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F]);
+                uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F], IsLittleEndian(file));
                 uint[] nodeSizes = new uint[nodeCount];
                 pos = 0x28;
                 for (int i = 0; i < nodeCount; i++) //Get data start and end positions 
                 {
-                    nodeDataStartPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]) + dataStartPos;
+                    nodeDataStartPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], IsLittleEndian(file)) + dataStartPos;
                     pos += 4;
-                    nodeDataEndPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]) + dataStartPos;
+                    nodeDataEndPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], IsLittleEndian(file)) + dataStartPos;
                     pos += 0x10 - 4;
                     nodeSizes[i] = nodeDataEndPos[i] - nodeDataStartPos[i];
                 }
@@ -673,14 +725,14 @@ namespace BotwUnpacker
                 int pos;
                 uint[] nodeDataStartPos = new uint[nodeCount];
                 uint[] nodeDataEndPos = new uint[nodeCount];
-                uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F]);
+                uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F], IsLittleEndian(file));
                 uint[] nodePaddings = new uint[nodeCount];
                 pos = 0x28;
                 for (int i = 0; i < nodeCount; i++) //Get data start and end positions 
                 {
-                    nodeDataStartPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]) + dataStartPos;
+                    nodeDataStartPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], IsLittleEndian(file)) + dataStartPos;
                     pos += 4;
-                    nodeDataEndPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]) + dataStartPos;
+                    nodeDataEndPos[i] = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], IsLittleEndian(file)) + dataStartPos;
                     pos += 0x10 - 4;
                 }
                 for (int i = 0; i < nodeCount; i++) //Calculate padding 
@@ -728,7 +780,7 @@ namespace BotwUnpacker
             byte[] inFile = System.IO.File.ReadAllBytes(file);
             int pos = 8;
             for (int i = pos; i < (pos + 4); i++)
-                inFile[i] = Breaku32(Convert.ToUInt32(inFile.Length))[i - pos];
+                inFile[i] = Breaku32(Convert.ToUInt32(inFile.Length), IsLittleEndian(file))[i - pos];
             System.IO.StreamWriter stream = new System.IO.StreamWriter(file); //StreamWriter doesn't like to be used to overwrite data :(
             stream.BaseStream.Write(inFile, 0, inFile.Length); //Just write the updated byte array
             stream.Close(); //Save
@@ -742,14 +794,14 @@ namespace BotwUnpacker
             int pos;
             uint tempNodeStartPos;
             uint tempNodeEndPos;
-            uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F]);
+            uint dataStartPos = Makeu32(inFile[0x0C], inFile[0x0D], inFile[0x0E], inFile[0x0F], IsLittleEndian(file));
             uint[] nodePaddings = new uint[nodeCount];
             nodePaddings = GetFileNodePaddings(file);
             int calculatedPadding = (int)nodePaddings[nodeId] + padding;
 
             pos = 0x28 + (0x10 * nodeId); //get position of the node
             pos += 4; //line of node's end data position
-            uint breakPoint = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3]) + dataStartPos; //find break point to split and rebuild
+            uint breakPoint = Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], IsLittleEndian(file)) + dataStartPos; //find break point to split and rebuild
             byte[] startDataBuild = new byte[breakPoint + calculatedPadding];
             byte[] endDataBuild = new byte[inFile.Length - (breakPoint + nodePaddings[nodeId])];
             Array.Copy(inFile, startDataBuild, breakPoint); //copy before changed padding
@@ -757,13 +809,13 @@ namespace BotwUnpacker
             pos += 0x10 - 4; //next node line at start pos
             for (int i = nodeId + 1; i < nodeCount; i++) //change the nodes below it
             {
-                tempNodeStartPos = (uint)((Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3])) + padding);
+                tempNodeStartPos = (uint)((Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], IsLittleEndian(file))) + padding);
                 for (int j = pos; j < (pos + 4); j++)
-                    startDataBuild[j] = Breaku32(tempNodeStartPos)[j - pos]; //Update calculation of new node data Start position
+                    startDataBuild[j] = Breaku32(tempNodeStartPos, IsLittleEndian(file))[j - pos]; //Update calculation of new node data Start position
                 pos += 4;
-                tempNodeEndPos = (uint)((Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3])) + padding);
+                tempNodeEndPos = (uint)((Makeu32(inFile[pos], inFile[pos + 1], inFile[pos + 2], inFile[pos + 3], IsLittleEndian(file))) + padding);
                 for (int j = pos; j < (pos + 4); j++)
-                    startDataBuild[j] = Breaku32(tempNodeEndPos)[j - pos]; //Update calculation of new node data End position
+                    startDataBuild[j] = Breaku32(tempNodeEndPos, IsLittleEndian(file))[j - pos]; //Update calculation of new node data End position
                 pos += 0x10 - 4;
             }
             System.IO.StreamWriter stream = new System.IO.StreamWriter(file); 

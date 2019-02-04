@@ -149,9 +149,9 @@ namespace BotwUnpacker
             this.cbxSetDataOffset.AutoSize = true;
             this.cbxSetDataOffset.Location = new System.Drawing.Point(118, 238);
             this.cbxSetDataOffset.Name = "cbxSetDataOffset";
-            this.cbxSetDataOffset.Size = new System.Drawing.Size(102, 17);
+            this.cbxSetDataOffset.Size = new System.Drawing.Size(113, 17);
             this.cbxSetDataOffset.TabIndex = 7;
-            this.cbxSetDataOffset.Text = "Set Data Offset ";
+            this.cbxSetDataOffset.Text = "Set Data Offset 0x";
             this.cbxSetDataOffset.UseVisualStyleBackColor = true;
             this.cbxSetDataOffset.CheckedChanged += new System.EventHandler(this.cbxSetDataOffset_CheckedChanged);
             this.cbxSetDataOffset.MouseHover += new System.EventHandler(this.cbxSetDataOffset_MouseHover);
@@ -161,7 +161,7 @@ namespace BotwUnpacker
             this.tbxDataOffset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
             this.tbxDataOffset.Enabled = false;
             this.tbxDataOffset.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.tbxDataOffset.Location = new System.Drawing.Point(214, 235);
+            this.tbxDataOffset.Location = new System.Drawing.Point(224, 236);
             this.tbxDataOffset.MaxLength = 4;
             this.tbxDataOffset.Name = "tbxDataOffset";
             this.tbxDataOffset.ReadOnly = true;

@@ -90,16 +90,6 @@ namespace BotwUnpacker
                     MessageBox.Show("Padding cannot be negative!");
                     dgvTable.CurrentCell.Value = lastCellValue;
                 }
-                else
-                {
-                    if ((Convert.ToInt32(dgvTable.CurrentCell.Value) % 2) != 0)
-                        if (MessageBox.Show("You sure you want an odd number?" + "\n\n" + "Nintendo likes even numbers, expecially multiples of 4", "You sure?", MessageBoxButtons.YesNo) == DialogResult.No)
-                        {
-                            dgvTable.CurrentCell.Value = lastCellValue;
-                        }
-                    fileSize += Convert.ToInt32(dgvTable.CurrentCell.Value) - Convert.ToInt32(lastCellValue);
-                    tbxFileSize.Text = fileSize.ToString();
-                }
             }
             catch (FormatException ex)
             {
@@ -108,7 +98,10 @@ namespace BotwUnpacker
             }
 
             if (lastCellValue != Convert.ToInt32(dgvTable.CurrentCell.Value))
+            {
                 dgvTable.CurrentCell.Style.BackColor = Color.Yellow;
+                dgvTable.CurrentCell.Style.ForeColor = Color.Black;
+            }
 
         }
 
@@ -152,7 +145,22 @@ namespace BotwUnpacker
                     MessageBox.Show("No changes were made!" + "\n" + "Data matches current file");
                 }
                 for (int i = 0; i < dgvTable.Rows.Count; i++) //reset color
-                    dgvTable.Rows[i].Cells[1].Style.BackColor = Color.White;
+                    ResetTableColor(dgvTable);
+                tbxFileSize.Text = System.IO.File.ReadAllBytes(tbxFile.Text).Length.ToString();
+
+            }
+        }
+
+        private void ResetTableColor(DataGridView table)
+        {
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                for (int j = 0; j < table.ColumnCount; j++)
+                {
+                    table.Rows[i].Cells[j].Style.BackColor = dgvTable.DefaultCellStyle.BackColor;
+                    table.Rows[i].Cells[j].Style.ForeColor = dgvTable.DefaultCellStyle.ForeColor;
+                }
+
             }
         }
     }

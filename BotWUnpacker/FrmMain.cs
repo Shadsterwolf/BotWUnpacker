@@ -261,25 +261,15 @@ namespace BotwUnpacker
             sFile.FileName = System.IO.Path.GetFileName(oFolder.FileName);
             if (sFile.ShowDialog() == DialogResult.Cancel) goto toss;
 
+            uint dataOffset = 0;
             if (cbxSetDataOffset.Checked)
-            {
-                uint dataOffset = (uint)int.Parse(tbxDataOffset.Text, System.Globalization.NumberStyles.HexNumber);
-                if (!SARC.Build(oFolder.FileName, sFile.FileName, dataOffset))
-                {
-                    MessageBox.Show("Failed to build!" + "\n\n" + SARC.lerror);
-                    goto toss;
-                }
-            }
-            else
-            {
-                if (!SARC.Build(oFolder.FileName, sFile.FileName))
-                { 
-                    MessageBox.Show("Failed to build!" + "\n\n" + SARC.lerror);
-                    goto toss;
-                }
-            }
+                dataOffset = (uint)int.Parse(tbxDataOffset.Text, System.Globalization.NumberStyles.HexNumber);
 
-            MessageBox.Show("Building Complete!" + "\n\n" + sFile.FileName);
+            if (SARC.Build(oFolder.FileName, sFile.FileName, dataOffset, rbnSwitch.Checked)) //Build
+                MessageBox.Show("Building Complete!" + "\n\n" + sFile.FileName);
+            else
+                MessageBox.Show("Failed to build!" + "\n\n" + SARC.lerror);
+
 
             toss:
             oFolder.Dispose();
