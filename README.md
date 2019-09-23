@@ -30,19 +30,24 @@
 - Decode <br />
   ```
   /d <Input File> [Output File]
+  /decode <Input File> [Output File]
   ```
 - Encode <br />
   ```
   /e <Input File> [Output File]
+  /encode <Input File> [Output File]
   ```
 - Unpack <br />
   ```
   /u <Input File> [Output Folder]
+  /unpack <Input File> [Output Folder]
   ``` 
-- Build
+- Build (Pack)
   ```
   /bu <Input Folder> [Output File]
+  /buildwiiu <Input Folder> [Output File]
   /bs <Input Folder> [Output File]
+  /buildswitch <Input Folder> [Output File]
   ``` 
   ```
   Examples:
