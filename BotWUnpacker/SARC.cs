@@ -416,7 +416,7 @@ namespace BotwUnpacker
         #region Build
         public static bool Build(string inDir, string outFile)
         {
-            return Build(inDir, outFile, 0, false); //if no fixed data offset is set (defaut 0) and no endian is set (default big endian)
+            return Build(inDir, outFile, 0, false); //if no fixed data offset is set (default 0) and no endian is set (default big endian)
         }
 
         public static bool Build(string inDir, string outFile, uint dataFixedOffset)

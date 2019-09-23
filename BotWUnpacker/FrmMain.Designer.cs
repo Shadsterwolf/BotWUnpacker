@@ -46,8 +46,8 @@ namespace BotwUnpacker
             this.cbxNodeDecode = new System.Windows.Forms.CheckBox();
             this.cbxCompileAllInOneFolder = new System.Windows.Forms.CheckBox();
             this.btnYaz0Encode = new System.Windows.Forms.Button();
-            this.btnCompareAndBuild = new System.Windows.Forms.Button();
-            this.btnPaddingEditor = new System.Windows.Forms.Button();
+            this.btnCompareTool = new System.Windows.Forms.Button();
+            this.btnPaddingTool = new System.Windows.Forms.Button();
             this.lblFootnote = new System.Windows.Forms.Label();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.loadingBar = new System.Windows.Forms.PictureBox();
@@ -87,7 +87,7 @@ namespace BotwUnpacker
             this.btnBrowseRoot.Location = new System.Drawing.Point(116, 54);
             this.btnBrowseRoot.Name = "btnBrowseRoot";
             this.btnBrowseRoot.Size = new System.Drawing.Size(71, 23);
-            this.btnBrowseRoot.TabIndex = 1;
+            this.btnBrowseRoot.TabIndex = 15;
             this.btnBrowseRoot.Text = "Browse";
             this.btnBrowseRoot.UseVisualStyleBackColor = true;
             this.btnBrowseRoot.Click += new System.EventHandler(this.btnBrowseRoot_Click);
@@ -106,10 +106,10 @@ namespace BotwUnpacker
             // btnBuildPack
             // 
             this.btnBuildPack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBuildPack.Location = new System.Drawing.Point(13, 238);
+            this.btnBuildPack.Location = new System.Drawing.Point(12, 238);
             this.btnBuildPack.Name = "btnBuildPack";
-            this.btnBuildPack.Size = new System.Drawing.Size(100, 48);
-            this.btnBuildPack.TabIndex = 6;
+            this.btnBuildPack.Size = new System.Drawing.Size(101, 48);
+            this.btnBuildPack.TabIndex = 5;
             this.btnBuildPack.Text = " Build SARC";
             this.btnBuildPack.UseVisualStyleBackColor = true;
             this.btnBuildPack.Click += new System.EventHandler(this.btnBuildPack_Click);
@@ -140,7 +140,7 @@ namespace BotwUnpacker
             this.cbxWriteSarcXml.Location = new System.Drawing.Point(118, 122);
             this.cbxWriteSarcXml.Name = "cbxWriteSarcXml";
             this.cbxWriteSarcXml.Size = new System.Drawing.Size(106, 17);
-            this.cbxWriteSarcXml.TabIndex = 1;
+            this.cbxWriteSarcXml.TabIndex = 100;
             this.cbxWriteSarcXml.Text = "Write Xml Debug";
             this.cbxWriteSarcXml.UseVisualStyleBackColor = true;
             // 
@@ -150,7 +150,7 @@ namespace BotwUnpacker
             this.cbxSetDataOffset.Location = new System.Drawing.Point(118, 238);
             this.cbxSetDataOffset.Name = "cbxSetDataOffset";
             this.cbxSetDataOffset.Size = new System.Drawing.Size(113, 17);
-            this.cbxSetDataOffset.TabIndex = 7;
+            this.cbxSetDataOffset.TabIndex = 6;
             this.cbxSetDataOffset.Text = "Set Data Offset 0x";
             this.cbxSetDataOffset.UseVisualStyleBackColor = true;
             this.cbxSetDataOffset.CheckedChanged += new System.EventHandler(this.cbxSetDataOffset_CheckedChanged);
@@ -166,7 +166,7 @@ namespace BotwUnpacker
             this.tbxDataOffset.Name = "tbxDataOffset";
             this.tbxDataOffset.ReadOnly = true;
             this.tbxDataOffset.Size = new System.Drawing.Size(32, 20);
-            this.tbxDataOffset.TabIndex = 8;
+            this.tbxDataOffset.TabIndex = 7;
             this.tbxDataOffset.Text = "2000";
             // 
             // btnExtractAll
@@ -175,7 +175,7 @@ namespace BotwUnpacker
             this.btnExtractAll.Location = new System.Drawing.Point(12, 147);
             this.btnExtractAll.Name = "btnExtractAll";
             this.btnExtractAll.Size = new System.Drawing.Size(100, 23);
-            this.btnExtractAll.TabIndex = 2;
+            this.btnExtractAll.TabIndex = 1;
             this.btnExtractAll.Text = "Unpack All";
             this.btnExtractAll.UseVisualStyleBackColor = true;
             this.btnExtractAll.Click += new System.EventHandler(this.btnExtractAll_Click);
@@ -186,7 +186,7 @@ namespace BotwUnpacker
             this.btnOpenFolder.Location = new System.Drawing.Point(193, 54);
             this.btnOpenFolder.Name = "btnOpenFolder";
             this.btnOpenFolder.Size = new System.Drawing.Size(84, 23);
-            this.btnOpenFolder.TabIndex = 15;
+            this.btnOpenFolder.TabIndex = 16;
             this.btnOpenFolder.Text = "Open Folder";
             this.btnOpenFolder.UseVisualStyleBackColor = true;
             this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
@@ -197,7 +197,7 @@ namespace BotwUnpacker
             this.btnYaz0Decode.Location = new System.Drawing.Point(12, 176);
             this.btnYaz0Decode.Name = "btnYaz0Decode";
             this.btnYaz0Decode.Size = new System.Drawing.Size(100, 23);
-            this.btnYaz0Decode.TabIndex = 4;
+            this.btnYaz0Decode.TabIndex = 3;
             this.btnYaz0Decode.Text = "Yaz0 Decode";
             this.btnYaz0Decode.UseVisualStyleBackColor = true;
             this.btnYaz0Decode.Click += new System.EventHandler(this.btnYaz0Decode_Click);
@@ -208,7 +208,7 @@ namespace BotwUnpacker
             this.cbxNodeDecode.Location = new System.Drawing.Point(12, 205);
             this.cbxNodeDecode.Name = "cbxNodeDecode";
             this.cbxNodeDecode.Size = new System.Drawing.Size(166, 17);
-            this.cbxNodeDecode.TabIndex = 5;
+            this.cbxNodeDecode.TabIndex = 4;
             this.cbxNodeDecode.Text = "Auto Decode Unpacked Files";
             this.cbxNodeDecode.UseVisualStyleBackColor = true;
             this.cbxNodeDecode.MouseHover += new System.EventHandler(this.cbxNodeDecode_MouseHover);
@@ -219,7 +219,7 @@ namespace BotwUnpacker
             this.cbxCompileAllInOneFolder.Location = new System.Drawing.Point(118, 151);
             this.cbxCompileAllInOneFolder.Name = "cbxCompileAllInOneFolder";
             this.cbxCompileAllInOneFolder.Size = new System.Drawing.Size(148, 17);
-            this.cbxCompileAllInOneFolder.TabIndex = 3;
+            this.cbxCompileAllInOneFolder.TabIndex = 2;
             this.cbxCompileAllInOneFolder.Text = "Compile All To One Folder";
             this.cbxCompileAllInOneFolder.UseVisualStyleBackColor = true;
             // 
@@ -229,32 +229,32 @@ namespace BotwUnpacker
             this.btnYaz0Encode.Location = new System.Drawing.Point(12, 292);
             this.btnYaz0Encode.Name = "btnYaz0Encode";
             this.btnYaz0Encode.Size = new System.Drawing.Size(100, 23);
-            this.btnYaz0Encode.TabIndex = 9;
+            this.btnYaz0Encode.TabIndex = 10;
             this.btnYaz0Encode.Text = "Yaz0 Encode";
             this.btnYaz0Encode.UseVisualStyleBackColor = true;
             this.btnYaz0Encode.Click += new System.EventHandler(this.btnYaz0Encode_Click);
             // 
-            // btnCompareAndBuild
+            // btnCompareTool
             // 
-            this.btnCompareAndBuild.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCompareAndBuild.Location = new System.Drawing.Point(272, 238);
-            this.btnCompareAndBuild.Name = "btnCompareAndBuild";
-            this.btnCompareAndBuild.Size = new System.Drawing.Size(100, 48);
-            this.btnCompareAndBuild.TabIndex = 10;
-            this.btnCompareAndBuild.Text = "Compare Tool";
-            this.btnCompareAndBuild.UseVisualStyleBackColor = false;
-            this.btnCompareAndBuild.Click += new System.EventHandler(this.btnCompareAndBuild_Click);
+            this.btnCompareTool.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCompareTool.Location = new System.Drawing.Point(272, 238);
+            this.btnCompareTool.Name = "btnCompareTool";
+            this.btnCompareTool.Size = new System.Drawing.Size(100, 48);
+            this.btnCompareTool.TabIndex = 11;
+            this.btnCompareTool.Text = "Compare Tool";
+            this.btnCompareTool.UseVisualStyleBackColor = false;
+            this.btnCompareTool.Click += new System.EventHandler(this.btnCompareAndBuild_Click);
             // 
-            // btnPaddingEditor
+            // btnPaddingTool
             // 
-            this.btnPaddingEditor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPaddingEditor.Location = new System.Drawing.Point(272, 292);
-            this.btnPaddingEditor.Name = "btnPaddingEditor";
-            this.btnPaddingEditor.Size = new System.Drawing.Size(100, 48);
-            this.btnPaddingEditor.TabIndex = 11;
-            this.btnPaddingEditor.Text = "Padding Tool";
-            this.btnPaddingEditor.UseVisualStyleBackColor = false;
-            this.btnPaddingEditor.Click += new System.EventHandler(this.btnSarcEditor_Click);
+            this.btnPaddingTool.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPaddingTool.Location = new System.Drawing.Point(272, 292);
+            this.btnPaddingTool.Name = "btnPaddingTool";
+            this.btnPaddingTool.Size = new System.Drawing.Size(100, 48);
+            this.btnPaddingTool.TabIndex = 12;
+            this.btnPaddingTool.Text = "Padding Tool";
+            this.btnPaddingTool.UseVisualStyleBackColor = false;
+            this.btnPaddingTool.Click += new System.EventHandler(this.btnSarcEditor_Click);
             // 
             // lblFootnote
             // 
@@ -299,7 +299,7 @@ namespace BotwUnpacker
             this.rbnWiiU.Location = new System.Drawing.Point(118, 261);
             this.rbnWiiU.Name = "rbnWiiU";
             this.rbnWiiU.Size = new System.Drawing.Size(48, 17);
-            this.rbnWiiU.TabIndex = 102;
+            this.rbnWiiU.TabIndex = 8;
             this.rbnWiiU.TabStop = true;
             this.rbnWiiU.Text = "WiiU";
             this.rbnWiiU.UseVisualStyleBackColor = true;
@@ -310,7 +310,7 @@ namespace BotwUnpacker
             this.rbnSwitch.Location = new System.Drawing.Point(166, 261);
             this.rbnSwitch.Name = "rbnSwitch";
             this.rbnSwitch.Size = new System.Drawing.Size(57, 17);
-            this.rbnSwitch.TabIndex = 103;
+            this.rbnSwitch.TabIndex = 9;
             this.rbnSwitch.Text = "Switch";
             this.rbnSwitch.UseVisualStyleBackColor = true;
             this.rbnSwitch.CheckedChanged += new System.EventHandler(this.rbnSwitch_CheckedChanged);
@@ -326,8 +326,8 @@ namespace BotwUnpacker
             this.Controls.Add(this.cbxWriteYaz0Xml);
             this.Controls.Add(this.loadingBar);
             this.Controls.Add(this.lblFootnote);
-            this.Controls.Add(this.btnPaddingEditor);
-            this.Controls.Add(this.btnCompareAndBuild);
+            this.Controls.Add(this.btnPaddingTool);
+            this.Controls.Add(this.btnCompareTool);
             this.Controls.Add(line1);
             this.Controls.Add(this.btnYaz0Encode);
             this.Controls.Add(this.cbxCompileAllInOneFolder);
@@ -373,8 +373,8 @@ namespace BotwUnpacker
         private System.Windows.Forms.CheckBox cbxNodeDecode;
         private System.Windows.Forms.CheckBox cbxCompileAllInOneFolder;
         private System.Windows.Forms.Button btnYaz0Encode;
-        private System.Windows.Forms.Button btnCompareAndBuild;
-        private System.Windows.Forms.Button btnPaddingEditor;
+        private System.Windows.Forms.Button btnCompareTool;
+        private System.Windows.Forms.Button btnPaddingTool;
         private System.Windows.Forms.Label lblFootnote;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.PictureBox loadingBar;
