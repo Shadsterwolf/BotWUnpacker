@@ -27,8 +27,8 @@
 - Supports multiple files and folders, from the same source location where you dropped it from ! <br />
 
 # Console
-/  command
-<> required argument
+/  command<br />
+<> required argument<br />
 [] optional argument
 
 - Decode <br />
