@@ -249,5 +249,6 @@ namespace BotwUnpacker
             Console.WriteLine("\t" + "   " + "BotwUnpacker.exe /bs \"C:\\CustomFiles\\Switch\\LinkModel\\Model\"");
         }
         #endregion
+
     }
 }
