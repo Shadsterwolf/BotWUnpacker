@@ -41,19 +41,21 @@
   ``` 
 - Build
   ```
-  /b <Input Folder> [Output File]
+  /bu <Input Folder> [Output File]
+  /bs <Input Folder> [Output File]
   ``` 
   ```
   Examples:
-  BotwUnpacker.exe /d "C:\OrignalFiles\Model.sbactorpack" "C:\CustomFiles\LinkModel\Model.bactorpack"
-  BotwUnpacker.exe /u "C:\CustomFiles\LinkModel\Model.bactorpack"
-  BotwUnpacker.exe /b "C:\CustomFiles\LinkModel\Model" "C:\CustomFiles\Model.bactorpack"
+  BotwUnpacker.exe /d "C:\OrignalFiles\WiiU\Model.sbactorpack" "C:\CustomFiles\WiiU\LinkModel\Model.bactorpack"
+  BotwUnpacker.exe /u "C:\CustomFiles\WiiU\LinkModel\Model.bactorpack"
+  BotwUnpacker.exe /bu "C:\CustomFiles\WiiU\LinkModel\Model" "C:\CustomFiles\Model.bactorpack"
+  BotwUnpacker.exe /bs "C:\CustomFiles\Switch\LinkModel\Model"
   ```
 # Solution Build
 1. Open the .sln project in Visual Studio
 2. Open Tools > NuGet Package Manager > Manage NuGet Packages for Solution...
 3. Search and Install the following:
-- Fody & Costura (This is to compile any .DLL files into the EXE, sometimes causes build errors at random, just retry)
+- Fody & Costura (This is to compile any .DLL files into the EXE, latest version only works on Visual Studio 2019!)
 - Microsoft.WindowsAPICodePack-Core  (Common .DLL library, used make folder select operations similar to file select)
 - Microsoft.WindowsAPICodePack-Shell
 
