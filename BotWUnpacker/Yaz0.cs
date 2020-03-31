@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 //Decode based off of thakis's and shevious's python code, recoded in C#
 //Encode was re-researched and programmed by myself (Shadsterwolf) 
 

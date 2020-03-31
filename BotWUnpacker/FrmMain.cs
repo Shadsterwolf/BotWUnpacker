@@ -5,6 +5,7 @@ using System.IO;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Threading;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace BotwUnpacker
 {
@@ -205,7 +206,7 @@ namespace BotwUnpacker
         #endregion
 
         #region Button Yaz0 Encode
-        private void btnYaz0Encode_Click(object sender, EventArgs e)
+        private async void btnYaz0Encode_Click(object sender, EventArgs e)
         {
             loadingBar.Visible = true;
             OpenFileDialog oFile = new OpenFileDialog();
@@ -218,10 +219,10 @@ namespace BotwUnpacker
                     if (File.Exists(outFile))
                     {
                         if (MessageBox.Show(Path.GetFileName(outFile) + " already exists!" + "\n\n" + "Proceed anyway?", "Overwrite?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                            Encode(oFile.FileName, outFile);
+                            await Encode(oFile.FileName, outFile);
                     }
                     else
-                        Encode(oFile.FileName, outFile);
+                        await Encode(oFile.FileName, outFile);
                 }
                 else
                     MessageBox.Show("Encode error:" + "\n\n" + "File is already Yaz0 encoded!");
@@ -230,9 +231,10 @@ namespace BotwUnpacker
             loadingBar.Visible = false;
         }
 
-        private void Encode(string inFile, string outFile) //Yaz0 Encode
+        private async Task Encode(string inFile, string outFile) //Yaz0 Encode
         {
-            if (Yaz0.Encode(inFile, outFile))
+            bool result;
+            if (result = await Task.Run(() => Yaz0.Encode(inFile, outFile)))
                 MessageBox.Show("Encode complete!" + "\n\n" + outFile);
             else
                 MessageBox.Show("Encode error:" + "\n\n" + Yaz0.lerror);
