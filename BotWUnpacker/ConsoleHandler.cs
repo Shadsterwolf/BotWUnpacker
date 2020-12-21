@@ -52,7 +52,7 @@ namespace BotwUnpacker
                         break;
                     case "/bs":
                     case "/buildswitch":
-                        ConsoleBuildWiiU(args);
+                        ConsoleBuildSwitch(args);
                         break;
                     case "/?":
                         ConsoleHelp();
