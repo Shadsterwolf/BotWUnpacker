@@ -1,5 +1,5 @@
 <p align="center"> 
-<img src="https://github.com/Shadsterwolf/BotWUnpacker/blob/master/BotWUnpacker5/images/ZeldaUnpackerLogo.png"/>
+<img src="https://github.com/Shadsterwolf/BotWUnpacker/blob/master/BotwUnpacker5/images/ZeldaUnpackerLogo.png?raw=true"/>
 </p>
 
 # Intro
