@@ -141,7 +141,8 @@ namespace BotwUnpacker
             ".sarc",
             ".stera",
             ".bitemico",
-            ".beventpack"
+            ".beventpack",
+            ".bslnk"
             };
             if (knownExtensions.Any(ext.Contains))
                 return true;
