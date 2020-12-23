@@ -3,7 +3,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace BotwUnpacker
+namespace BotwUnpacker5
 {
     public struct ConsoleHandler
     {

@@ -7,7 +7,7 @@ using System.Threading;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace BotwUnpacker
+namespace BotwUnpacker5
 {
     public partial class FrmMain : Form
     {
@@ -15,11 +15,11 @@ namespace BotwUnpacker
         {
             InitializeComponent();
             //Load in previous instance
-            tbxFolderRoot.Text = BotwUnpacker.Properties.Settings.Default.RootFolder;
+            tbxFolderRoot.Text = Properties.Settings.Default.RootFolder;
             if (tbxFolderRoot.Text != "") btnExtractAll.Enabled = true;
             if (tbxFolderRoot.Text != "") btnOpenFolder.Enabled = true;
 
-            if (BotwUnpacker.Properties.Settings.Default.LittleEndian)
+            if (Properties.Settings.Default.LittleEndian)
             {
                 rbnWiiU.Checked = false;
                 rbnSwitch.Checked = true;
@@ -44,8 +44,8 @@ namespace BotwUnpacker
             btnOpenFolder.Enabled = true;
 
             //Save GameRoot property
-            BotwUnpacker.Properties.Settings.Default.RootFolder = oFolder.FileName;
-            BotwUnpacker.Properties.Settings.Default.Save();
+            Properties.Settings.Default.RootFolder = oFolder.FileName;
+            Properties.Settings.Default.Save();
 
             toss:
             oFolder.Dispose();
@@ -88,7 +88,7 @@ namespace BotwUnpacker
                 goto toss;
             }
             else
-                System.Diagnostics.Process.Start(oFolderPath);
+                System.Diagnostics.Process.Start("explorer.exe",oFolderPath);
 
             //XML
             xml:
@@ -170,38 +170,42 @@ namespace BotwUnpacker
         #endregion
 
         #region Button Yaz0 Decode
-        private void btnYaz0Decode_Click(object sender, EventArgs e)
+        private async void btnYaz0Decode_Click(object sender, EventArgs e)
         {
             loadingBar.Visible = true;
             OpenFileDialog oFile = new OpenFileDialog();
             if (tbxFolderRoot.Text != "") oFile.InitialDirectory = tbxFolderRoot.Text;
-            if (oFile.ShowDialog() == DialogResult.Cancel) goto toss;
-            string outFile = oFile.FileName;
+            if (oFile.ShowDialog() != DialogResult.Cancel)
             {
-                if (!Yaz0.Decode(oFile.FileName, Yaz0.DecodeOutputFileRename(oFile.FileName)))
+                string outFile = oFile.FileName;
                 {
-                    MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
-                    goto toss;
+                    await Decode(oFile.FileName, Yaz0.DecodeOutputFileRename(oFile.FileName));
+                }
+
+                //XML Debug
+                if (cbxWriteYaz0Xml.Checked)
+                {
+                    String oFolderName = Path.GetFileNameWithoutExtension(oFile.FileName);
+                    String oFolderPath = Path.GetDirectoryName(oFile.FileName) + "\\" + oFolderName;
+                    if (File.Exists(oFolderPath + "_Yaz0Debug.xml"))
+                        if (MessageBox.Show(oFolderName + ".xml already exists!" + "\n\n" + "Proceed anyway?", "Overwrite?", MessageBoxButtons.YesNo) != DialogResult.No)
+                        {
+                            if (!DebugWriter.WriteYaz0Xml(oFile.FileName, (oFolderPath + "_Yaz0Debug.xml")))
+                                MessageBox.Show("XML file failed to write by unknown reasons");
+                        }
                 }
             }
-
-            //XML
-            if (cbxWriteYaz0Xml.Checked)
-            {
-                String oFolderName = Path.GetFileNameWithoutExtension(oFile.FileName);
-                String oFolderPath = Path.GetDirectoryName(oFile.FileName) + "\\" + oFolderName;
-                if (File.Exists(oFolderPath + "_Yaz0Debug.xml"))
-                    if (MessageBox.Show(oFolderName + ".xml already exists!" + "\n\n" + "Proceed anyway?", "Overwrite?", MessageBoxButtons.YesNo) == DialogResult.No) goto toss;
-                if (!DebugWriter.WriteYaz0Xml(oFile.FileName, (oFolderPath + "_Yaz0Debug.xml")))
-                    MessageBox.Show("XML file failed to write by unknown reasons");
-            }
-
-            MessageBox.Show("Decode complete!" + "\n\n" + outFile);
-
-            toss:
             oFile.Dispose();
-            GC.Collect();
             loadingBar.Visible = false;
+        }
+
+        private async Task Decode(string inFile, string outFile) //Yaz0 Decode
+        {
+            bool result;
+            if (result = await Task.Run(() => Yaz0.Decode(inFile, outFile)))
+                MessageBox.Show("Decode complete!" + "\n\n" + outFile);
+            else
+                MessageBox.Show("Decode error:" + "\n\n" + Yaz0.lerror);
         }
         #endregion
 
@@ -211,7 +215,7 @@ namespace BotwUnpacker
             loadingBar.Visible = true;
             OpenFileDialog oFile = new OpenFileDialog();
             if (tbxFolderRoot.Text != "") oFile.InitialDirectory = tbxFolderRoot.Text;
-            if (!(oFile.ShowDialog() == DialogResult.Cancel))
+            if (oFile.ShowDialog() != DialogResult.Cancel)
             {
                 if (!SARC.IsYaz0File(oFile.FileName))
                 {
@@ -303,7 +307,7 @@ namespace BotwUnpacker
             {
                 try
                 {
-                    System.Diagnostics.Process.Start(tbxFolderRoot.Text);
+                    System.Diagnostics.Process.Start("explorer.exe", tbxFolderRoot.Text);
                 }
                 catch
                 {
@@ -315,10 +319,10 @@ namespace BotwUnpacker
         private void tbxFolderRoot_TextChanged(object sender, EventArgs e)
         {
             if (tbxFolderRoot.Text == "")
-                BotwUnpacker.Properties.Settings.Default.RootFolder = "";
+                Properties.Settings.Default.RootFolder = "";
             else
-                BotwUnpacker.Properties.Settings.Default.RootFolder = tbxFolderRoot.Text;
-            BotwUnpacker.Properties.Settings.Default.Save();
+                Properties.Settings.Default.RootFolder = tbxFolderRoot.Text;
+            Properties.Settings.Default.Save();
         }        
         
         FrmCompareTool frmCompareBuild = new FrmCompareTool();
@@ -376,10 +380,10 @@ namespace BotwUnpacker
         private void rbnSwitch_CheckedChanged(object sender, EventArgs e)
         {
             if (rbnSwitch.Checked == true)
-                BotwUnpacker.Properties.Settings.Default.LittleEndian = true;
+                Properties.Settings.Default.LittleEndian = true;
             else
-                BotwUnpacker.Properties.Settings.Default.LittleEndian = false;
-            BotwUnpacker.Properties.Settings.Default.Save();
+                Properties.Settings.Default.LittleEndian = false;
+            Properties.Settings.Default.Save();
         }
     }
 }

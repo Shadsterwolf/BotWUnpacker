@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 //Modified code From Uwizard master branch as of 10/16/2017
 
-
-namespace BotwUnpacker
+namespace BotwUnpacker5
 {
     public struct DebugWriter
     {
@@ -18,8 +18,8 @@ namespace BotwUnpacker
 
             public SarcNode(uint fhash, byte unk, uint foffset, uint fstart, uint fend)
             {
-                hash = fhash; 
-                unknown = unk; 
+                hash = fhash;
+                unknown = unk;
                 offset = foffset;
                 start = fstart;
                 end = fend;
@@ -200,7 +200,7 @@ namespace BotwUnpacker
                 fileNames[i] = tempName; //Take built string and store it in the array
                 writer.WriteElementString("NodeFile" + i, tempName);
             }
-            
+
 
             for (int i = 0; i < nodeCount; i++) //Write files based from node information
             {
@@ -208,7 +208,7 @@ namespace BotwUnpacker
                 writer.WriteBinHex(inFile, (int)(nodes[i].start + dataOffset), (int)(nodes[i].end - nodes[i].start));
                 writer.WriteEndElement(); //</NodeData>
             }
-            
+
 
             writer.WriteEndElement(); //</PACK>
             writer.Close();
@@ -222,7 +222,7 @@ namespace BotwUnpacker
         {
             //try
             //{
-                return WriteYaz0Xml(System.IO.File.ReadAllBytes(inFile), outFile);
+            return WriteYaz0Xml(System.IO.File.ReadAllBytes(inFile), outFile);
             //}
             //catch 
             //{
@@ -291,7 +291,7 @@ namespace BotwUnpacker
                         numBytes = inFile[sourcePos] + (uint)0x12;
                         sourcePos++;
                         groupValues += " | " + "";
-                     
+
                     }
                     else
                     {

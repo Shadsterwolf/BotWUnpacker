@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BotwUnpacker
+namespace BotwUnpacker5
 {
     public partial class FrmCompareTool : Form
     {
@@ -26,7 +26,7 @@ namespace BotwUnpacker
             {
                 OpenFileDialog oriFile = new OpenFileDialog();
                 oriFile.Filter = "All Files|*.*";
-                if (BotwUnpacker.Properties.Settings.Default.RootFolder != "") oriFile.InitialDirectory = BotwUnpacker.Properties.Settings.Default.RootFolder;
+                if (Properties.Settings.Default.RootFolder != "") oriFile.InitialDirectory = Properties.Settings.Default.RootFolder;
                 if (oriFile.ShowDialog() == DialogResult.Cancel) goto toss;
                 tbxOriFile.Text = oriFile.FileName;
 
@@ -84,7 +84,7 @@ namespace BotwUnpacker
             {
                 CommonOpenFileDialog oriFolder = new CommonOpenFileDialog();
                 oriFolder.IsFolderPicker = true;
-                if (BotwUnpacker.Properties.Settings.Default.RootFolder != "") oriFolder.InitialDirectory = BotwUnpacker.Properties.Settings.Default.RootFolder;
+                if (Properties.Settings.Default.RootFolder != "") oriFolder.InitialDirectory = Properties.Settings.Default.RootFolder;
                 if (oriFolder.ShowDialog() == CommonFileDialogResult.Cancel) goto toss;
                 tbxOriFile.Text = oriFolder.FileName;
 
@@ -126,7 +126,7 @@ namespace BotwUnpacker
             {
                 OpenFileDialog cusFile = new OpenFileDialog();
                 cusFile.Filter = "All Files|*.*";
-                if (BotwUnpacker.Properties.Settings.Default.RootFolder != "") cusFile.InitialDirectory = BotwUnpacker.Properties.Settings.Default.RootFolder;
+                if (Properties.Settings.Default.RootFolder != "") cusFile.InitialDirectory = Properties.Settings.Default.RootFolder;
                 if (cusFile.ShowDialog() == DialogResult.Cancel) goto toss;
                 tbxCustom.Text = cusFile.FileName;
 
@@ -184,7 +184,7 @@ namespace BotwUnpacker
             {
                 CommonOpenFileDialog cusFolder = new CommonOpenFileDialog();
                 cusFolder.IsFolderPicker = true;
-                if (BotwUnpacker.Properties.Settings.Default.RootFolder != "") cusFolder.InitialDirectory = BotwUnpacker.Properties.Settings.Default.RootFolder;
+                if (Properties.Settings.Default.RootFolder != "") cusFolder.InitialDirectory = Properties.Settings.Default.RootFolder;
                 if (cusFolder.ShowDialog() == CommonFileDialogResult.Cancel) goto toss;
                 tbxCustom.Text = cusFolder.FileName;
 

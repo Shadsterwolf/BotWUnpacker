@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace BotwUnpacker
+namespace BotwUnpacker5
 {
     partial class FrmMain
     {
@@ -54,19 +54,22 @@ namespace BotwUnpacker
             this.cbxWriteYaz0Xml = new System.Windows.Forms.CheckBox();
             this.rbnWiiU = new System.Windows.Forms.RadioButton();
             this.rbnSwitch = new System.Windows.Forms.RadioButton();
+            this.doneBar = new System.Windows.Forms.PictureBox();
             imgIcon = new System.Windows.Forms.PictureBox();
             line1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(imgIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.loadingBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.doneBar)).BeginInit();
             this.SuspendLayout();
             // 
             // imgIcon
             // 
             imgIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             imgIcon.Image = ((System.Drawing.Image)(resources.GetObject("imgIcon.Image")));
-            imgIcon.Location = new System.Drawing.Point(12, 12);
+            imgIcon.Location = new System.Drawing.Point(14, 14);
+            imgIcon.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             imgIcon.Name = "imgIcon";
-            imgIcon.Size = new System.Drawing.Size(100, 100);
+            imgIcon.Size = new System.Drawing.Size(117, 115);
             imgIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             imgIcon.TabIndex = 99;
             imgIcon.TabStop = false;
@@ -75,18 +78,20 @@ namespace BotwUnpacker
             // 
             line1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             line1.Enabled = false;
-            line1.Location = new System.Drawing.Point(12, 225);
+            line1.Location = new System.Drawing.Point(14, 260);
+            line1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             line1.Name = "line1";
-            line1.Size = new System.Drawing.Size(356, 2);
+            line1.Size = new System.Drawing.Size(415, 2);
             line1.TabIndex = 23;
             // 
             // btnBrowseRoot
             // 
             this.btnBrowseRoot.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.btnBrowseRoot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBrowseRoot.Location = new System.Drawing.Point(116, 54);
+            this.btnBrowseRoot.Location = new System.Drawing.Point(135, 62);
+            this.btnBrowseRoot.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnBrowseRoot.Name = "btnBrowseRoot";
-            this.btnBrowseRoot.Size = new System.Drawing.Size(71, 23);
+            this.btnBrowseRoot.Size = new System.Drawing.Size(83, 27);
             this.btnBrowseRoot.TabIndex = 15;
             this.btnBrowseRoot.Text = "Browse";
             this.btnBrowseRoot.UseVisualStyleBackColor = true;
@@ -95,9 +100,10 @@ namespace BotwUnpacker
             // btnExtractPack
             // 
             this.btnExtractPack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExtractPack.Location = new System.Drawing.Point(12, 118);
+            this.btnExtractPack.Location = new System.Drawing.Point(14, 136);
+            this.btnExtractPack.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnExtractPack.Name = "btnExtractPack";
-            this.btnExtractPack.Size = new System.Drawing.Size(100, 23);
+            this.btnExtractPack.Size = new System.Drawing.Size(117, 27);
             this.btnExtractPack.TabIndex = 0;
             this.btnExtractPack.Text = "Unpack SARC";
             this.btnExtractPack.UseVisualStyleBackColor = true;
@@ -106,9 +112,10 @@ namespace BotwUnpacker
             // btnBuildPack
             // 
             this.btnBuildPack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBuildPack.Location = new System.Drawing.Point(12, 238);
+            this.btnBuildPack.Location = new System.Drawing.Point(14, 275);
+            this.btnBuildPack.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnBuildPack.Name = "btnBuildPack";
-            this.btnBuildPack.Size = new System.Drawing.Size(101, 48);
+            this.btnBuildPack.Size = new System.Drawing.Size(118, 55);
             this.btnBuildPack.TabIndex = 5;
             this.btnBuildPack.Text = " Build SARC";
             this.btnBuildPack.UseVisualStyleBackColor = true;
@@ -117,9 +124,10 @@ namespace BotwUnpacker
             // lblFolderRoot
             // 
             this.lblFolderRoot.AutoSize = true;
-            this.lblFolderRoot.Location = new System.Drawing.Point(115, 12);
+            this.lblFolderRoot.Location = new System.Drawing.Point(134, 14);
+            this.lblFolderRoot.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFolderRoot.Name = "lblFolderRoot";
-            this.lblFolderRoot.Size = new System.Drawing.Size(120, 13);
+            this.lblFolderRoot.Size = new System.Drawing.Size(133, 15);
             this.lblFolderRoot.TabIndex = 5;
             this.lblFolderRoot.Text = "Default Folder Location:";
             // 
@@ -127,9 +135,10 @@ namespace BotwUnpacker
             // 
             this.tbxFolderRoot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
             this.tbxFolderRoot.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.tbxFolderRoot.Location = new System.Drawing.Point(116, 28);
+            this.tbxFolderRoot.Location = new System.Drawing.Point(135, 32);
+            this.tbxFolderRoot.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tbxFolderRoot.Name = "tbxFolderRoot";
-            this.tbxFolderRoot.Size = new System.Drawing.Size(253, 20);
+            this.tbxFolderRoot.Size = new System.Drawing.Size(294, 23);
             this.tbxFolderRoot.TabIndex = 14;
             this.tbxFolderRoot.TextChanged += new System.EventHandler(this.tbxFolderRoot_TextChanged);
             // 
@@ -137,9 +146,10 @@ namespace BotwUnpacker
             // 
             this.cbxWriteSarcXml.AutoSize = true;
             this.cbxWriteSarcXml.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.cbxWriteSarcXml.Location = new System.Drawing.Point(118, 122);
+            this.cbxWriteSarcXml.Location = new System.Drawing.Point(138, 141);
+            this.cbxWriteSarcXml.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cbxWriteSarcXml.Name = "cbxWriteSarcXml";
-            this.cbxWriteSarcXml.Size = new System.Drawing.Size(106, 17);
+            this.cbxWriteSarcXml.Size = new System.Drawing.Size(116, 19);
             this.cbxWriteSarcXml.TabIndex = 100;
             this.cbxWriteSarcXml.Text = "Write Xml Debug";
             this.cbxWriteSarcXml.UseVisualStyleBackColor = true;
@@ -147,9 +157,10 @@ namespace BotwUnpacker
             // cbxSetDataOffset
             // 
             this.cbxSetDataOffset.AutoSize = true;
-            this.cbxSetDataOffset.Location = new System.Drawing.Point(118, 238);
+            this.cbxSetDataOffset.Location = new System.Drawing.Point(138, 275);
+            this.cbxSetDataOffset.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cbxSetDataOffset.Name = "cbxSetDataOffset";
-            this.cbxSetDataOffset.Size = new System.Drawing.Size(113, 17);
+            this.cbxSetDataOffset.Size = new System.Drawing.Size(119, 19);
             this.cbxSetDataOffset.TabIndex = 6;
             this.cbxSetDataOffset.Text = "Set Data Offset 0x";
             this.cbxSetDataOffset.UseVisualStyleBackColor = true;
@@ -161,20 +172,22 @@ namespace BotwUnpacker
             this.tbxDataOffset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
             this.tbxDataOffset.Enabled = false;
             this.tbxDataOffset.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.tbxDataOffset.Location = new System.Drawing.Point(224, 236);
+            this.tbxDataOffset.Location = new System.Drawing.Point(261, 272);
+            this.tbxDataOffset.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tbxDataOffset.MaxLength = 4;
             this.tbxDataOffset.Name = "tbxDataOffset";
             this.tbxDataOffset.ReadOnly = true;
-            this.tbxDataOffset.Size = new System.Drawing.Size(32, 20);
+            this.tbxDataOffset.Size = new System.Drawing.Size(37, 23);
             this.tbxDataOffset.TabIndex = 7;
             this.tbxDataOffset.Text = "2000";
             // 
             // btnExtractAll
             // 
             this.btnExtractAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExtractAll.Location = new System.Drawing.Point(12, 147);
+            this.btnExtractAll.Location = new System.Drawing.Point(14, 170);
+            this.btnExtractAll.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnExtractAll.Name = "btnExtractAll";
-            this.btnExtractAll.Size = new System.Drawing.Size(100, 23);
+            this.btnExtractAll.Size = new System.Drawing.Size(117, 27);
             this.btnExtractAll.TabIndex = 1;
             this.btnExtractAll.Text = "Unpack All";
             this.btnExtractAll.UseVisualStyleBackColor = true;
@@ -183,9 +196,10 @@ namespace BotwUnpacker
             // btnOpenFolder
             // 
             this.btnOpenFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOpenFolder.Location = new System.Drawing.Point(193, 54);
+            this.btnOpenFolder.Location = new System.Drawing.Point(225, 62);
+            this.btnOpenFolder.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnOpenFolder.Name = "btnOpenFolder";
-            this.btnOpenFolder.Size = new System.Drawing.Size(84, 23);
+            this.btnOpenFolder.Size = new System.Drawing.Size(98, 27);
             this.btnOpenFolder.TabIndex = 16;
             this.btnOpenFolder.Text = "Open Folder";
             this.btnOpenFolder.UseVisualStyleBackColor = true;
@@ -194,9 +208,10 @@ namespace BotwUnpacker
             // btnYaz0Decode
             // 
             this.btnYaz0Decode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnYaz0Decode.Location = new System.Drawing.Point(12, 176);
+            this.btnYaz0Decode.Location = new System.Drawing.Point(14, 203);
+            this.btnYaz0Decode.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnYaz0Decode.Name = "btnYaz0Decode";
-            this.btnYaz0Decode.Size = new System.Drawing.Size(100, 23);
+            this.btnYaz0Decode.Size = new System.Drawing.Size(117, 27);
             this.btnYaz0Decode.TabIndex = 3;
             this.btnYaz0Decode.Text = "Yaz0 Decode";
             this.btnYaz0Decode.UseVisualStyleBackColor = true;
@@ -205,9 +220,10 @@ namespace BotwUnpacker
             // cbxNodeDecode
             // 
             this.cbxNodeDecode.AutoSize = true;
-            this.cbxNodeDecode.Location = new System.Drawing.Point(12, 205);
+            this.cbxNodeDecode.Location = new System.Drawing.Point(14, 237);
+            this.cbxNodeDecode.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cbxNodeDecode.Name = "cbxNodeDecode";
-            this.cbxNodeDecode.Size = new System.Drawing.Size(166, 17);
+            this.cbxNodeDecode.Size = new System.Drawing.Size(177, 19);
             this.cbxNodeDecode.TabIndex = 4;
             this.cbxNodeDecode.Text = "Auto Decode Unpacked Files";
             this.cbxNodeDecode.UseVisualStyleBackColor = true;
@@ -216,9 +232,10 @@ namespace BotwUnpacker
             // cbxCompileAllInOneFolder
             // 
             this.cbxCompileAllInOneFolder.AutoSize = true;
-            this.cbxCompileAllInOneFolder.Location = new System.Drawing.Point(118, 151);
+            this.cbxCompileAllInOneFolder.Location = new System.Drawing.Point(138, 174);
+            this.cbxCompileAllInOneFolder.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cbxCompileAllInOneFolder.Name = "cbxCompileAllInOneFolder";
-            this.cbxCompileAllInOneFolder.Size = new System.Drawing.Size(148, 17);
+            this.cbxCompileAllInOneFolder.Size = new System.Drawing.Size(164, 19);
             this.cbxCompileAllInOneFolder.TabIndex = 2;
             this.cbxCompileAllInOneFolder.Text = "Compile All To One Folder";
             this.cbxCompileAllInOneFolder.UseVisualStyleBackColor = true;
@@ -226,9 +243,10 @@ namespace BotwUnpacker
             // btnYaz0Encode
             // 
             this.btnYaz0Encode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnYaz0Encode.Location = new System.Drawing.Point(12, 292);
+            this.btnYaz0Encode.Location = new System.Drawing.Point(14, 337);
+            this.btnYaz0Encode.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnYaz0Encode.Name = "btnYaz0Encode";
-            this.btnYaz0Encode.Size = new System.Drawing.Size(100, 23);
+            this.btnYaz0Encode.Size = new System.Drawing.Size(117, 27);
             this.btnYaz0Encode.TabIndex = 10;
             this.btnYaz0Encode.Text = "Yaz0 Encode";
             this.btnYaz0Encode.UseVisualStyleBackColor = true;
@@ -237,9 +255,10 @@ namespace BotwUnpacker
             // btnCompareTool
             // 
             this.btnCompareTool.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCompareTool.Location = new System.Drawing.Point(272, 238);
+            this.btnCompareTool.Location = new System.Drawing.Point(317, 275);
+            this.btnCompareTool.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnCompareTool.Name = "btnCompareTool";
-            this.btnCompareTool.Size = new System.Drawing.Size(100, 48);
+            this.btnCompareTool.Size = new System.Drawing.Size(117, 55);
             this.btnCompareTool.TabIndex = 11;
             this.btnCompareTool.Text = "Compare Tool";
             this.btnCompareTool.UseVisualStyleBackColor = false;
@@ -248,9 +267,10 @@ namespace BotwUnpacker
             // btnPaddingTool
             // 
             this.btnPaddingTool.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPaddingTool.Location = new System.Drawing.Point(272, 292);
+            this.btnPaddingTool.Location = new System.Drawing.Point(317, 337);
+            this.btnPaddingTool.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnPaddingTool.Name = "btnPaddingTool";
-            this.btnPaddingTool.Size = new System.Drawing.Size(100, 48);
+            this.btnPaddingTool.Size = new System.Drawing.Size(117, 55);
             this.btnPaddingTool.TabIndex = 12;
             this.btnPaddingTool.Text = "Padding Tool";
             this.btnPaddingTool.UseVisualStyleBackColor = false;
@@ -259,9 +279,10 @@ namespace BotwUnpacker
             // lblFootnote
             // 
             this.lblFootnote.AutoSize = true;
-            this.lblFootnote.Location = new System.Drawing.Point(12, 346);
+            this.lblFootnote.Location = new System.Drawing.Point(14, 399);
+            this.lblFootnote.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFootnote.Name = "lblFootnote";
-            this.lblFootnote.Size = new System.Drawing.Size(49, 13);
+            this.lblFootnote.Size = new System.Drawing.Size(55, 15);
             this.lblFootnote.TabIndex = 27;
             this.lblFootnote.Text = "Footnote";
             // 
@@ -274,9 +295,10 @@ namespace BotwUnpacker
             // loadingBar
             // 
             this.loadingBar.Image = ((System.Drawing.Image)(resources.GetObject("loadingBar.Image")));
-            this.loadingBar.Location = new System.Drawing.Point(12, 321);
+            this.loadingBar.Location = new System.Drawing.Point(14, 370);
+            this.loadingBar.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.loadingBar.Name = "loadingBar";
-            this.loadingBar.Size = new System.Drawing.Size(179, 22);
+            this.loadingBar.Size = new System.Drawing.Size(209, 25);
             this.loadingBar.TabIndex = 100;
             this.loadingBar.TabStop = false;
             this.loadingBar.Visible = false;
@@ -285,9 +307,10 @@ namespace BotwUnpacker
             // 
             this.cbxWriteYaz0Xml.AutoSize = true;
             this.cbxWriteYaz0Xml.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.cbxWriteYaz0Xml.Location = new System.Drawing.Point(118, 180);
+            this.cbxWriteYaz0Xml.Location = new System.Drawing.Point(138, 208);
+            this.cbxWriteYaz0Xml.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cbxWriteYaz0Xml.Name = "cbxWriteYaz0Xml";
-            this.cbxWriteYaz0Xml.Size = new System.Drawing.Size(106, 17);
+            this.cbxWriteYaz0Xml.Size = new System.Drawing.Size(116, 19);
             this.cbxWriteYaz0Xml.TabIndex = 101;
             this.cbxWriteYaz0Xml.Text = "Write Xml Debug";
             this.cbxWriteYaz0Xml.UseVisualStyleBackColor = true;
@@ -296,9 +319,10 @@ namespace BotwUnpacker
             // 
             this.rbnWiiU.AutoSize = true;
             this.rbnWiiU.Checked = true;
-            this.rbnWiiU.Location = new System.Drawing.Point(118, 261);
+            this.rbnWiiU.Location = new System.Drawing.Point(138, 301);
+            this.rbnWiiU.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rbnWiiU.Name = "rbnWiiU";
-            this.rbnWiiU.Size = new System.Drawing.Size(48, 17);
+            this.rbnWiiU.Size = new System.Drawing.Size(50, 19);
             this.rbnWiiU.TabIndex = 8;
             this.rbnWiiU.TabStop = true;
             this.rbnWiiU.Text = "WiiU";
@@ -307,20 +331,33 @@ namespace BotwUnpacker
             // rbnSwitch
             // 
             this.rbnSwitch.AutoSize = true;
-            this.rbnSwitch.Location = new System.Drawing.Point(166, 261);
+            this.rbnSwitch.Location = new System.Drawing.Point(194, 301);
+            this.rbnSwitch.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rbnSwitch.Name = "rbnSwitch";
-            this.rbnSwitch.Size = new System.Drawing.Size(57, 17);
+            this.rbnSwitch.Size = new System.Drawing.Size(60, 19);
             this.rbnSwitch.TabIndex = 9;
             this.rbnSwitch.Text = "Switch";
             this.rbnSwitch.UseVisualStyleBackColor = true;
             this.rbnSwitch.CheckedChanged += new System.EventHandler(this.rbnSwitch_CheckedChanged);
             // 
+            // doneBar
+            // 
+            this.doneBar.Image = ((System.Drawing.Image)(resources.GetObject("doneBar.Image")));
+            this.doneBar.Location = new System.Drawing.Point(14, 370);
+            this.doneBar.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.doneBar.Name = "doneBar";
+            this.doneBar.Size = new System.Drawing.Size(209, 25);
+            this.doneBar.TabIndex = 102;
+            this.doneBar.TabStop = false;
+            this.doneBar.Visible = false;
+            // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
-            this.ClientSize = new System.Drawing.Size(384, 401);
+            this.ClientSize = new System.Drawing.Size(448, 463);
+            this.Controls.Add(this.doneBar);
             this.Controls.Add(this.rbnSwitch);
             this.Controls.Add(this.rbnWiiU);
             this.Controls.Add(this.cbxWriteYaz0Xml);
@@ -347,12 +384,14 @@ namespace BotwUnpacker
             this.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MaximizeBox = false;
             this.Name = "FrmMain";
             this.ShowIcon = false;
             this.Text = "BotW Unpacker";
             ((System.ComponentModel.ISupportInitialize)(imgIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.loadingBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.doneBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -381,6 +420,7 @@ namespace BotwUnpacker
         private System.Windows.Forms.CheckBox cbxWriteYaz0Xml;
         private System.Windows.Forms.RadioButton rbnWiiU;
         private System.Windows.Forms.RadioButton rbnSwitch;
+        private System.Windows.Forms.PictureBox doneBar;
     }
 }
 
