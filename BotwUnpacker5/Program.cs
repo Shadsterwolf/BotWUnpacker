@@ -35,7 +35,6 @@ namespace BotwUnpacker5
             {
                 AttachConsole(-1); //Pass to parent console that sent the arguments
                 ConsoleHandler.Commands(args);
-                SendKeys.SendWait("{ENTER}"); //Thank you StackOverflow (Rob L)
             }
                 
         }
