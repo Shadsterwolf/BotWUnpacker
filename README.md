@@ -61,7 +61,10 @@
   BotwUnpacker.exe /bs "C:\CustomFiles\Switch\LinkModel\Model"
   ```
 # Solution Build
-1. Open the .sln project in Visual Studio
+## .Net 6 <br />
+TODO
+## .Net Framework 4.8 <br />
+1. Download/Clone NetFramework branch and open it
 2. Open Tools > NuGet Package Manager > Manage NuGet Packages for Solution...
 3. Search and Install the following:
 - Fody & Costura (This is to compile any .DLL files into the EXE, latest version only works on Visual Studio 2019!)
