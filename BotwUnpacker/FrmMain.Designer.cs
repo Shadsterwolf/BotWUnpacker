@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace BotwUnpacker5
+namespace BotwUnpacker
 {
     partial class FrmMain
     {

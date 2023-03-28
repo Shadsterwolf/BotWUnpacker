@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace BotwUnpacker5
+namespace BotwUnpacker
 {
     public partial class FrmPaddingTool : Form
     {

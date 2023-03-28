@@ -7,7 +7,7 @@ using System.Threading;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace BotwUnpacker5
+namespace BotwUnpacker
 {
     public partial class FrmMain : Form
     {

@@ -1,4 +1,4 @@
-﻿namespace BotwUnpacker5
+﻿namespace BotwUnpacker
 {
     partial class FrmPaddingTool
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml;
 //Modified code From Uwizard master branch as of 10/16/2017
 
-namespace BotwUnpacker5
+namespace BotwUnpacker
 {
     public struct DebugWriter
     {

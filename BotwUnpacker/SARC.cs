@@ -4,7 +4,7 @@ using System.IO;
 //Modified code From Uwizard SARC master branch as of 10/16/2017, 
 
 
-namespace BotwUnpacker5
+namespace BotwUnpacker
 {
     public struct SARC
     {

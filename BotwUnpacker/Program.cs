@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BotwUnpacker5
+namespace BotwUnpacker
 {
     static class Program
     {
@@ -14,7 +14,7 @@ namespace BotwUnpacker5
         static extern bool AttachConsole(int dwProcessId); //Pass to console magic, since "AllocConsole" would just make seperate console window...
         [STAThread]
         static void Main(string[] args)
-        {
+        {         
             if (args.Length == 0) //Determine if to utilize application or pass console arguments
             {
                 Application.EnableVisualStyles();

@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BotwUnpacker5
+namespace BotwUnpacker
 {
     public partial class FrmCompareTool : Form
     {
