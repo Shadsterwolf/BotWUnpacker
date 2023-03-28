@@ -1,5 +1,5 @@
 <p align="center"> 
-<img src="https://github.com/Shadsterwolf/BotWUnpacker/blob/master/BotwUnpacker5/images/ZeldaUnpackerLogo.png?raw=true"/>
+<img src="https://github.com/Shadsterwolf/BotWUnpacker/blob/master/BotwUnpacker/images/ZeldaUnpackerLogo.png?raw=true"/>
 </p>
 
 # Intro
@@ -62,11 +62,15 @@
   ```
 # Solution Build
 ## .Net 6 <br />
-TODO
-## .Net Framework 4.8 <br />
-1. Download/Clone NetFramework branch and open it
-2. Open Tools > NuGet Package Manager > Manage NuGet Packages for Solution...
-3. Search and Install the following:
+1. Use latest version of Visual studio
+2. Download/Clone <b>Master</b> branch and open it
+3. Build or Execute Debug
+
+## .Net Framework 4.8 (OLD) <br />
+1. Use Visual Studio 2019
+2. Download/Clone <b>NetFramework</b> branch and open it
+3. Open Tools > NuGet Package Manager > Manage NuGet Packages for Solution...
+4. Search and Install the following:
 - Fody & Costura (This is to compile any .DLL files into the EXE, latest version only works on Visual Studio 2019!)
 - Microsoft.WindowsAPICodePack-Core  (Common .DLL library, used make folder select operations similar to file select)
 - Microsoft.WindowsAPICodePack-Shell
